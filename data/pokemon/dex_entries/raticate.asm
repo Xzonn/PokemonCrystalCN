@@ -1,10 +1,7 @@
-	db "RAT@" ; species name
-	dw 204, 410 ; height, weight
+	db "鼠@" ; species name
+	dbw 7, 185 ; height, weight
 
-	db   "The webs on its"
-	next "hind legs enable"
-	next "it to cross"
+	db   "后脚上长了蹼，"
+	next "因此也能渡过河流。"
+	next "觅食范围相当辽阔。@"
 
-	page "rivers. It search-"
-	next "es wide areas for"
-	next "food.@"

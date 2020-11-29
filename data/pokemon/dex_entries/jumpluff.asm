@@ -1,10 +1,7 @@
-	db "COTTONWEED@" ; species name
-	dw 207, 70 ; height, weight
+	db "棉草@" ; species name
+	dbw 8, 30 ; height, weight
 
-	db   "Even in the fierc-"
-	next "est wind, it can"
-	next "control its fluff"
+	db   "不管是刮什么风，"
+	next "都能用棉毛来调整方向，"
+	next "前往任何自己喜欢的地方。@"
 
-	page "to make its way to"
-	next "any place in the"
-	next "world it wants.@"

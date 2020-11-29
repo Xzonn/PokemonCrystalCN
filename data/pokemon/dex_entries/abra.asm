@@ -1,10 +1,7 @@
-	db "PSI@" ; species name
-	dw 211, 430 ; height, weight
+	db "念力@" ; species name
+	dbw 9, 195 ; height, weight
 
-	db   "It hypnotizes"
-	next "itself so that it"
-	next "can teleport away"
+	db   "察觉到危险的话，"
+	next "即使在睡觉也能暗示自己"
+	next "用瞬间移动逃脱。@"
 
-	page "when it senses"
-	next "danger, even"
-	next "if it is asleep.@"

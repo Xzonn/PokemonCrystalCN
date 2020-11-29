@@ -1,10 +1,7 @@
-	db "MUSHROOM@" ; species name
-	dw 100, 120 ; height, weight
+	db "蘑菇@" ; species name
+	dbw 3, 54 ; height, weight
 
-	db   "The tochukaso"
-	next "growing on this"
-	next "#MON's back"
+	db   "背上的蘑菇叫做冬虫夏草，"
+	next "它会命令本体"
+	next "吸取树木根部的营养。@"
 
-	page "orders it to"
-	next "extract juice from"
-	next "tree trunks.@"

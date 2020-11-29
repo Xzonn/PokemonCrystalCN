@@ -1,10 +1,7 @@
-	db "POISON GAS@" ; species name
-	dw 200, 20 ; height, weight
+	db "毒气@" ; species name
+	dbw 6, 10 ; height, weight
 
-	db   "If one gets close"
-	next "enough to it when"
-	next "it expels poison-"
+	db   "接近喷出剧毒的瓦斯弹"
+	next "就可以看到瓦斯"
+	next "在它体内缭绕。@"
 
-	page "ous gas, the gas"
-	next "swirling inside it"
-	next "can be seen.@"

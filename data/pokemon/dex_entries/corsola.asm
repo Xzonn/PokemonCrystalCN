@@ -1,10 +1,7 @@
-	db "CORAL@" ; species name
-	dw 200, 110 ; height, weight
+	db "珊瑚@" ; species name
+	dbw 6, 50 ; height, weight
 
-	db   "The points on its"
-	next "head absorb"
-	next "nutrients from"
+	db   "会用头顶从清水中吸取养分"
+	next "来使自己成长，因此无法"
+	next "在受污染的海水中居住。@"
 
-	page "clean water. They"
-	next "cannot survive in"
-	next "polluted water.@"

@@ -78,18 +78,22 @@ DoDexSearchSlowpokeFrame:
 
 DisplayDexEntry:
 	call GetPokemonName
-	hlcoord 9, 3
+	hlcoord 9, 2
 	call PlaceString ; mon species
 	ld a, [wTempSpecies]
 	ld b, a
 	call GetDexEntryPointer
 	ld a, b
 	push af
-	hlcoord 9, 5
+	call IncreaseDFSCombineLevel
+	hlcoord 9, 4
 	call FarString ; dex species
 	ld h, b
 	ld l, c
 	push de
+	ld de, POKeString
+	call PlaceString
+	call DecreaseDFSCombineLevel
 ; Print dex number
 	hlcoord 2, 8
 	ld a, $5c ; No
@@ -112,28 +116,34 @@ DisplayDexEntry:
 	inc hl
 	ld a, b
 	push af
-	push hl
-	call GetFarHalfword
-	ld d, l
-	ld e, h
-	pop hl
+	; push hl
+	; call GetFarHalfword
+	; ld d, l
+	; ld e, h
+	; pop hl
+	call GetFarByte
+	; inc hl
 	inc hl
-	inc hl
-	ld a, d
-	or e
+	; ld a, d
+	; or e
+	and a
 	jr z, .skip_height
 	push hl
-	push de
+	push af
+	; push de
 ; Print the height, with two of the four digits in front of the decimal point
-	ld hl, sp+0
+	; ld hl, sp+0
+	ld hl, sp+1
 	ld d, h
 	ld e, l
-	hlcoord 12, 7
-	lb bc, 2, (2 << 4) | 4
+	; hlcoord 12, 7
+	; lb bc, 2, (2 << 4) | 4
+	hlcoord 13, 6
+	lb bc, 1, (2 << 4) | 3
 	call PrintNum
 ; Replace the decimal point with a ft symbol
-	hlcoord 14, 7
-	ld [hl], $5e
+	; hlcoord 14, 7
+	; ld [hl], $5e
 	pop af
 	pop hl
 
@@ -154,68 +164,69 @@ DisplayDexEntry:
 	ld hl, sp+0
 	ld d, h
 	ld e, l
-	hlcoord 11, 9
-	lb bc, 2, (4 << 4) | 5
+	hlcoord 12, 8
+	lb bc, 2, (3 << 4) | 4
 	call PrintNum
 	pop de
 
 .skip_weight
 ; Page 1
-	lb bc, 5, SCREEN_WIDTH - 2
-	hlcoord 2, 11
+	lb bc, 6, SCREEN_WIDTH - 2
+	hlcoord 1, 10
 	call ClearBox
-	hlcoord 1, 10
-	ld bc, SCREEN_WIDTH - 1
-	ld a, $61 ; horizontal divider
-	call ByteFill
+	; hlcoord 1, 10
+	; ld bc, SCREEN_WIDTH - 1
+	; ld a, $61 ; horizontal divider
+	; call ByteFill
 	; page number
-	hlcoord 1, 9
-	ld [hl], $55
-	inc hl
-	ld [hl], $55
-	hlcoord 1, 10
-	ld [hl], $56 ; P.
-	inc hl
-	ld [hl], $57 ; 1
+	; hlcoord 1, 9
+	; ld [hl], $55
+	; inc hl
+	; ld [hl], $55
+	; hlcoord 1, 10
+	; ld [hl], $56 ; P.
+	; inc hl
+	; ld [hl], $57 ; 1
 	pop de
 	inc de
 	pop af
 	hlcoord 2, 11
-	push af
+	; push af
 	call FarString
-	pop bc
-	ld a, [wPokedexStatus]
-	or a ; check for page 2
-	ret z
-
-; Page 2
-	push bc
-	push de
-	lb bc, 5, SCREEN_WIDTH - 2
-	hlcoord 2, 11
-	call ClearBox
-	hlcoord 1, 10
-	ld bc, SCREEN_WIDTH - 1
-	ld a, $61
-	call ByteFill
-	; page number
-	hlcoord 1, 9
-	ld [hl], $55
-	inc hl
-	ld [hl], $55
-	hlcoord 1, 10
-	ld [hl], $56 ; P.
-	inc hl
-	ld [hl], $58 ; 2
-	pop de
-	inc de
-	pop af
-	hlcoord 2, 11
-	call FarString
+	; pop bc
+	; ld a, [wPokedexStatus]
+	; or a ; check for page 2
+	; ret z
 	ret
 
+; Page 2
+	; push bc
+	; push de
+	; lb bc, 5, SCREEN_WIDTH - 2
+	; hlcoord 2, 11
+	; call ClearBox
+	; hlcoord 1, 10
+	; ld bc, SCREEN_WIDTH - 1
+	; ld a, $61
+	; call ByteFill
+	; ; page number
+	; hlcoord 1, 9
+	; ld [hl], $55
+	; inc hl
+	; ld [hl], $55
+	; hlcoord 1, 10
+	; ld [hl], $56 ; P.
+	; inc hl
+	; ld [hl], $58 ; 2
+	; pop de
+	; inc de
+	; pop af
+	; hlcoord 2, 11
+	; call FarString
+	; ret
+
 POKeString: ; unreferenced
-	db "#@"
+	db "宝可梦@"
 
 GetDexEntryPointer:
 ; return dex entry pointer b:de
@@ -262,7 +273,7 @@ GetDexEntryPagePointer:
 	cp "@"
 	jr nz, .loop1
 ; skip height and weight
-rept 4
+rept 3 ; 4
 	inc hl
 endr
 ; if c != 1: skip entry

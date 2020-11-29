@@ -1,10 +1,7 @@
-	db "TRIPLEBIRD@" ; species name
-	dw 511, 1880 ; height, weight
+	db "三头鸟@" ; species name
+	dbw 18, 852 ; height, weight
 
-	db   "An enemy that"
-	next "takes its eyes off"
-	next "any of the three"
+	db   "在3个脑袋的注视之下，"
+	next "只要露出一点破绽，"
+	next "就会遭到鸟嘴的猛烈啄击。@"
 
-	page "heads--even for a"
-	next "second--will get"
-	next "pecked severely.@"

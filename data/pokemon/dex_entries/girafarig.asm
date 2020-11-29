@@ -1,10 +1,7 @@
-	db "LONG NECK@" ; species name
-	dw 411, 910 ; height, weight
+	db "长颈@" ; species name
+	dbw 15, 415 ; height, weight
 
-	db   "When it is in"
-	next "danger, its tail"
-	next "uses some sort of"
+	db   "一旦陷入危机关头，"
+	next "尾巴就会使出不可思议的"
+	next "力量将敌人赶走。@"
 
-	page "mysterious powers"
-	next "to drive away the"
-	next "enemy.@"

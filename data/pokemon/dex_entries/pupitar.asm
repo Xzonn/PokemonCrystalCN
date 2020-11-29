@@ -1,10 +1,7 @@
-	db "HARD SHELL@" ; species name
-	dw 311, 3350 ; height, weight
+	db "子弹@" ; species name
+	dbw 12, 1520 ; height, weight
 
-	db   "It will not stay"
-	next "still, even while"
-	next "it's a pupa. It"
+	db   "虽然是蛹，但会动个不停。"
+	next "坚硬的甲壳之下"
+	next "已经长出了手脚。@"
 
-	page "already has arms"
-	next "and legs under its"
-	next "solid shell.@"

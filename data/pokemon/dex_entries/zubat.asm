@@ -1,10 +1,7 @@
-	db "BAT@" ; species name
-	dw 207, 170 ; height, weight
+	db "蝙蝠@" ; species name
+	dbw 8, 75 ; height, weight
 
-	db   "During the day, it"
-	next "gathers with"
-	next "others and hangs"
+	db   "白天会成群地倒挂在"
+	next "老旧建筑物的天花板上"
+	next "或者山洞的顶部。@"
 
-	page "from the ceilings"
-	next "of old buildings"
-	next "and caves.@"

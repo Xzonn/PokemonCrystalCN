@@ -1,10 +1,7 @@
-	db "MILK COW@" ; species name
-	dw 311, 1660 ; height, weight
+	db "奶牛@" ; species name
+	dbw 12, 755 ; height, weight
 
-	db   "In order to milk a"
-	next "MILTANK, one must"
-	next "have a knack for"
+	db   "给大奶罐挤奶的诀窍是："
+	next "保持一定的节奏"
+	next "从上往下挤压乳头。@"
 
-	page "rhythmically pull-"
-	next "ing up and down"
-	next "on its udders.@"

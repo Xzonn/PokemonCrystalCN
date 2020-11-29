@@ -16,6 +16,10 @@ Get2bppOptionalHDMA: ; unreferenced
 	jp Get2bpp
 
 _LoadStandardFont::
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT FS_FONT_STYLE_STANDARD
+	ld [wDFSFontSytle], a
+	ld [wDFSVramLimit], a
+
 	ld de, Font
 	ld hl, vTiles1
 	lb bc, BANK(Font), 128 ; "A" to "9"
@@ -95,7 +99,7 @@ LoadBattleFontsHPBar:
 	call Get2bppViaHDMA
 	ld hl, vTiles2 tile $70
 	ld de, FontBattleExtra + 16 tiles ; "<DO>"
-	lb bc, BANK(FontBattleExtra), 3 ; "<DO>" to "『"
+	lb bc, BANK(FontBattleExtra), 3 ; "<DO>" to "<『>"
 	call Get2bppViaHDMA
 	call LoadFrame
 

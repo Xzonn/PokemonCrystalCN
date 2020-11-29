@@ -1,10 +1,7 @@
-	db "WORM@" ; species name
-	dw 100, 60 ; height, weight
+	db "虫宝宝@" ; species name
+	dbw 3, 29 ; height, weight
 
-	db   "It crawls into"
-	next "foliage where it"
-	next "camouflages itself"
+	db   "为了将自己隐藏在与"
+	next "身体颜色相同的环境中，"
+	next "会钻到树叶里面去。@"
 
-	page "among leaves that"
-	next "are the same color"
-	next "as its body.@"

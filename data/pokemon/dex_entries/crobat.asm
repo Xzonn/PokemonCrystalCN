@@ -1,10 +1,7 @@
-	db "BAT@" ; species name
-	dw 511, 1650 ; height, weight
+	db "蝙蝠@" ; species name
+	dbw 18, 750 ; height, weight
 
-	db   "As a result of its"
-	next "pursuit of faster,"
-	next "yet more silent"
+	db   "一心追求更快更安静的"
+	next "飞行方式，结果就连"
+	next "后腿也长也成了翅膀。@"
 
-	page "flight, a new set"
-	next "of wings grew on"
-	next "its hind legs.@"

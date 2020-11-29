@@ -109,10 +109,10 @@ endif
 
 
 pokecrystal_opt         = -Cjv -t PM_CRYSTAL -i BYTE -n 0 -k 01 -l 0x33 -m 0x10 -r 3 -p 0
-pokecrystal11_opt       = -Cjv -t PM_CRYSTAL -i BYTE -n 1 -k 01 -l 0x33 -m 0x10 -r 3 -p 0
+pokecrystal11_opt       = -Cjv -t PM_CRYSTAL -i BYTC -n 1 -k 01 -l 0x33 -m 0x10 -r 3 -p 0
 pokecrystal_au_opt      = -Cjv -t PM_CRYSTAL -i BYTU -n 0 -k 01 -l 0x33 -m 0x10 -r 3 -p 0
 pokecrystal_debug_opt   = -Cjv -t PM_CRYSTAL -i BYTE -n 0 -k 01 -l 0x33 -m 0x10 -r 3 -p 0
-pokecrystal11_debug_opt = -Cjv -t PM_CRYSTAL -i BYTE -n 1 -k 01 -l 0x33 -m 0x10 -r 3 -p 0
+pokecrystal11_debug_opt = -Cjv -t PM_CRYSTAL -i BYTC -n 1 -k 01 -l 0x33 -m 0x10 -r 3 -p 0
 
 pokecrystal_base         = us
 pokecrystal11_base       = us
@@ -196,7 +196,7 @@ gfx/mystery_gift/mystery_gift.2bpp: tools/gfx += --trim-whitespace
 
 gfx/title/crystal.2bpp: tools/gfx += --interleave --png=$<
 gfx/title/old_fg.2bpp: tools/gfx += --interleave --png=$<
-gfx/title/logo.2bpp: rgbgfx += -x 4
+gfx/title/logo.2bpp: rgbgfx += -x 3
 
 gfx/trade/ball.2bpp: tools/gfx += --remove-whitespace
 gfx/trade/game_boy.2bpp: tools/gfx += --remove-duplicates --preserve=0x23,0x27

@@ -578,7 +578,7 @@ Phone_Wait20Frames:
 Phone_TextboxWithName:
 	push bc
 	call Phone_CallerTextbox
-	hlcoord 1, 1
+	hlcoord 1, 2
 	ld [hl], "☎"
 	inc hl
 	inc hl
@@ -634,17 +634,22 @@ GetCallerName:
 	jr z, .NotTrainer
 
 	call Phone_GetTrainerName
-	push hl
+	; push hl
 	push bc
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	call PlaceString
-	ld a, ":"
-	ld [bc], a
+	; ld a, ":"
+	; ld [bc], a
 	pop bc
-	pop hl
-	ld de, SCREEN_WIDTH + 3
+	; pop hl
+	; ld de, SCREEN_WIDTH + 3
+	ld de, 5
 	add hl, de
 	call Phone_GetTrainerClassName
 	call PlaceString
+	xor a
+	ld [wDFSVramLimit], a
 	ret
 
 .NotTrainer:
@@ -658,7 +663,11 @@ GetCallerName:
 	ld e, a
 	ld d, [hl]
 	pop hl
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	call PlaceString
+	xor a
+	ld [wDFSVramLimit], a
 	ret
 
 INCLUDE "data/phone/non_trainer_names.asm"

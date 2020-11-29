@@ -86,36 +86,38 @@ CloseWindow::
 	ret
 
 RestoreTileBackup::
-	call MenuBoxCoord2Tile
-	call .copy
-	call MenuBoxCoord2Attr
-	call .copy
+	homecall _RestoreTileBackup
 	ret
+; 	call MenuBoxCoord2Tile
+; 	call .copy
+; 	call MenuBoxCoord2Attr
+; 	call .copy
+; 	ret
 
-.copy
-	call GetMenuBoxDims
-	inc b
-	inc c
+; .copy
+; 	call GetMenuBoxDims
+; 	inc b
+; 	inc c
 
-.row
-	push bc
-	push hl
+; .row
+; 	push bc
+; 	push hl
 
-.col
-	ld a, [de]
-	ld [hli], a
-	dec de
-	dec c
-	jr nz, .col
+; .col
+; 	ld a, [de]
+; 	ld [hli], a
+; 	dec de
+; 	dec c
+; 	jr nz, .col
 
-	pop hl
-	ld bc, SCREEN_WIDTH
-	add hl, bc
-	pop bc
-	dec b
-	jr nz, .row
+; 	pop hl
+; 	ld bc, SCREEN_WIDTH
+; 	add hl, bc
+; 	pop bc
+; 	dec b
+; 	jr nz, .row
 
-	ret
+; 	ret
 
 PopWindow::
 	ld b, wMenuHeaderEnd - wMenuHeader
@@ -415,7 +417,7 @@ CopyNameFromMenu::
 	ret
 
 YesNoBox::
-	lb bc, SCREEN_WIDTH - 6, 7
+	lb bc, SCREEN_WIDTH - 6, 6
 
 PlaceYesNoBox::
 	jr _YesNoBox
@@ -445,7 +447,7 @@ _YesNoBox::
 	ld [wMenuBorderRightCoord], a
 	ld a, c
 	ld [wMenuBorderTopCoord], a
-	add 4
+	add 5
 	ld [wMenuBorderBottomCoord], a
 	call PushWindow
 
@@ -471,15 +473,15 @@ InterpretTwoOptionMenu::
 
 YesNoMenuHeader::
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 10, 5, 15, 9
+	menu_coords 9, 5, 15, 9
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
-	db STATICMENU_CURSOR | STATICMENU_NO_TOP_SPACING ; flags
+	db STATICMENU_CURSOR ; | STATICMENU_NO_TOP_SPACING ; flags
 	db 2
-	db "YES@"
-	db "NO@"
+	db "是@"
+	db "否@"
 
 OffsetMenuHeader::
 	call _OffsetMenuHeader

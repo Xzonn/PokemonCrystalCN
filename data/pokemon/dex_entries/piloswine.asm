@@ -1,10 +1,7 @@
-	db "SWINE@" ; species name
-	dw 307, 1230 ; height, weight
+	db "野猪@" ; species name
+	dbw 11, 558 ; height, weight
 
-	db   "Although its legs"
-	next "are short, its"
-	next "rugged hooves"
+	db   "虽然4只脚很短，"
+	next "但是蹄子宽而粗糙，"
+	next "走路时不会在雪面上打滑。@"
 
-	page "prevent it from"
-	next "slipping, even on"
-	next "icy ground.@"

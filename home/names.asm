@@ -87,27 +87,29 @@ GetNthString::
 	ret
 
 GetBasePokemonName::
+; fallthrough
+
 ; Discards gender (Nidoran).
 
-	push hl
-	call GetPokemonName
+; 	push hl
+; 	call GetPokemonName
 
-	ld hl, wStringBuffer1
-.loop
-	ld a, [hl]
-	cp "@"
-	jr z, .quit
-	cp "♂"
-	jr z, .end
-	cp "♀"
-	jr z, .end
-	inc hl
-	jr .loop
-.end
-	ld [hl], "@"
-.quit
-	pop hl
-	ret
+; 	ld hl, wStringBuffer1
+; .loop
+; 	ld a, [hl]
+; 	cp "@"
+; 	jr z, .quit
+; 	cp "♂"
+; 	jr z, .end
+; 	cp "♀"
+; 	jr z, .end
+; 	inc hl
+; 	jr .loop
+; .end
+; 	ld [hl], "@"
+; .quit
+; 	pop hl
+; 	ret
 
 GetPokemonName::
 ; Get Pokemon name for wNamedObjectIndexBuffer.
@@ -242,12 +244,12 @@ GetTMHMName::
 	ret
 
 .TMText:
-	db "TM"
+	db "招式学习器"
 .TMTextEnd:
 	db "@"
 
 .HMText:
-	db "HM"
+	db "秘传学习器"
 .HMTextEnd:
 	db "@"
 

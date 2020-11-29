@@ -1,10 +1,7 @@
-	db "MOLE@" ; species name
-	dw 204, 730 ; height, weight
+	db "鼹鼠@" ; species name
+	dbw 7, 333 ; height, weight
 
-	db   "These DIGLETT"
-	next "triplets dig over"
-	next "60 miles below sea"
+	db   "可以往地下挖100公里"
+	next "的三只地鼠。没人知道"
+	next "地面之下的部分长什么样。@"
 
-	page "level. No one"
-	next "knows what it's"
-	next "like underground.@"

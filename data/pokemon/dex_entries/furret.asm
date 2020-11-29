@@ -1,10 +1,7 @@
-	db "LONG BODY@" ; species name
-	dw 511, 720 ; height, weight
+	db "长躯干@" ; species name
+	dbw 18, 325 ; height, weight
 
-	db   "It lives in narrow"
-	next "burrows that fit"
-	next "its slim body. The"
+	db   "会配合自己身体形状"
+	next "建造出细长的巢穴，"
+	next "越往里走越错综复杂。@"
 
-	page "deeper the nests"
-	next "go, the more maze-"
-	next "like they become.@"

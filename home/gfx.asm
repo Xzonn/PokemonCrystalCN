@@ -100,6 +100,7 @@ UpdatePlayerSprite::
 
 LoadStandardFont::
 	farcall _LoadStandardFont
+	farcall dfsClearCache
 	ret
 
 LoadFontsBattleExtra::
@@ -148,7 +149,7 @@ FarCopyBytes::
 	rst Bankswitch
 	ret
 
-FarCopyBytesDouble:
+FarCopyBytesDouble::
 ; Copy bc bytes from a:hl to bc*2 bytes at de,
 ; doubling each byte in the process.
 
@@ -390,3 +391,71 @@ Copy1bpp::
 
 	pop hl
 	jp FarCopyBytesDouble
+
+DecompressRaw4FontTo8FontLeft::
+; decompress from a:de to hl
+
+	ld b, a
+	ldh a, [hROMBank]
+	push af
+	ld a, b
+	rst Bankswitch
+
+	; ld hl, wDFS8Font
+	; ld de, wDFSRaw4Font
+	ld b, LEN_2BPP_TILE / 2 ; 高半字符留白
+	xor a
+.loop1
+	ld [hli], a
+	dec b
+	jr nz, .loop1
+	ld b, DFS_RAW_4FONT_SIZE
+.loop2
+	ld a, [de]
+	and %11110000
+	ld [hli], a
+	ld [hli], a
+	ld a, [de]
+	swap a
+	and %11110000
+	ld [hli], a
+	ld [hli], a
+	inc de
+	dec b
+	jr nz, .loop2
+
+	pop af
+	rst Bankswitch
+	ret
+
+DecompressRaw4FontTo8FontRight::
+; decompress from a:de to hl
+
+	ld b, a
+	ldh a, [hROMBank]
+	push af
+	ld a, b
+	rst Bankswitch
+
+	; ld hl, wDFS8Font + LEN_2BPP_TILE / 2 ; 跳过高半字符
+	; ld de, wDFSRaw4Font
+	ld b, DFS_RAW_4FONT_SIZE
+.loop
+	ld a, [de]
+	swap a
+	and %00001111
+	or [hl]
+	ld [hli], a
+	ld [hli], a
+	ld a, [de]
+	and %00001111
+	or [hl]
+	ld [hli], a
+	ld [hli], a
+	inc de
+	dec b
+	jr nz, .loop
+
+	pop af
+	rst Bankswitch
+	ret

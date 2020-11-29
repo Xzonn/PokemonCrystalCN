@@ -81,4 +81,6 @@ PredefPointers::
 	add_predef AnimateFrontpic
 	add_predef Unused_HOF_AnimateAlignedFrontpic
 	add_predef HOF_AnimateFrontpic
+	add_predef PlaceLargeStatusString
+	add_predef ComputeShortHPBarPixels
 	dbw -1, InexplicablyEmptyFunction ; ???

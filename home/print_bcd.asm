@@ -16,12 +16,12 @@ PrintBCDNumber::
 	res PRINTNUM_LEADINGZEROS_F, c
 	res PRINTNUM_LEFTALIGN_F, c
 	res PRINTNUM_MONEY_F, c ; c now holds the length
-	bit PRINTNUM_MONEY_F, b
-	jr z, .loop
-	bit PRINTNUM_LEADINGZEROS_F, b
-	jr nz, .loop ; skip currency symbol
-	ld [hl], "¥"
-	inc hl
+	; bit PRINTNUM_MONEY_F, b
+	; jr z, .loop
+	; bit PRINTNUM_LEADINGZEROS_F, b
+	; jr nz, .loop ; skip currency symbol
+	; ld [hl], "¥"
+	; inc hl
 .loop
 	ld a, [de]
 	swap a
@@ -35,18 +35,23 @@ PrintBCDNumber::
 	jr z, .done ; if so, we are done
 .numberEqualsZero ; if every digit of the BCD number is zero
 	bit PRINTNUM_LEFTALIGN_F, b
-	jr nz, .skipLeftAlignmentAdjustment
-	dec hl ; if the string is left-aligned, it needs to be moved back one space
-.skipLeftAlignmentAdjustment
+	jr nz, .skipRightAlignmentAdjustment
+	dec hl ; if the string is right-aligned, it needs to be moved back one space
+.skipRightAlignmentAdjustment
+	ld [hl], "0"
+	inc hl
+	call PrintLetterDelay
+.done
 	bit PRINTNUM_MONEY_F, b
 	jr z, .skipCurrencySymbol
 	ld [hl], "¥" ; currency symbol
-	inc hl
-.skipCurrencySymbol
-	ld [hl], "0"
+	; inc hl
 	call PrintLetterDelay
+.skipCurrencySymbol
+	; ld [hl], "0"
+	; call PrintLetterDelay
 	inc hl
-.done
+; .done
 	ret
 
 PrintBCDDigit::
@@ -57,11 +62,11 @@ PrintBCDDigit::
 	bit PRINTNUM_LEADINGZEROS_F, b ; have any non-space characters been printed?
 	jr z, .outputDigit
 ; if bit 7 is set, then no numbers have been printed yet
-	bit PRINTNUM_MONEY_F, b
-	jr z, .skipCurrencySymbol
-	ld [hl], "¥"
-	inc hl
-	res PRINTNUM_MONEY_F, b
+	; bit PRINTNUM_MONEY_F, b
+	; jr z, .skipCurrencySymbol
+	; ld [hl], "¥"
+	; inc hl
+	; res PRINTNUM_MONEY_F, b
 .skipCurrencySymbol
 	res PRINTNUM_LEADINGZEROS_F, b ; unset 7 to indicate that a nonzero digit has been reached
 .outputDigit

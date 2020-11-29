@@ -1,10 +1,7 @@
-	db "SEED@" ; species name
-	dw 303, 290 ; height, weight
+	db "种子@" ; species name
+	dbw 10, 130 ; height, weight
 
-	db   "The bulb on its"
-	next "back grows as it"
-	next "absorbs nutrients."
+	db   "背上的花蕾会在吸取"
+	next "养分后膨胀。开花期间"
+	next "会发出怡人的香气。@"
 
-	page "The bulb gives off"
-	next "a pleasant aroma"
-	next "when it blooms.@"

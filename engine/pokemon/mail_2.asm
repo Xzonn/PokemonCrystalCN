@@ -19,6 +19,8 @@ ReadAnyMail:
 	farcall IsMailEuropean
 	call CloseSRAM
 	ld a, c
+	cp a, $5
+	jr z, .skip_font
 	ld de, StandardEnglishFont
 	or a
 	jr z, .got_font
@@ -26,11 +28,14 @@ ReadAnyMail:
 	sub $3
 	jr c, .got_font
 	ld de, SpanishItalianFont
-
 .got_font
+	ld a, DFS_FONT_STYLE_EUROPE
+	ld [wDFSFontSytle], a
 	ld hl, vTiles1
 	lb bc, BANK(StandardEnglishFont), $80
 	call Get1bpp
+.skip_font
+	farcall dfsClearCache
 	pop de
 	call .LoadGFX
 	call EnableLCD
@@ -690,9 +695,12 @@ MailGFX_PlaceMessage:
 	ld a, "@"
 	ld [wTempMailAuthor], a
 	ld [wMonOrItemNameBuffer + NAME_LENGTH - 1], a
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	ld de, wTempMailMessage
 	hlcoord 2, 7
-	call PlaceString
+	; call PlaceString
+	call .PlaceMailString
 	ld de, wMonOrItemNameBuffer
 	ld a, [de]
 	and a
@@ -707,6 +715,83 @@ MailGFX_PlaceMessage:
 	hlcoord 5, 14
 
 .place_author
+	; jp PlaceString
+	call .PlaceNameString
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
+	ret
+
+.PlaceMailString
+	ld a, [wDFSFontSytle]
+	cp DFS_FONT_STYLE_EUROPE
+	jr z, .eurPlaceString
+	jr .chiPlaseString
+.chiNextLineChar
+	pop hl
+	ld bc, SCREEN_WIDTH * 2
+	add hl, bc
+.chiPlaseString
+	push hl
+.chiPlaceNextchar
+	ld a, [de]
+	cp "@"
+	jr nz, .chiCheckDict
+	pop hl
+	ret
+.chiCheckDict
+	inc de
+	cp "<NEXT>"
+	jr z, .chiNextLineChar
+	push hl
+	ld hl, wDFSCode
+	and a
+	jr z, .singlechar
+	cp DFS_CODE_CONTRL_0
+	jr c, .doublechar
+	cp DFS_CODE_CONTRL_2
+	jr nc, .singlechar
+	bit 3, a
+	jr nz, .doublechar
+.singlechar
+	ld [hli], a
+	ld [hl], "@"
+	jr .setchar
+.doublechar
+	ld [hli], a
+	ld a, [de]
+	inc de
+	ld [hli], a
+	ld [hl], "@"
+.setchar
+	pop hl
+	push de
+	call PlaceDFSChar
+	pop de
+	jr .chiPlaceNextchar
+
+.eurNextLineChar
+	pop hl
+	ld bc, SCREEN_WIDTH * 2
+	add hl, bc
+.eurPlaceString
+	push hl
+.eurPlaceNextchar
+	ld a, [de]
+	cp "@"
+	jr nz, .eurCheckDict
+	pop hl
+	ret
+.eurCheckDict
+	inc de
+	cp "<NEXT>"
+	jr z, .eurNextLineChar
+	ld [hli], a
+	jr .eurPlaceNextchar
+
+.PlaceNameString
+	ld a, [wDFSFontSytle]
+	cp DFS_FONT_STYLE_EUROPE
+	jr z, .eurPlaceString
 	jp PlaceString
 
 InvertBytes: ; unreferenced

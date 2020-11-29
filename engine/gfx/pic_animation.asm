@@ -817,7 +817,22 @@ PokeAnim_PlaceGraphic:
 	ld l, a
 	ld b, 7
 	ld c, 7
-	call ClearBox
+	; call ClearBox
+	; ret
+	ld a, " "
+.CBrow
+	push bc
+	push hl
+.CBcol
+	ld [hli], a
+	dec c
+	jr nz, .CBcol
+	pop hl
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	pop bc
+	dec b
+	jr nz, .CBrow
 	ret
 
 PokeAnim_SetVBank1:

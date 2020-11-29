@@ -1,10 +1,7 @@
-	db "HERMITCRAB@" ; species name
-	dw 503, 1730 ; height, weight
+	db "寄居蟹@" ; species name
+	dbw 16, 785 ; height, weight
 
-	db   "An attached"
-	next "SHELLDER won't let"
-	next "go because of the"
+	db   "紧咬不放的大舌贝很喜欢"
+	next "它尾巴上散发的香味，"
+	next "所以一直都不愿松口。@"
 
-	page "tasty flavor that"
-	next "oozes out of its"
-	next "tail.@"

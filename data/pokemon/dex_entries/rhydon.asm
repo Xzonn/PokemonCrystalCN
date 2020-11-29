@@ -1,10 +1,7 @@
-	db "DRILL@" ; species name
-	dw 603, 2650 ; height, weight
+	db "钻锥@" ; species name
+	dbw 19, 1200 ; height, weight
 
-	db   "By lightly spin-"
-	next "ning its drill-"
-	next "like horn, it can"
+	db   "轻轻旋转钻头般的角，"
+	next "就连钻石的原石"
+	next "也能轻而易举地凿碎。@"
 
-	page "easily shatter"
-	next "even a diamond in"
-	next "the rough.@"

@@ -148,7 +148,7 @@ GetCaughtName:
 GetCaughtLevel:
 	ld a, "@"
 	ld hl, wSeerCaughtLevelString
-	ld bc, 4
+	ld bc, 5
 	call ByteFill
 
 	; caught level
@@ -170,13 +170,14 @@ GetCaughtLevel:
 
 .unknown
 	ld de, wSeerCaughtLevelString
-	ld hl, .unknown_level
-	ld bc, 4
-	call CopyBytes
-	ret
+	jp UnknownCaughtData
+	; ld hl, .unknown_level
+	; ld bc, 4
+	; call CopyBytes
+	; ret
 
-.unknown_level
-	db "???@"
+; .unknown_level
+	; db "???@"
 
 GetCaughtTime:
 	ld a, [wSeerCaughtData]
@@ -201,18 +202,18 @@ GetCaughtTime:
 	ret
 
 .times
-	db "Morning@"
-	db "Day@"
-	db "Night@"
+	db "清晨@"
+	db "白天@"
+	db "夜晚@"
 
 UnknownCaughtData:
 	ld hl, .unknown
-	ld bc, NAME_LENGTH
+	ld bc, 5;  NAME_LENGTH
 	call CopyBytes
 	ret
 
 .unknown
-	db "Unknown@"
+	db "不明@"
 
 GetCaughtLocation:
 	ld a, [wSeerCaughtGender]

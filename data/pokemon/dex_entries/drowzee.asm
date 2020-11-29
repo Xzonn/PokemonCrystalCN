@@ -1,10 +1,7 @@
-	db "HYPNOSIS@" ; species name
-	dw 303, 710 ; height, weight
+	db "催眠@" ; species name
+	dbw 10, 324 ; height, weight
 
-	db   "When it twitches"
-	next "its nose, it can"
-	next "tell where someone"
+	db   "据说只要抽动一下向前伸出"
+	next "的长鼻就能完全掌握"
+	next "谁在哪里做了什么样的梦。@"
 
-	page "is sleeping and"
-	next "what that person"
-	next "is dreaming about.@"

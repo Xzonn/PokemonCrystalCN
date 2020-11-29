@@ -1,10 +1,7 @@
-	db "SHELLFISH@" ; species name
-	dw 108, 250 ; height, weight
+	db "甲壳@" ; species name
+	dbw 5, 115 ; height, weight
 
-	db   "Three hundred"
-	next "million years ago,"
-	next "it hid on the sea"
+	db   "它藏身于海底，用长在"
+	next "背上的眼睛监视四周，"
+	next "3亿年前的宝可梦。@"
 
-	page "floor. It also has"
-	next "eyes on its back"
-	next "that glow.@"

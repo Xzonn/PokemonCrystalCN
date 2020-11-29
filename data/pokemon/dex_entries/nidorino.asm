@@ -1,10 +1,7 @@
-	db "POISON PIN@" ; species name
-	dw 211, 430 ; height, weight
+	db "毒针@" ; species name
+	dbw 9, 195 ; height, weight
 
-	db   "It is easily"
-	next "agitated and uses"
-	next "its horn for"
+	db   "很容易受到刺激。"
+	next "一旦察觉到有敌人，"
+	next "就会伸出角猛冲过去。@"
 
-	page "offense as soon as"
-	next "it notices an"
-	next "attacker.@"

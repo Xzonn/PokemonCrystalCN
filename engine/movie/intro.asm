@@ -29,6 +29,13 @@ CrystalIntro:
 	call ClearBGPalettes
 	call ClearSprites
 	call ClearTilemap
+	di
+	ldh a, [rIE]
+	push af
+	call DoubleSpeed
+	pop af
+	ldh [rIE], a
+	ei
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
@@ -97,6 +104,13 @@ IntroScene1:
 	call Intro_ClearBGPals
 	call ClearSprites
 	call ClearTilemap
+	di
+	ldh a, [rIE]
+	push af
+	call NormalSpeed
+	pop af
+	ldh [rIE], a
+	ei
 	xor a
 	ldh [hBGMapMode], a
 	ld a, $1

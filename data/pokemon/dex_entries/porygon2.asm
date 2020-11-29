@@ -1,10 +1,7 @@
-	db "VIRTUAL@" ; species name
-	dw 200, 720 ; height, weight
+	db "虚拟@" ; species name
+	dbw 6, 325 ; height, weight
 
-	db   "This manmade"
-	next "#MON evolved"
-	next "from the latest"
+	db   "靠最新科技进化出来的"
+	next "人工宝可梦。有时也会"
+	next "做出程序里没有的动作。@"
 
-	page "technology. It"
-	next "may have unprog-"
-	next "rammed reactions.@"

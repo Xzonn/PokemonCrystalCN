@@ -42,10 +42,10 @@ BattleMenuHeader:
 	dbw BANK(@), NULL
 
 .Text:
-	db "FIGHT@"
-	db "<PKMN>@"
-	db "PACK@"
-	db "RUN@"
+	db "战斗@"
+	db "背包@"
+	db "宝可梦@"
+	db "逃走@"
 
 SafariBattleMenuHeader:
 	db MENU_BACKUP_TILES ; flags
@@ -61,7 +61,7 @@ SafariBattleMenuHeader:
 	dba .PrintSafariBallsRemaining
 
 .Text:
-	db "サファりボール×　　@" ; "SAFARI BALL×  @"
+	db "サファりボール×<　><　>@" ; "SAFARI BALL×  @"
 	db "エサをなげる@" ; "THROW BAIT"
 	db "いしをなげる@" ; "THROW ROCK"
 	db "にげる@" ; "RUN"
@@ -75,25 +75,25 @@ SafariBattleMenuHeader:
 
 ContestBattleMenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 2, 12, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
+	menu_coords 3, 12, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR | STATICMENU_DISABLE_B ; flags
 	dn 2, 2 ; rows, columns
-	db 12 ; spacing
+	db 6 ; spacing
 	dba .Text
 	dba .PrintParkBallsRemaining
 
 .Text:
-	db "FIGHT@"
-	db "<PKMN>@"
-	db "PARKBALL×  @"
-	db "RUN@"
+	db "战斗@"
+	db "公园球×  @"
+	db "宝可梦@"
+	db "逃走@"
 
 .PrintParkBallsRemaining:
-	hlcoord 13, 16
+	hlcoord 17, 14
 	ld de, wParkBallsRemaining
 	lb bc, PRINTNUM_LEADINGZEROS | 1, 2
 	call PrintNum

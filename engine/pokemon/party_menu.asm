@@ -51,6 +51,7 @@ WritePartyMenuTilemap:
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	ld a, " "
 	call ByteFill ; blank the tilemap
+	call ClearFullVramNo
 	call GetPartyMenuQualityIndexes
 .loop
 	ld a, [hli]
@@ -79,7 +80,7 @@ WritePartyMenuTilemap:
 	dw PlacePartyMonMobileBattleSelection
 
 PlacePartyNicknames:
-	hlcoord 3, 1
+	hlcoord 2, 1
 	ld a, [wPartyCount]
 	and a
 	jr z, .end
@@ -92,8 +93,20 @@ PlacePartyNicknames:
 	ld hl, wPartyMonNicknames
 	ld a, b
 	call GetNick
+	lb bc, 15, 1
+	farcall FixStrLength
 	pop hl
+	call IncreaseDFSCombineLevel
+	push de
+	ld b, 1
+	ld a, [de]
+	ld c, a
+	ld d, h
+	ld e, l
+	farcall dfsFirstCharRightAlign
+	pop de
 	call PlaceString
+	call DecreaseDFSCombineLevel
 	pop hl
 	ld de, 2 * SCREEN_WIDTH
 	add hl, de
@@ -103,14 +116,14 @@ PlacePartyNicknames:
 	jr nz, .loop
 
 .end
-	dec hl
+	; dec hl
 	dec hl
 	ld de, .CancelString
 	call PlaceString
 	ret
 
 .CancelString:
-	db "CANCEL@"
+	db "取消@"
 
 PlacePartyHPBar:
 	xor a
@@ -120,7 +133,7 @@ PlacePartyHPBar:
 	ret z
 	ld c, a
 	ld b, 0
-	hlcoord 11, 2
+	hlcoord 13, 1
 .loop
 	push bc
 	push hl
@@ -129,7 +142,7 @@ PlacePartyHPBar:
 	push hl
 	call PlacePartymonHPBar
 	pop hl
-	ld d, $6
+	ld d, $4
 	ld b, $0
 	call DrawBattleHPBar
 	ld hl, wHPPals
@@ -137,7 +150,7 @@ PlacePartyHPBar:
 	ld c, a
 	ld b, $0
 	add hl, bc
-	call SetHPPal
+	call SetShortHPPal
 	ld b, SCGB_PARTY_MENU_HP_BARS
 	call GetSGBLayout
 .skip
@@ -177,7 +190,7 @@ PlacePartymonHPBar:
 	ld d, a
 	ld a, [hli]
 	ld e, a
-	predef ComputeHPBarPixels
+	predef ComputeShortHPBarPixels
 	ret
 
 PlacePartyMenuHPDigits:
@@ -186,7 +199,7 @@ PlacePartyMenuHPDigits:
 	ret z
 	ld c, a
 	ld b, 0
-	hlcoord 13, 1
+	hlcoord 13, 0
 .loop
 	push bc
 	push hl
@@ -227,7 +240,7 @@ PlacePartyMonLevel:
 	ret z
 	ld c, a
 	ld b, 0
-	hlcoord 8, 2
+	hlcoord 10, 1
 .loop
 	push bc
 	push hl
@@ -269,7 +282,7 @@ PlacePartyMonStatus:
 	ret z
 	ld c, a
 	ld b, 0
-	hlcoord 5, 2
+	hlcoord 10, 0
 .loop
 	push bc
 	push hl
@@ -301,7 +314,7 @@ PlacePartyMonTMHMCompatibility:
 	ret z
 	ld c, a
 	ld b, 0
-	hlcoord 12, 2
+	hlcoord 13, 1
 .loop
 	push bc
 	push hl
@@ -341,10 +354,10 @@ PlacePartyMonTMHMCompatibility:
 	ret
 
 .string_able
-	db "ABLE@"
+	db "能学习@"
 
 .string_not_able
-	db "NOT ABLE@"
+	db "不能学@"
 
 PlacePartyMonEvoStoneCompatibility:
 	ld a, [wPartyCount]
@@ -352,7 +365,7 @@ PlacePartyMonEvoStoneCompatibility:
 	ret z
 	ld c, a
 	ld b, 0
-	hlcoord 12, 2
+	hlcoord 13, 1
 .loop
 	push bc
 	push hl
@@ -421,9 +434,9 @@ PlacePartyMonEvoStoneCompatibility:
 	ret
 
 .string_able
-	db "ABLE@"
+	db "能使用@"
 .string_not_able
-	db "NOT ABLE@"
+	db "不能使用@"
 
 PlacePartyMonGender:
 	ld a, [wPartyCount]
@@ -431,7 +444,7 @@ PlacePartyMonGender:
 	ret z
 	ld c, a
 	ld b, 0
-	hlcoord 12, 2
+	hlcoord 13, 1
 .loop
 	push bc
 	push hl
@@ -465,13 +478,13 @@ PlacePartyMonGender:
 	ret
 
 .male
-	db "♂…MALE@"
+	db "♂…雄性@"
 
 .female
-	db "♀…FEMALE@"
+	db "♀…雌性@"
 
 .unknown
-	db "…UNKNOWN@"
+	db " …未知@"
 
 PlacePartyMonMobileBattleSelection:
 	ld a, [wPartyCount]
@@ -542,13 +555,13 @@ PlacePartyMonMobileBattleSelection:
 	jr .loop2
 
 .String_Banme:
-	db "　ばんめ　　@" ; Place
+	db "<　>ばんめ<　><　>@" ; Place
 .String_Sanka_Shinai:
 	db "さんかしない@" ; Cancel
 .String_Kettei_Yameru:
-	db "けってい　　やめる@" ; Quit
+	db "けってい<　><　>やめる@" ; Quit
 .Strings_1_2_3:
-	db "１@", "２@", "３@" ; 1st, 2nd, 3rd
+	db "<１>@", "<２>@", "<３>@" ; 1st, 2nd, 3rd
 
 PartyMenuCheckEgg:
 	ld a, LOW(wPartySpecies)
@@ -744,33 +757,33 @@ PartyMenuStrings:
 	dw ToWhichPKMNString
 
 ChooseAMonString:
-	db "Choose a #MON.@"
+	db "请选择宝可梦。@"
 
 UseOnWhichPKMNString:
-	db "Use on which <PK><MN>?@"
+	db "要用于哪只宝可梦？@"
 
 WhichPKMNString:
-	db "Which <PK><MN>?@"
+	db "哪只宝可梦?@"
 
 TeachWhichPKMNString:
-	db "Teach which <PK><MN>?@"
+	db "要让哪只宝可梦学习？@"
 
 MoveToWhereString:
-	db "Move to where?@"
+	db "要与哪只调整位置？@"
 
 ChooseAFemalePKMNString:
 ; unused
-	db "Choose a ♀<PK><MN>.@"
+	db "请选择雌性宝可梦。@"
 
 ChooseAMalePKMNString:
 ; unused
-	db "Choose a ♂<PK><MN>.@"
+	db "请选择雄性宝可梦。@"
 
 ToWhichPKMNString:
-	db "To which <PK><MN>?@"
+	db "要让哪只宝可梦携带？@"
 
 YouHaveNoPKMNString:
-	db "You have no <PK><MN>!@"
+	db "没有同行宝可梦！@"
 
 PrintPartyMenuActionText:
 	ld a, [wCurPartyMon]

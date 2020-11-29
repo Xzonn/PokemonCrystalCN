@@ -1,10 +1,7 @@
-	db "BIG JAW@" ; species name
-	dw 307, 550 ; height, weight
+	db "大颚@" ; species name
+	dbw 11, 250 ; height, weight
 
-	db   "The tips of its"
-	next "fangs are slanted"
-	next "backward. Once"
+	db   "长着倒向后弯曲的尖牙，"
+	next "猎物一旦被它咬住，"
+	next "就再也无法挣脱了。@"
 
-	page "those fangs clamp"
-	next "down, the prey has"
-	next "no hope of escape.@"

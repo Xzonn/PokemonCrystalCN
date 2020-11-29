@@ -42,7 +42,7 @@ PokemonCenterPC:
 
 .TopMenu:
 	db MENU_BACKUP_TILES | MENU_NO_CLICK_SFX ; flags
-	menu_coords 0, 0, 15, 12
+	menu_coords 0, 0, 14, 12
 	dw .MenuData
 	db 1 ; default option
 
@@ -61,11 +61,11 @@ PokemonCenterPC:
 	dw HallOfFamePC, .String_HallOfFame
 	dw TurnOffPC,    .String_TurnOff
 
-.String_PlayersPC:  db "<PLAYER>'s PC@"
-.String_BillsPC:    db "BILL's PC@"
-.String_OaksPC:     db "PROF.OAK's PC@"
-.String_HallOfFame: db "HALL OF FAME@"
-.String_TurnOff:    db "TURN OFF@"
+.String_PlayersPC:  db "<PLAYER>的电脑@"
+.String_BillsPC:    db "正辉的电脑@"
+.String_OaksPC:     db "大木的电脑@"
+.String_HallOfFame: db "名人堂@"
+.String_TurnOff:    db "关机@"
 
 .WhichPC:
 ; entries correspond to PCPC_* constants
@@ -260,7 +260,7 @@ _PlayersPC:
 
 PlayersPCMenuData:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 15, 12
+	menu_coords 0, 0, 14, 12
 	dw .PlayersPCMenuData
 	db 1 ; default selected option
 
@@ -281,13 +281,13 @@ PlayersPCMenuData:
 	dw PlayerLogOffMenu,       .LogOff
 	dw PlayerLogOffMenu,       .TurnOff
 
-.WithdrawItem: db "WITHDRAW ITEM@"
-.DepositItem:  db "DEPOSIT ITEM@"
-.TossItem:     db "TOSS ITEM@"
-.MailBox:      db "MAIL BOX@"
-.Decoration:   db "DECORATION@"
-.TurnOff:      db "TURN OFF@"
-.LogOff:       db "LOG OFF@"
+.WithdrawItem: db "取出道具@"
+.DepositItem:  db "寄放道具@"
+.TossItem:     db "丢弃道具@"
+.MailBox:      db "邮箱@"
+.Decoration:   db "家具@"
+.TurnOff:      db "关机@"
+.LogOff:       db "退出@"
 
 .WhichPC:
 ; entries correspond to PLAYERSPC_* constants

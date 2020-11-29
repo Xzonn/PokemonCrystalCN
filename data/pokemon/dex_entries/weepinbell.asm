@@ -1,10 +1,7 @@
-	db "FLYCATCHER@" ; species name
-	dw 303, 140 ; height, weight
+	db "捕蝇@" ; species name
+	dbw 10, 64 ; height, weight
 
-	db   "When it's hungry,"
-	next "it swings its"
-	next "razor-sharp"
+	db   "肚子饿了就疯狂发射"
+	next "锋利的叶子，那些被切到的"
+	next "倒霉鬼直接就变成了食物。@"
 
-	page "leaves, slicing up"
-	next "any unlucky object"
-	next "nearby for food.@"

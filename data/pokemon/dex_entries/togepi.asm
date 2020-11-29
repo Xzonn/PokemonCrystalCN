@@ -1,10 +1,7 @@
-	db "SPIKE BALL@" ; species name
-	dw 100, 30 ; height, weight
+	db "针球@" ; species name
+	dbw 3, 15 ; height, weight
 
-	db   "It is considered"
-	next "to be a symbol of"
-	next "good luck. Its"
+	db   "被认为是好运的象征。"
+	next "据说在它的蛋壳里面"
+	next "装有大量的幸福。@"
 
-	page "shell is said to"
-	next "be filled with"
-	next "happiness.@"

@@ -1,10 +1,7 @@
-	db "LEGENDARY@" ; species name
-	dw 603, 3420 ; height, weight
+	db "传说@" ; species name
+	dbw 19, 1550 ; height, weight
 
-	db   "An ancient picture"
-	next "scroll shows that"
-	next "people were"
+	db   "一些古代画卷表明："
+	next "它在草原上驰骋的样子"
+	next "俘获了很多人的心灵。@"
 
-	page "attracted to its"
-	next "movement as it ran"
-	next "through prairies.@"

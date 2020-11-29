@@ -1,10 +1,7 @@
-	db "BALL@" ; species name
-	dw 108, 230 ; height, weight
+	db "球@" ; species name
+	dbw 5, 104 ; height, weight
 
-	db   "During the study"
-	next "of this #MON,"
-	next "it was discovered"
+	db   "调查过身体的成分之后，"
+	next "发现它是由自然界中"
+	next "不存在的物质组成的。@"
 
-	page "that its compo-"
-	next "nents are not"
-	next "found in nature.@"

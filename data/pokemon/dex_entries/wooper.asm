@@ -1,10 +1,7 @@
-	db "WATER FISH@" ; species name
-	dw 104, 190 ; height, weight
+	db "水鱼@" ; species name
+	dbw 4, 85 ; height, weight
 
-	db   "A mucous"
-	next "membrane covers"
-	next "its body. Touching"
+	db   "全身覆盖着一层透明粘膜"
+	next "空手去摸的话会产生"
+	next "令人刺痛的麻痹感。@"
 
-	page "it barehanded will"
-	next "cause a shooting"
-	next "pain.@"

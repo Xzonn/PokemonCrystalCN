@@ -86,18 +86,28 @@ Magikarp_LoadFeetInchesChars:
 INCBIN "gfx/font/feet_inches.2bpp"
 
 PrintMagikarpLength:
-	call Magikarp_LoadFeetInchesChars
+	; call Magikarp_LoadFeetInchesChars
 	ld hl, wStringBuffer1
 	ld de, wMagikarpLength
-	lb bc, PRINTNUM_LEFTALIGN | 1, 2
+	lb bc, 2 | PRINTNUM_LEFTALIGN, 4 ; PRINTNUM_LEFTALIGN | 1, 2
 	call PrintNum
-	ld [hl], "′"
+	; ld [hl], "′"
+	; inc hl
+	; ld de, wMagikarpLength + 1
+	; lb bc, PRINTNUM_LEFTALIGN | 1, 2
+	; call PrintNum
+	; ld [hl], "″"
+	; inc hl
+	dec hl
+	ld a, [hl]
+	ld [hl], "."
 	inc hl
-	ld de, wMagikarpLength + 1
-	lb bc, PRINTNUM_LEFTALIGN | 1, 2
-	call PrintNum
-	ld [hl], "″"
+	ld [hl], a
 	inc hl
+	; ld [hl], "c"
+	; inc hl
+	; ld [hl], "m"
+	; inc hl
 	ld [hl], "@"
 	ret
 
@@ -240,36 +250,36 @@ CalcMagikarpLength:
 	ld e, l
 
 .done
-	; convert from mm to feet and inches
-	; in = mm / 25.4
-	; ft = in / 12
+; 	; convert from mm to feet and inches
+; 	; in = mm / 25.4
+; 	; ft = in / 12
 
-	; hl = de × 10
-	ld h, d
-	ld l, e
-	add hl, hl
-	add hl, hl
-	add hl, de
-	add hl, hl
+; 	; hl = de × 10
+; 	ld h, d
+; 	ld l, e
+; 	add hl, hl
+; 	add hl, hl
+; 	add hl, de
+; 	add hl, hl
 
-	; hl = hl / 254
-	ld de, -254
-	ld a, -1
-.div_254
-	inc a
-	add hl, de
-	jr c, .div_254
+; 	; hl = hl / 254
+; 	ld de, -254
+; 	ld a, -1
+; .div_254
+; 	inc a
+; 	add hl, de
+; 	jr c, .div_254
 
-	; d, e = hl / 12, hl % 12
-	ld d, 0
-.mod_12
-	cp 12
-	jr c, .ok
-	sub 12
-	inc d
-	jr .mod_12
-.ok
-	ld e, a
+; 	; d, e = hl / 12, hl % 12
+; 	ld d, 0
+; .mod_12
+; 	cp 12
+; 	jr c, .ok
+; 	sub 12
+; 	inc d
+; 	jr .mod_12
+; .ok
+; 	ld e, a
 
 	ld hl, wMagikarpLength
 	ld [hl], d ; ft

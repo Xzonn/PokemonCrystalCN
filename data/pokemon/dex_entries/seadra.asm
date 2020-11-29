@@ -1,10 +1,7 @@
-	db "DRAGON@" ; species name
-	dw 311, 550 ; height, weight
+	db "龙@" ; species name
+	dbw 12, 250 ; height, weight
 
-	db   "The male raises"
-	next "the young. If it"
-	next "is approached, it"
+	db   "由雄性抚养后代。"
+	next "会用含有剧毒的刺赶跑"
+	next "在育儿期间接近的家伙。@"
 
-	page "uses its toxic"
-	next "spikes to fend off"
-	next "the intruder.@"

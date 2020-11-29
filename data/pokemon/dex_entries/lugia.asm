@@ -1,10 +1,7 @@
-	db "DIVING@" ; species name
-	dw 1701, 4760 ; height, weight
+	db "潜水@" ; species name
+	dbw 52, 2160 ; height, weight
 
-	db   "It has an incred-"
-	next "ible ability to"
-	next "calm raging sto-"
+	db   "拥有足以镇住汹涌海水的"
+	next "惊人力量。传说它会在发生"
+	next "暴风雨的时候现身。@"
 
-	page "rms. It is said"
-	next "that LUGIA appears"
-	next "when storms start.@"

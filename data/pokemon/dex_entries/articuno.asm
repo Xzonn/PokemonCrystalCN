@@ -1,10 +1,7 @@
-	db "FREEZE@" ; species name
-	dw 507, 1220 ; height, weight
+	db "冰冻@" ; species name
+	dbw 17, 554 ; height, weight
 
-	db   "Legendary bird"
-	next "#MON. As it"
-	next "flies through the"
+	db   "在飞翔的同时会将附近的"
+	next "空气冷凝成雪降下。"
+	next "传说中的鸟宝可梦。@"
 
-	page "sky, it cools the"
-	next "air, causing snow"
-	next "to fall.@"

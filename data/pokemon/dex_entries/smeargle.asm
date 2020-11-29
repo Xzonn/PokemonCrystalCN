@@ -1,10 +1,7 @@
-	db "PAINTER@" ; species name
-	dw 311, 1280 ; height, weight
+	db "画画@" ; species name
+	dbw 12, 580 ; height, weight
 
-	db   "The color of the"
-	next "mysterious fluid"
-	next "secreted from its"
+	db   "会从尾巴末端会分泌出一种"
+	next "神秘的液体，每只图图犬的"
+	next "分泌液的颜色都是固定的。@"
 
-	page "tail is predeter-"
-	next "mined for each"
-	next "SMEARGLE.@"

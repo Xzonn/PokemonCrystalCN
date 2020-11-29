@@ -1,10 +1,7 @@
-	db "VOLCANO@" ; species name
-	dw 507, 1750 ; height, weight
+	db "火山@" ; species name
+	dbw 17, 795 ; height, weight
 
-	db   "When heat from its"
-	next "body causes the"
-	next "air around it to"
+	db   "当火暴兽的周围产生"
+	next "滚滚热浪的时候，就意味着"
+	next "战斗的准备已经完成。@"
 
-	page "shimmer, this is a"
-	next "sign that it is"
-	next "ready to battle.@"

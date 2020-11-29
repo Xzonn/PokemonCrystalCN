@@ -1,10 +1,7 @@
-	db "RAT@" ; species name
-	dw 100, 80 ; height, weight
+	db "鼠@" ; species name
+	dbw 3, 35 ; height, weight
 
-	db   "This #MON's"
-	next "impressive vital-"
-	next "ity allows it to"
+	db   "在什么地方都能生存，"
+	next "生命力非常顽强。"
+	next "繁殖速度非常快。@"
 
-	page "live anywhere. It"
-	next "also multiplies"
-	next "very quickly.@"

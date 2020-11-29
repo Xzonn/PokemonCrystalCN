@@ -1,10 +1,7 @@
-	db "SPITFIRE@" ; species name
-	dw 403, 980 ; height, weight
+	db "吐火@" ; species name
+	dbw 13, 445 ; height, weight
 
-	db   "It moves more"
-	next "frequently in hot"
-	next "areas. It can heal"
+	db   "待的地方越热身体越灵活。"
+	next "会使用熔岩治疗自己"
+	next "在对战中受到的伤。@"
 
-	page "itself by dipping"
-	next "its wound into"
-	next "lava.@"

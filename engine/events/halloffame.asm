@@ -132,7 +132,7 @@ AnimateHallOfFame:
 	ret
 
 .String_NewHallOfFamer:
-	db "New Hall of Famer!@"
+	db "恭喜登入名人堂！！@"
 
 GetHallOfFameParty:
 	ld hl, wHallOfFamePokemonList
@@ -363,28 +363,32 @@ _HallOfFamePC:
 	call ClearBGPalettes
 	pop hl
 	call DisplayHOFMon
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	ld a, [wHallOfFameTempWinCount]
 	cp HOF_MASTER_COUNT + 1 ; should be HOF_MASTER_COUNT
 	jr c, .print_num_hof
 	ld de, .HOFMaster
 	hlcoord 1, 2
 	call PlaceString
-	hlcoord 13, 2
+	hlcoord 11, 2
 	jr .finish
 
 .print_num_hof
 	ld de, .TimeFamer
-	hlcoord 1, 2
-	call PlaceString
 	hlcoord 2, 2
+	call PlaceString
+	hlcoord 4, 2
 	ld de, wHallOfFameTempWinCount
 	lb bc, 1, 3
 	call PrintNum
-	hlcoord 11, 2
+	hlcoord 10, 2
 
 .finish
 	ld de, .EmptyString
 	call PlaceString
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	call WaitBGMap
 	ld b, SCGB_PLAYER_OR_MON_FRONTPIC_PALS
 	call GetSGBLayout
@@ -396,13 +400,13 @@ _HallOfFamePC:
 	ret
 
 .EmptyString:
-	db "@"
+	db "登入名人堂@"
 
 .HOFMaster:
-	db "    HOF Master!@"
+	db "第…几次来着?@"
 
 .TimeFamer:
-	db "    -Time Famer@"
+	db "第   次@"
 
 LoadHOFTeam:
 	ld a, [wJumptableIndex]
@@ -431,6 +435,8 @@ LoadHOFTeam:
 	ret
 
 DisplayHOFMon:
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	xor a
 	ldh [hBGMapMode], a
 	ld a, [hli]
@@ -472,16 +478,16 @@ DisplayHOFMon:
 	ld a, [wCurPartySpecies]
 	cp EGG
 	jr z, .print_id_no
-	hlcoord 1, 13
+	hlcoord 14, 13
 	ld a, "№"
 	ld [hli], a
 	ld [hl], "<DOT>"
-	hlcoord 3, 13
+	hlcoord 16, 13
 	ld de, wDeciramBuffer
 	lb bc, PRINTNUM_LEADINGZEROS | 1, 3
 	call PrintNum
 	call GetBasePokemonName
-	hlcoord 7, 13
+	hlcoord 1, 14
 	call PlaceString
 	ld a, TEMPMON
 	ld [wMonType], a
@@ -493,9 +499,9 @@ DisplayHOFMon:
 	ld a, "♀"
 
 .got_gender
-	hlcoord 18, 13
-	ld [hli], a
-	hlcoord 8, 14
+	hlcoord 12, 13
+	ld [hl], a
+	hlcoord 8, 15
 	ld a, "/"
 	ld [hli], a
 	ld de, wStringBuffer2
@@ -504,16 +510,18 @@ DisplayHOFMon:
 	call PrintLevel
 
 .print_id_no
-	hlcoord 7, 16
+	hlcoord 6, 16
 	ld a, "<ID>"
 	ld [hli], a
 	ld a, "№"
 	ld [hli], a
 	ld [hl], "/"
-	hlcoord 10, 16
+	hlcoord 9, 16
 	ld de, wTempMonID
 	lb bc, PRINTNUM_LEADINGZEROS | 2, 5
 	call PrintNum
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	ret
 
 HOF_AnimatePlayerPic:
@@ -601,4 +609,4 @@ HOF_AnimatePlayerPic:
 	ret
 
 .PlayTime:
-	db "PLAY TIME@"
+	db "游戏时间@"

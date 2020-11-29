@@ -1,10 +1,7 @@
-	db "DRAGON@" ; species name
-	dw 511, 70 ; height, weight
+	db "龙@" ; species name
+	dbw 18, 33 ; height, weight
 
-	db   "It sheds many lay-"
-	next "ers of skin as it"
-	next "grows larger. Dur-"
+	db   "藏身在水流激烈的瀑布后，"
+	next "不断地进行蜕皮，"
+	next "同时也会越长越大。@"
 
-	page "ing this process,"
-	next "it is protected by"
-	next "a rapid waterfall.@"

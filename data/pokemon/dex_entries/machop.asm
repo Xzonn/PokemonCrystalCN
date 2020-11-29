@@ -1,10 +1,7 @@
-	db "SUPERPOWER@" ; species name
-	dw 207, 430 ; height, weight
+	db "怪力@" ; species name
+	dbw 8, 195 ; height, weight
 
-	db   "It trains by"
-	next "lifting rocks in"
-	next "the mountains. It"
+	db   "会举起山里的石头"
+	next "进行锻炼。就算是隆隆石"
+	next "也能轻易地举起来。@"
 
-	page "can even pick up a"
-	next "GRAVELER with"
-	next "ease.@"

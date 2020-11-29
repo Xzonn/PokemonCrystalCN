@@ -1,10 +1,7 @@
-	db "SCUFFLE@" ; species name
-	dw 204, 460 ; height, weight
+	db "打斗@" ; species name
+	dbw 7, 210 ; height, weight
 
-	db   "To brush up on its"
-	next "fighting skills,"
-	next "it will challenge"
+	db   "为了磨练自己的格斗意识，"
+	next "会勇敢地面对任何对手。"
+	next "性格非常争强好胜。@"
 
-	page "anyone. It has a"
-	next "very strong com-"
-	next "petitive spirit.@"

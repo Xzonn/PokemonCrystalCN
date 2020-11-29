@@ -1,10 +1,7 @@
-	db "FISH@" ; species name
-	dw 211, 220 ; height, weight
+	db "鱼@" ; species name
+	dbw 9, 100 ; height, weight
 
-	db   "This weak and"
-	next "pathetic #MON"
-	next "gets easily pushed"
+	db   "在水流湍急的地方"
+	next "只能等着被冲走，"
+	next "弱得可怜的宝可梦。@"
 
-	page "along rivers when"
-	next "there are strong"
-	next "currents.@"

@@ -1,10 +1,7 @@
-	db "BARRIER@" ; species name
-	dw 403, 1200 ; height, weight
+	db "屏障@" ; species name
+	dbw 13, 545 ; height, weight
 
-	db   "It uses the"
-	next "mysterious"
-	next "power it has in"
+	db   "从手指释放的神秘力量"
+	next "能把周围的空气硬化，"
+	next "于是会产生看不见的墙。@"
 
-	page "its fingers to"
-	next "solidify air into"
-	next "an invisible wall.@"

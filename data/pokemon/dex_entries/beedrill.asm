@@ -1,10 +1,7 @@
-	db "POISON BEE@" ; species name
-	dw 303, 650 ; height, weight
+	db "毒蜂@" ; species name
+	dbw 10, 295 ; height, weight
 
-	db   "It uses sharp,"
-	next "poisonous stings"
-	next "to defeat prey,"
+	db   "会用锐利的毒针"
+	next "放倒一切对手，不论强弱。"
+	next "然后带回巢穴当作食物。@"
 
-	page "then takes the"
-	next "victim back to its"
-	next "nest for food.@"

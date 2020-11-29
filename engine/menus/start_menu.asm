@@ -96,13 +96,18 @@ StartMenu::
 ; Return carry on exit, and no-carry on selection.
 	xor a
 	ldh [hBGMapMode], a
+	ld b, a ; 初始化一个非$ff的值就行
 	call ._DrawMenuAccount
 	call SetUpMenu
 	ld a, $ff
 	ld [wMenuSelection], a
 .loop
-	call .PrintMenuAccount
+	ld a, [wMenuSelection]
+	cp b
+	push af
+	call nz, .PrintMenuAccount
 	call GetScrollingMenuJoypad
+	pop bc
 	ld a, [wMenuJoypad]
 	cp B_BUTTON
 	jr z, .b
@@ -157,13 +162,13 @@ StartMenu::
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 10, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
+	menu_coords 12, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
 	dw .MenuData
 	db 1 ; default selection
 
 .ContestMenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 10, 2, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
+	menu_coords 12, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
 	dw .MenuData
 	db 1 ; default selection
 
@@ -186,51 +191,50 @@ StartMenu::
 	dw StartMenu_Pokegear, .PokegearString, .PokegearDesc
 	dw StartMenu_Quit,     .QuitString,     .QuitDesc
 
-.PokedexString:  db "#DEX@"
-.PartyString:    db "#MON@"
-.PackString:     db "PACK@"
+.PokedexString:  db "图鉴@"
+.PartyString:    db "宝可梦@"
+.PackString:     db "背包@"
 .StatusString:   db "<PLAYER>@"
-.SaveString:     db "SAVE@"
-.OptionString:   db "OPTION@"
-.ExitString:     db "EXIT@"
-.PokegearString: db "<POKE>GEAR@"
-.QuitString:     db "QUIT@"
+.SaveString:     db "记录@"
+.OptionString:   db "设置@"
+.ExitString:     db "关闭@"
+.PokegearString: db "齿轮@"
+.QuitString:     db "中止@"
 
 .PokedexDesc:
-	db   "#MON"
-	next "database@"
+	db   "宝可梦的秘密"
+	next "尽在其中@"
 
 .PartyDesc:
-	db   "Party <PKMN>"
-	next "status@"
+	db   "同行宝可梦的"
+	next "状况一览@"
 
 .PackDesc:
-	db   "Contains"
-	next "items@"
+	db   "能收纳道具的"
+	next "多口袋背包@"
 
 .PokegearDesc:
-	db   "Trainer's"
-	next "key device@"
+	db   "训练家之旅的"
+	next "实用工具@"
 
 .StatusDesc:
-	db   "Your own"
-	next "status@"
+	db   "你现在的"
+	next "状况一览@"
 
 .SaveDesc:
-	db   "Save your"
-	next "progress@"
+	db   "在休息之前"
+	next "先记录状态@"
 
 .OptionDesc:
-	db   "Change"
-	next "settings@"
+	db   "对规则等等"
+	next "进行调整@"
 
 .ExitDesc:
-	db   "Close this"
-	next "menu@"
+	db   "关闭本菜单@"
 
 .QuitDesc:
-	db   "Quit and"
-	next "be judged.@"
+	db   "离开"
+	next "并进行裁定@"
 
 .OpenMenu:
 	ld a, [wMenuSelection]
@@ -243,12 +247,25 @@ StartMenu::
 .MenuString:
 	push de
 	ld a, [wMenuSelection]
+	cp STARTMENUITEM_STATUS
+	jr z, .status
 	call .GetMenuAccountTextPointer
 	inc hl
 	inc hl
 	ld a, [hli]
 	ld d, [hl]
 	ld e, a
+	pop hl
+	call PlaceString
+	ret
+.status
+	ld bc, PLAYER_NAME_LENGTH
+	ld hl, wPlayerName
+	ld de, wStringBuffer1
+	call CopyBytes
+	ld de, wStringBuffer1
+	lb bc, 10, 0
+	farcall FixStrLength
 	pop hl
 	call PlaceString
 	ret
@@ -361,13 +378,21 @@ endr
 	ret
 
 .DrawMenuAccount:
-	jp ._DrawMenuAccount
+	call .IsMenuAccountOn
+	ret z
+	hlcoord 0, 13
+	lb bc, 5, SCREEN_WIDTH
+	call ClearBox
+	hlcoord 0, 13
+	ld b, 3
+	ld c, SCREEN_WIDTH - 2
+	jp TextboxPalette
 
 .PrintMenuAccount:
 	call .IsMenuAccountOn
 	ret z
 	call ._DrawMenuAccount
-	decoord 0, 14
+	decoord 1, 14
 	jp .MenuDesc
 
 ._DrawMenuAccount:
@@ -376,10 +401,11 @@ endr
 	hlcoord 0, 13
 	lb bc, 5, 10
 	call ClearBox
-	hlcoord 0, 13
-	ld b, 3
-	ld c, 8
-	jp TextboxPalette
+	ret
+	; hlcoord 0, 13
+	; ld b, 3
+	; ld c, 8
+	; jp TextboxPalette
 
 .IsMenuAccountOn:
 	ld a, [wOptions2]

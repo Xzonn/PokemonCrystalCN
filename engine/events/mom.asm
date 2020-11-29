@@ -77,7 +77,7 @@ BankOfMom:
 	jr .done_2
 
 .nope
-	call DSTChecks
+	; call DSTChecks
 	ld a, $7
 
 .done_2
@@ -470,7 +470,7 @@ Mom_WithdrawDepositMenuJoypad:
 	ldh a, [hVBlankCounter]
 	and $10
 	jr nz, .skip
-	hlcoord 13, 6
+	hlcoord 12, 6
 	ld a, [wMomBankDigitCursorPosition]
 	ld c, a
 	ld b, 0
@@ -638,27 +638,27 @@ MomJustDoWhatYouCanText:
 	text_end
 
 Mom_SavedString:
-	db "SAVED@"
+	db "寄放金额@"
 
 Mon_WithdrawString:
-	db "WITHDRAW@"
+	db "取出金额@"
 
 Mom_DepositString:
-	db "DEPOSIT@"
+	db "存入金额@"
 
 Mom_HeldString:
-	db "HELD@"
+	db "手持金额@"
 
 BankOfMom_MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 10, 10
+	menu_coords 0, 0, 5, 9
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
-	db "GET@"
-	db "SAVE@"
-	db "CHANGE@"
-	db "CANCEL@"
+	db "取钱@"
+	db "存钱@"
+	db "变更@"
+	db "放弃@"

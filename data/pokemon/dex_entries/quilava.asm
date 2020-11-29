@@ -1,10 +1,7 @@
-	db "VOLCANO@" ; species name
-	dw 211, 420 ; height, weight
+	db "火山@" ; species name
+	dbw 9, 190 ; height, weight
 
-	db   "Before battle, it"
-	next "turns its back on"
-	next "its opponent to"
+	db   "为了向对方展示"
+	next "自己背后猛烈燃烧的火焰，"
+	next "对战前会背对对手。@"
 
-	page "demonstrate how"
-	next "ferociously its"
-	next "fire blazes.@"

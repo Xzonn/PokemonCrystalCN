@@ -16,11 +16,13 @@ _Option:
 	push af
 	ld [hl], TRUE
 	call ClearBGPalettes
+	ld b, SCGB_DIPLOMA
+	call GetSGBLayout
 	hlcoord 0, 0
 	ld b, SCREEN_HEIGHT - 2
 	ld c, SCREEN_WIDTH - 2
 	call Textbox
-	hlcoord 2, 2
+	hlcoord 1, 2
 	ld de, StringOptions
 	call PlaceString
 	xor a
@@ -45,8 +47,8 @@ _Option:
 	inc a
 	ldh [hBGMapMode], a
 	call WaitBGMap
-	ld b, SCGB_DIPLOMA
-	call GetSGBLayout
+	; ld b, SCGB_DIPLOMA
+	; call GetSGBLayout
 	call SetPalettes
 
 .joypad_loop
@@ -74,21 +76,14 @@ _Option:
 	ret
 
 StringOptions:
-	db "TEXT SPEED<LF>"
-	db "        :<LF>"
-	db "BATTLE SCENE<LF>"
-	db "        :<LF>"
-	db "BATTLE STYLE<LF>"
-	db "        :<LF>"
-	db "SOUND<LF>"
-	db "        :<LF>"
-	db "PRINT<LF>"
-	db "        :<LF>"
-	db "MENU ACCOUNT<LF>"
-	db "        :<LF>"
-	db "FRAME<LF>"
-	db "        :TYPE<LF>"
-	db "CANCEL@"
+	db   "语速"
+	next "对战动画"
+	next "比赛规则"
+	next "声音"
+	next "打印浓度"
+	next "菜单说明"
+	next "边框       类型"
+	next "          结束@"
 
 GetOptionPointer:
 	jumptable .Pointers, wJumptableIndex
@@ -151,7 +146,7 @@ Options_TextSpeed:
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	hlcoord 11, 3
+	hlcoord 11, 2
 	call PlaceString
 	and a
 	ret
@@ -162,9 +157,9 @@ Options_TextSpeed:
 	dw .Mid
 	dw .Slow
 
-.Fast: db "FAST@"
-.Mid:  db "MID @"
-.Slow: db "SLOW@"
+.Fast: db "快　@"
+.Mid:  db "普通@"
+.Slow: db "慢　@"
 
 GetTextSpeed:
 ; converts TEXT_DELAY_* value in a to OPT_TEXT_SPEED_* value in c,
@@ -221,13 +216,13 @@ Options_BattleScene:
 	ld de, .Off
 
 .Display:
-	hlcoord 11, 5
+	hlcoord 11, 4
 	call PlaceString
 	and a
 	ret
 
-.On:  db "ON @"
-.Off: db "OFF@"
+.On:  db "看　@"
+.Off: db "不看@"
 
 Options_BattleStyle:
 	ld hl, wOptions
@@ -259,13 +254,13 @@ Options_BattleStyle:
 	ld de, .Set
 
 .Display:
-	hlcoord 11, 7
+	hlcoord 11, 6
 	call PlaceString
 	and a
 	ret
 
-.Shift: db "SHIFT@"
-.Set:   db "SET  @"
+.Shift: db "替换@"
+.Set:   db "连战@"
 
 Options_Sound:
 	ld hl, wOptions
@@ -304,13 +299,13 @@ Options_Sound:
 	ld de, .Stereo
 
 .Display:
-	hlcoord 11, 9
+	hlcoord 11, 8
 	call PlaceString
 	and a
 	ret
 
-.Mono:   db "MONO  @"
-.Stereo: db "STEREO@"
+.Mono:   db "单声道@"
+.Stereo: db "立体声@"
 
 	const_def
 	const OPT_PRINT_LIGHTEST ; 0
@@ -358,7 +353,7 @@ Options_Print:
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	hlcoord 11, 11
+	hlcoord 11, 10
 	call PlaceString
 	and a
 	ret
@@ -371,11 +366,11 @@ Options_Print:
 	dw .Darker
 	dw .Darkest
 
-.Lightest: db "LIGHTEST@"
-.Lighter:  db "LIGHTER @"
-.Normal:   db "NORMAL  @"
-.Darker:   db "DARKER  @"
-.Darkest:  db "DARKEST @"
+.Lightest: db "最淡@"
+.Lighter:  db "较淡@"
+.Normal:   db "正常@"
+.Darker:   db "较浓@"
+.Darkest:  db "最浓@"
 
 GetPrinterSetting:
 ; converts GBPRINTER_* value in a to OPT_PRINT_* value in c,
@@ -444,13 +439,13 @@ Options_MenuAccount:
 	ld de, .On
 
 .Display:
-	hlcoord 11, 13
+	hlcoord 11, 12
 	call PlaceString
 	and a
 	ret
 
-.Off: db "OFF@"
-.On:  db "ON @"
+.Off: db "关闭@"
+.On:  db "开启@"
 
 Options_Frame:
 	ld hl, wTextboxFrame
@@ -476,7 +471,7 @@ Options_Frame:
 	ld [hl], a
 UpdateFrame:
 	ld a, [wTextboxFrame]
-	hlcoord 16, 15 ; where on the screen the number is drawn
+	hlcoord 15, 14 ; where on the screen the number is drawn
 	add "1"
 	ld [hl], a
 	call LoadFontsExtra
@@ -543,7 +538,7 @@ OptionsControl:
 	ret
 
 Options_UpdateCursorPosition:
-	hlcoord 1, 1
+	hlcoord 10, 1
 	ld de, SCREEN_WIDTH
 	ld c, SCREEN_HEIGHT - 2
 .loop
@@ -551,7 +546,7 @@ Options_UpdateCursorPosition:
 	add hl, de
 	dec c
 	jr nz, .loop
-	hlcoord 1, 2
+	hlcoord 10, 2
 	ld bc, 2 * SCREEN_WIDTH
 	ld a, [wJumptableIndex]
 	call AddNTimes

@@ -1,10 +1,7 @@
-	db "MOONLIGHT@" ; species name
-	dw 303, 600 ; height, weight
+	db "月光@" ; species name
+	dbw 10, 270 ; height, weight
 
-	db   "On the night of a"
-	next "full moon, or when"
-	next "it gets excited,"
+	db   "在满月之夜或兴奋起来的"
+	next "时候，全身上下的环状花纹"
+	next "会发出金色的光。@"
 
-	page "the ring patterns"
-	next "on its body glow"
-	next "yellow.@"

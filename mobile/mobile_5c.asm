@@ -400,8 +400,8 @@ Function171a95:
 
 String_171aa7:
 	db   "モバイルアダプタに"
-	next "せつぞく　しています"
-	next "しばらく　おまちください"
+	next "せつぞく<　>しています"
+	next "しばらく<　>おまちください"
 	db   "@"
 
 Function171ac9:
@@ -645,7 +645,7 @@ MenuHeader_171c6b:
 	db 0 ; default option
 
 String_171c73:
-	db   "モバイルセンターを　けってい"
+	db   "モバイルセンターを<　>けってい"
 	next "しました@"
 
 Function171c87:
@@ -776,14 +776,14 @@ INCBIN "gfx/pokedex/slowpoke.2bpp.lz"
 String_172e31:
 	db "パスワード<WO>いれてください@"
 String_172e3f:
-	db "きりかえ　やめる　　けってい@"
+	db "きりかえ<　>やめる<　><　>けってい@"
 String_172e4e:
-	db "きりかえ　やめる　　"
+	db "きりかえ<　>やめる<　><　>"
 String_172e58:
 	db "けってい@"
 String_172e5d:
-	db "せつぞくする　モバイルセンターを"
-	next "えらんで　ください@"
+	db "せつぞくする<　>モバイルセンターを"
+	next "えらんで<　>ください@"
 
 Function172e78:
 	ld a, $7f
@@ -869,7 +869,8 @@ Stadium2N64Tilemap:
 if DEF(_CRYSTAL11)
 ; Crystal 1.1 corrupted this tilemap by treating $0a bytes as Unix newlines,
 ; and converting them to $0d $0a Windows newlines.
-INCBIN "gfx/mobile/stadium2_n64_corrupt.tilemap"
+; INCBIN "gfx/mobile/stadium2_n64_corrupt.tilemap"
+INCBIN "gfx/mobile/stadium2_n64.tilemap"
 else
 INCBIN "gfx/mobile/stadium2_n64.tilemap"
 endc

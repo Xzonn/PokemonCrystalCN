@@ -40,10 +40,14 @@ PrintHoursMins:
 	ld [hl], " "
 	lb bc, 1, 2
 	call PrintNum
-	ld [hl], ":"
-	inc hl
-	ld d, h
-	ld e, l
+	; ld [hl], ":"
+	; inc hl
+	; ld d, h
+	; ld e, l
+	ld de, .colon
+	call PlaceString
+	ld d, b
+	ld e, c
 	ld hl, sp+0
 	push de
 	push hl
@@ -60,6 +64,9 @@ PrintHoursMins:
 	inc hl
 	call PlaceString
 	ret
+
+.colon:
+	db ":@"
 
 String_AM: db "AM@"
 String_PM: db "PM@"

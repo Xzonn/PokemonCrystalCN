@@ -42,6 +42,27 @@ MG_Mobile_Layout_FillBox:
 	jr nz, .row
 	ret
 
+MG_Mobile_Layout_FillBox_WithoutVramNo:
+.row
+	push bc
+	push hl
+.col
+	ld b, a
+	ld a, [hl]
+	and a, $08
+	or b
+	ld [hli], a
+	ld a, b
+	dec c
+	jr nz, .col
+	pop hl
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	pop bc
+	dec b
+	jr nz, .row
+	ret
+
 MG_Mobile_Layout_WipeAttrmap:
 	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
@@ -235,42 +256,57 @@ INCLUDE "gfx/trade/mobile_border.pal"
 
 _InitMG_Mobile_LinkTradePalMap:
 	hlcoord 0, 0, wAttrmap
-	lb bc, 16, 2
-	ld a, $4
-	call MG_Mobile_Layout_FillBox
-	ld a, $3
-	ldcoord_a 0, 1, wAttrmap
-	ldcoord_a 0, 14, wAttrmap
-	hlcoord 2, 0, wAttrmap
-	lb bc, 8, 18
-	ld a, $5
-	call MG_Mobile_Layout_FillBox
-	hlcoord 2, 8, wAttrmap
-	lb bc, 8, 18
-	ld a, $6
-	call MG_Mobile_Layout_FillBox
-	hlcoord 0, 16, wAttrmap
 	lb bc, 2, SCREEN_WIDTH
 	ld a, $4
+	; call MG_Mobile_Layout_FillBox
+	call MG_Mobile_Layout_FillBox_WithoutVramNo
+	ld a, $3
+	ldcoord_a 1, 0, wAttrmap
+	ldcoord_a 18, 0, wAttrmap
+	hlcoord 8, 0, wAttrmap
+	; lb bc, 8, 18
+	ld a, $5
+	ld [hli], a
+	ld [hli], a
+	ldcoord_a 8, 1, wAttrmap
+	ld a, $6
+	ld [hli], a
+	ld [hl], a
+	ldcoord_a 11, 1, wAttrmap
+	
+	hlcoord 0, 2, wAttrmap
+	lb bc, 13, 10
+	ld a, $5
+	; call MG_Mobile_Layout_FillBox
+	call MG_Mobile_Layout_FillBox_WithoutVramNo
+	hlcoord 10, 2, wAttrmap
+	lb bc, 13, 10
+	ld a, $6
+	; call MG_Mobile_Layout_FillBox
+	call MG_Mobile_Layout_FillBox_WithoutVramNo
+	hlcoord 0, 15, wAttrmap
+	lb bc, 3, SCREEN_WIDTH
+	ld a, $4
+	; call MG_Mobile_Layout_FillBox
+	call MG_Mobile_Layout_FillBox_WithoutVramNo
+	; ld a, $3
+	; lb bc, 6, 1
+	; hlcoord 6, 1, wAttrmap
+	; call MG_Mobile_Layout_FillBox
+	; ld a, $3
+	; lb bc, 6, 1
+	; hlcoord 17, 1, wAttrmap
+	; call MG_Mobile_Layout_FillBox
+	ld a, $3
+	lb bc, 11, 1
+	hlcoord 8, 3, wAttrmap
 	call MG_Mobile_Layout_FillBox
 	ld a, $3
-	lb bc, 6, 1
-	hlcoord 6, 1, wAttrmap
-	call MG_Mobile_Layout_FillBox
-	ld a, $3
-	lb bc, 6, 1
-	hlcoord 17, 1, wAttrmap
-	call MG_Mobile_Layout_FillBox
-	ld a, $3
-	lb bc, 6, 1
-	hlcoord 6, 9, wAttrmap
-	call MG_Mobile_Layout_FillBox
-	ld a, $3
-	lb bc, 6, 1
-	hlcoord 17, 9, wAttrmap
+	lb bc, 11, 1
+	hlcoord 11, 3, wAttrmap
 	call MG_Mobile_Layout_FillBox
 	ld a, $2
-	hlcoord 2, 16, wAttrmap
+	hlcoord 13, 16, wAttrmap
 	ld [hli], a
 	ld a, $7
 	ld [hli], a
@@ -278,7 +314,7 @@ _InitMG_Mobile_LinkTradePalMap:
 	ld [hli], a
 	ld a, $2
 	ld [hl], a
-	hlcoord 2, 17, wAttrmap
+	hlcoord 12, 17, wAttrmap
 	ld a, $3
 	ld bc, 6
 	call ByteFill

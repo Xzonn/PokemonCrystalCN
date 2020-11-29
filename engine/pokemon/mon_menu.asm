@@ -234,6 +234,7 @@ GiveTakePartyMonItem:
 	ret
 
 .cancel
+	call WaitBGMap
 	ld a, 3
 	ret
 
@@ -376,15 +377,15 @@ TakePartyItem:
 
 GiveTakeItemMenuData:
 	db MENU_SPRITE_ANIMS | MENU_BACKUP_TILES ; flags
-	menu_coords 12, 12, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
+	menu_coords 11, 12, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
 	dw .Items
 	db 1 ; default option
 
 .Items:
 	db STATICMENU_CURSOR ; flags
 	db 2 ; # items
-	db "GIVE@"
-	db "TAKE@"
+	db "携带@"
+	db "收回@"
 
 PokemonSwapItemText:
 	text_far _PokemonSwapItemText
@@ -449,6 +450,30 @@ ComposeMailMessage:
 	ld de, wTempMailAuthor
 	ld bc, NAME_LENGTH - 1
 	call CopyBytes
+
+	ld b, -1
+	ld hl, wTempMailAuthor
+.loop
+	inc b
+	ld a, b
+	cp 8
+	jr nc, .overflow
+
+	ld a, [hli]
+	cp "@"
+	jr nz, .loop
+
+	ld a, b
+	cp 8
+	jr nc, .overflow
+
+	ld hl, wTempMailAuthorNationality
+	ld a, "C"
+	ld [hli], a
+	ld a, "N"
+	ld [hl], a
+.overflow
+
 	ld hl, wPlayerID
 	ld bc, 2
 	call CopyBytes
@@ -540,21 +565,22 @@ MonMailAction:
 	jr .done
 
 .done
+	call WaitBGMap
 	ld a, $3
 	ret
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 12, 10, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
+	menu_coords 11, 10, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 3 ; items
-	db "READ@"
-	db "TAKE@"
-	db "QUIT@"
+	db "阅读邮件@"
+	db "取下邮件@"
+	db "取消@"
 
 .MailLoseMessageText:
 	text_far _MailLoseMessageText
@@ -906,12 +932,13 @@ MoveScreenLoop:
 	jp .joy_loop
 
 .moving_move
-	ld a, " "
+	; ld a, " "
+	; hlcoord 1, 11
+	; ld bc, 5
+	; call ByteFill
+	; hlcoord 1, 12
 	hlcoord 1, 11
-	ld bc, 5
-	call ByteFill
-	hlcoord 1, 12
-	lb bc, 5, SCREEN_WIDTH - 2
+	lb bc, 6, SCREEN_WIDTH - 2
 	call ClearBox
 	hlcoord 1, 12
 	ld de, String_MoveWhere
@@ -1042,9 +1069,9 @@ MoveScreenLoop:
 	hlcoord 1, 2
 	lb bc, 8, 18
 	call ClearBox
-	hlcoord 10, 10
-	lb bc, 1, 9
-	call ClearBox
+	; hlcoord 10, 10
+	; lb bc, 1, 9
+	; call ClearBox
 	jp .loop
 
 .copy_move
@@ -1085,7 +1112,7 @@ MoveScreen2DMenuData:
 	db D_UP | D_DOWN | D_LEFT | D_RIGHT | A_BUTTON | B_BUTTON ; accepted buttons
 
 String_MoveWhere:
-	db "Where?@"
+	db "移动到哪里？@"
 
 SetUpMoveScreenBG:
 	call ClearBGPalettes
@@ -1108,15 +1135,25 @@ SetUpMoveScreenBG:
 	ld b, 9
 	ld c, 18
 	call Textbox
-	hlcoord 0, 11
-	ld b, 5
+	hlcoord 0, 10
+	ld b, 6
 	ld c, 18
 	call Textbox
-	hlcoord 2, 0
-	lb bc, 2, 3
+	hlcoord 1, 0
+	lb bc, 2, 18
 	call ClearBox
+	ld b, SCGB_MOVE_LIST
+	call GetSGBLayout
 	xor a
 	ld [wMonType], a
+if 1
+	hlcoord 3, 1
+	predef Unused_PlaceEnemyHPLevel
+	ld hl, wPlayerHPPal
+	jp SetHPPal
+	; ld b, SCGB_MOVE_LIST
+	; call GetSGBLayout
+else
 	ld hl, wPartyMonNicknames
 	ld a, [wCurPartyMon]
 	call GetNick
@@ -1128,11 +1165,13 @@ SetUpMoveScreenBG:
 	call PrintLevel
 	ld hl, wPlayerHPPal
 	call SetHPPal
-	ld b, SCGB_MOVE_LIST
-	call GetSGBLayout
+	; ld b, SCGB_MOVE_LIST
+	; call GetSGBLayout
 	hlcoord 16, 0
-	lb bc, 1, 3
+	lb bc, 1, 4
 	jp ClearBox
+endc
+
 
 SetUpMoveList:
 	xor a
@@ -1148,15 +1187,15 @@ SetUpMoveList:
 	ld [wBuffer1], a
 	hlcoord 2, 3
 	predef ListMoves
-	hlcoord 10, 4
+	hlcoord 11, 3
 	predef ListMovePP
 	call WaitBGMap
 	call SetPalettes
 	ld a, [wNumMoves]
 	inc a
 	ld [w2DMenuNumRows], a
-	hlcoord 0, 11
-	ld b, 5
+	hlcoord 0, 10
+	ld b, 6
 	ld c, 18
 	jp Textbox
 
@@ -1172,25 +1211,25 @@ PrepareToPlaceMoveData:
 	add hl, bc
 	ld a, [hl]
 	ld [wCurSpecies], a
-	hlcoord 1, 12
-	lb bc, 5, 18
+	hlcoord 1, 11
+	lb bc, 6, 18
 	jp ClearBox
 
 PlaceMoveData:
 	xor a
 	ldh [hBGMapMode], a
-	hlcoord 0, 10
-	ld de, String_MoveType_Top
-	call PlaceString
-	hlcoord 0, 11
+	; hlcoord 0, 10
+	; ld de, String_MoveType_Top
+	; call PlaceString
+	hlcoord 1, 12
 	ld de, String_MoveType_Bottom
 	call PlaceString
-	hlcoord 12, 12
+	hlcoord 11, 12
 	ld de, String_MoveAtk
 	call PlaceString
 	ld a, [wCurSpecies]
 	ld b, a
-	hlcoord 2, 12
+	hlcoord 5, 12
 	predef PrintMoveType
 	ld a, [wCurSpecies]
 	dec a
@@ -1199,7 +1238,7 @@ PlaceMoveData:
 	call AddNTimes
 	ld a, BANK(Moves)
 	call GetFarByte
-	hlcoord 16, 12
+	hlcoord 15, 12
 	cp 2
 	jr c, .no_power
 	ld [wDeciramBuffer], a
@@ -1219,12 +1258,12 @@ PlaceMoveData:
 	ldh [hBGMapMode], a
 	ret
 
-String_MoveType_Top:
-	db "┌─────┐@"
+; String_MoveType_Top:
+; 	db "┌─────┐@"
 String_MoveType_Bottom:
-	db "│TYPE/└@"
+	db "属性/@"
 String_MoveAtk:
-	db "ATK/@"
+	db "威力/@"
 String_MoveNoPower:
 	db "---@"
 

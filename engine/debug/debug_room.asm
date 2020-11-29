@@ -74,7 +74,7 @@ _DebugRoom:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 15, SCREEN_HEIGHT - 1
+	menu_coords 0, 0, 11, SCREEN_HEIGHT - 1
 	dw .MenuData
 	db 1 ; default option
 
@@ -87,27 +87,27 @@ _DebugRoom:
 
 .Strings:
 ; entries correspond to DEBUGROOMMENUITEM_* constants
-	db "SP CLEAR@"
-	db "WIN WORK CLR@"
-	db "#MON GET!@"
-	db "#DEX COMP@"
-	db "TIMER RESET@"
-	db "DECORATE ALL@"
-	db "ITEM GET!@"
-	db "RTC EDIT@"
-	db "NEXT@"
-	db "GB ID SET@"
-	db "BTL REC CLR@"
-	db "#DEX CLR@"
-	db "HALT CHK CLR@"
-	db "BATTLE SKIP@"
-	db "HOF CLEAR@"
-	db "ROM CHECKSUM@"
-	db "TEL DEBUG@"
-	db "SUM RECALC@"
-	db "RAM FLAG CLR@"
-	db "CHANGE SEX@"
-	db "BT BUG POKE@"
+	db "清除堆栈@"
+	db "清除窗口工作@"
+	db "获取宝可梦！@"
+	db "完成图鉴@"
+	db "时钟复位@"
+	db "所有家具@"
+	db "获取道具！@"
+	db "编辑实时时钟@"
+	db "下一页@"
+	db "设置GB ID@"
+	db "清除对战成绩@"
+	db "清除图鉴@"
+	db "清除时钟挂起@"
+	db "跳过对战@"
+	db "清除名人堂@"
+	db "ROM校验值@"
+	db "手机调试@"
+	db "重算校验值@"
+	db "清除内存标志@"
+	db "改变性别@"
+	db "对战错宝可梦@"
 
 .Jumptable:
 ; entries correspond to DEBUGROOMMENUITEM_* constants
@@ -161,12 +161,13 @@ _DebugRoom:
 	db -1
 
 	; DEBUGROOMMENU_PAGE_3
-	db 6
+	db 7
 	db DEBUGROOMMENUITEM_TEL_DEBUG
 	db DEBUGROOMMENUITEM_SUM_RECALC
 	db DEBUGROOMMENUITEM_RAM_FLAG_CLR
 	db DEBUGROOMMENUITEM_CHANGE_SEX
 	db DEBUGROOMMENUITEM_BT_BUG_POKE
+	db DEBUGROOMMENUITEM_WIN_WORK_CLR
 	db DEBUGROOMMENUITEM_NEXT
 	db -1
 
@@ -220,7 +221,7 @@ DebugRoomMenu_SpClear:
 DebugRoom_PrintStackBottomTop:
 	ld a, BANK(sStackTop)
 	call OpenSRAM
-	hlcoord 16, 14
+	hlcoord 16, 13
 	ld de, sStackTop + 1
 	ld c, 1
 	call PrintHexNumber
@@ -228,7 +229,7 @@ DebugRoom_PrintStackBottomTop:
 	ld c, 1
 	call PrintHexNumber
 	call CloseSRAM
-	hlcoord 16, 12
+	hlcoord 12, 13
 	ld de, .SPString
 	call PlaceString
 	ld d, LOW(wStackBottom)
@@ -237,14 +238,14 @@ DebugRoom_PrintStackBottomTop:
 	ld hl, sp+0
 	ld d, h
 	ld e, l
-	hlcoord 16, 13
+	hlcoord 16, 12
 	ld c, 2
 	call PrintHexNumber
 	pop de
 	ret
 
 .SPString:
-	db "SP:@"
+	db "堆栈:@"
 
 DebugRoomMenu_WinWorkClr:
 	call YesNoBox
@@ -272,7 +273,7 @@ DebugRoomMenu_WinWorkClr:
 	ret
 
 DebugRoom_PrintWindowStackBottomTop:
-	ret ; stubbed out
+	; ret ; stubbed out
 
 	ld a, $00
 	call OpenSRAM
@@ -295,7 +296,7 @@ DebugRoom_PrintWindowStackBottomTop:
 	ld hl, sp+0
 	ld d, h
 	ld e, l
-	hlcoord 16, 17
+	hlcoord 16, 15
 	ld c, 2
 	call PrintHexNumber
 	pop hl
@@ -305,17 +306,17 @@ DebugRoom_PrintWindowStackBottomTop:
 	ld hl, sp+0
 	ld d, h
 	ld e, l
-	hlcoord 16, 16
+	hlcoord 16, 14
 	ld c, 2
 	call PrintHexNumber
 	pop de
-	hlcoord 16, 15
+	hlcoord 12, 15
 	ld de, .WSPString
 	call PlaceString
 	ret
 
 .WSPString:
-	db "WSP:@"
+	db "窗指:@"
 
 DebugRoomMenu_PokedexComp:
 	call YesNoBox
@@ -387,7 +388,7 @@ DebugRoomMenu_BattleSkip:
 	ret
 
 DebugRoom_PrintBattleSkip:
-	hlcoord 16, 6
+	hlcoord 12, 7
 	ld de, .BTLString
 	call PlaceString
 	ld a, BANK(sSkipBattle)
@@ -404,11 +405,11 @@ DebugRoom_PrintBattleSkip:
 	ret
 
 .BTLString:
-	db "BTL:@"
+	db "对战:@"
 .DoString:
-	db "  DO@"
+	db "进行@"
 .SkipString:
-	db "SKIP@"
+	db "跳过@"
 
 DebugRoomMenu_ChangeSex:
 	ld a, BANK(sCrystalData)
@@ -421,7 +422,7 @@ DebugRoomMenu_ChangeSex:
 	ret
 
 DebugRoom_PrintGender:
-	hlcoord 16, 0
+	hlcoord 12, 1
 	ld de, .SexString
 	call PlaceString
 	ld a, BANK(sCrystalData)
@@ -433,12 +434,12 @@ DebugRoom_PrintGender:
 	jr z, .ok
 	ld a, "♀"
 .ok
-	hlcoord 19, 1
+	hlcoord 16, 1
 	ld [hl], a
 	ret
 
 .SexString:
-	db "SEX:@"
+	db "性别:@"
 
 DebugRoomMenu_TelDebug:
 	ld a, BANK(sDebugTimeCyclesSinceLastCall)
@@ -454,7 +455,7 @@ DebugRoomMenu_TelDebug:
 	ret
 
 DebugRoom_PrintTelDebug:
-	hlcoord 16, 16
+	hlcoord 12, 17
 	ld de, .TelString
 	call PlaceString
 	ld a, BANK(sDebugTimeCyclesSinceLastCall)
@@ -474,13 +475,13 @@ DebugRoom_PrintTelDebug:
 	ret
 
 .TelString:
-	db "TEL:@"
+	db "手机:@"
 .OffString:
-	db " OFF@"
+	db "关@"
 .BusyString:
-	db "BUSY@"
+	db "较忙@"
 .HardString:
-	db "HARD@"
+	db "繁重@"
 
 DebugRoomMenu_RAMFlagClr:
 	call YesNoBox
@@ -496,17 +497,17 @@ DebugRoom_PrintRAMFlag:
 	ld a, BANK(sOpenedInvalidSRAM)
 	call OpenSRAM
 	ld de, sOpenedInvalidSRAM
-	hlcoord 18, 4
+	hlcoord 16, 4
 	ld c, 1
 	call PrintHexNumber
 	call CloseSRAM
-	hlcoord 16, 3
+	hlcoord 12, 4
 	ld de, .RamString
 	call PlaceString
 	ret
 
 .RamString:
-	db "RAM:@"
+	db "内存:@"
 
 DebugRoomMenu_SumRecalc:
 	call YesNoBox
@@ -581,6 +582,8 @@ DebugRoom_EditPagedValues:
 	push af
 	ld [hl], TRUE
 	call ClearBGPalettes
+	ld b, SCGB_DIPLOMA
+	call GetSGBLayout
 	hlcoord 0, 0
 	ld b, SCREEN_HEIGHT - 2
 	ld c, SCREEN_WIDTH - 2
@@ -600,8 +603,8 @@ DebugRoom_EditPagedValues:
 	inc a
 	ldh [hBGMapMode], a
 	call WaitBGMap
-	ld b, SCGB_DIPLOMA
-	call GetSGBLayout
+	; ld b, SCGB_DIPLOMA
+	; call GetSGBLayout
 	call SetPalettes
 .resume
 	call DelayFrame
@@ -812,7 +815,7 @@ DebugRoom_GetCurPagedValuePtr:
 
 DebugRoom_ShowHideCursor:
 	push af
-	hlcoord 1, 1
+	hlcoord 1, 2
 	ld bc, SCREEN_WIDTH * 2
 	ld a, [wDebugRoomCurValue]
 	call AddNTimes
@@ -954,14 +957,14 @@ DebugRoom_PrintPagedValue:
 	ld d, [hl]
 	inc hl
 	push hl
-	hlcoord 2, 1
+	hlcoord 2, 2
 	ld a, c
 	ld bc, SCREEN_WIDTH * 2
 	call AddNTimes
 	push hl
 	call PlaceString
 	pop hl
-	ld bc, SCREEN_WIDTH - 7
+	ld bc, SCREEN_WIDTH - 6
 	add hl, bc
 	pop bc ; pushed hl
 	pop de
@@ -978,10 +981,10 @@ DebugRoom_PrintPagedValue:
 .hex
 	ld c, 1
 	call PrintHexNumber
-	ld [hl], "H"
+	ld [hl], "<BOLD_H>" ; "H"
 	inc hl
 .printed
-	ld bc, 6
+	ld bc, -13 ; 6
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -1071,15 +1074,15 @@ DebugRoom_SaveItem:
 	ret
 
 .ItemNumberAddedText:
-	text "Item number added!"
+	text "道具数量增加！"
 	done
 
 .CreatedNewItemText:
-	text "Created new item!"
+	text "创建新道具！"
 	done
 
 .StockFullText:
-	text "Stock full!!"
+	text "已经存满了！"
 	done
 
 DebugRoom_PrintItemName:
@@ -1088,7 +1091,9 @@ DebugRoom_PrintItemName:
 	call GetItemName
 	pop hl
 	push hl
-	lb bc, 1, 12
+	ld bc, -SCREEN_WIDTH
+	add hl, bc
+	lb bc, 2, 10
 	call ClearBox
 	pop hl
 	ld de, wStringBuffer1
@@ -1100,8 +1105,8 @@ DebugRoomMenu_ItemGet_Page1Values:
 	paged_value wDebugRoomItemID,       1, NUM_POKEMON, MASTER_BALL, .ItemNameString, DebugRoom_PrintItemName, FALSE
 	paged_value wDebugRoomItemQuantity, 1, 99,          1,           .NumberString,   NULL,                    FALSE
 
-.ItemNameString: db "ITEM NAME@"
-.NumberString:   db "NUMBER@"
+.ItemNameString: db "道具@"
+.NumberString:   db "数量@"
 
 DebugRoomMenu_PokemonGet:
 	ld hl, .PagedValuesHeader
@@ -1215,17 +1220,17 @@ DebugRoom_SavePokemon:
 	ret
 
 .OTString:
-	db "DEBUG▶OT@"
+	db "调▶初训@"
 
 .NicknameString:
-	db "DEBUG▶<PK><MN>@"
+	db "调▶宝可梦@"
 
 .CompletedText:
-	text "COMPLETED!"
+	text "完成！"
 	done
 
 .BoxIsFullText:
-	text "BOX IS FULL!"
+	text "盒子已满！"
 	done
 
 DebugRoom_PrintPokemonName:
@@ -1249,7 +1254,9 @@ DebugRoom_PrintMoveName:
 _DebugRoom_FinishGetName:
 	pop hl
 	push hl
-	lb bc, 1, 12
+	ld bc, -SCREEN_WIDTH
+	add hl, bc
+	lb bc, 2, 10
 	call ClearBox
 	pop hl
 	ld de, wStringBuffer1
@@ -1320,39 +1327,39 @@ DebugRoomMenu_PokemonGet_Page4Values:
 	paged_value wDebugRoomMonBox,           1,   NUM_BOXES,   $0e,            DebugRoom_BoxStructStrings.SendBox,   NULL,                       FALSE
 
 DebugRoom_BoxStructStrings:
-.Pokemon:   db "#MON@"
-.Item:      db "ITEM@"
-.Move1:     db "MOVE 1@"
-.Move2:     db "MOVE 2@"
-.Move3:     db "MOVE 3@"
-.Move4:     db "MOVE 4@"
+.Pokemon:   db "宝可@"
+.Item:      db "道具@"
+.Move1:     db "招式1@"
+.Move2:     db "招式2@"
+.Move3:     db "招式3@"
+.Move4:     db "招式4@"
 .ID0:       db "ID[0]@"
 .ID1:       db "ID[1]@"
-.BaseExp0:  db "BASE EXP[0]@"
-.BaseExp1:  db "BASE EXP[1]@"
-.BaseExp2:  db "BASE EXP[2]@"
-.HPExp0:    db "HP EXP[0]@"
-.HPExp1:    db "HP EXP[1]@"
-.AttkExp0:  db "ATTK EXP[0]@"
-.AttkExp1:  db "ATTK EXP[1]@"
-.DfnsExp0:  db "DFNS EXP[0]@"
-.DfnsExp1:  db "DFNS EXP[1]@"
-.SpeedExp0: db "SPEED EXP[0]@"
-.SpeedExp1: db "SPEED EXP[1]@"
-.SpclExp0:  db "SPCL EXP[0]@"
-.SpclExp1:  db "SPCL EXP[1]@"
-.PowerRnd0: db "POWER RND[0]<LF>  RARE:--1-1010@"
-.PowerRnd1: db "POWER RND[1]<LF>  RARE:10101010@"
-.PP1:       db "PP 1@"
-.PP2:       db "PP 2@"
-.PP3:       db "PP 3@"
-.PP4:       db "PP 4@"
-.Friend:    db "FRIEND@"
-.Pokerus:   db "#RUS@"
-.NoUse0:    db "NO USE[0]@"
-.NoUse1:    db "NO USE[1]@"
-.Level:     db "LEVEL@"
-.SendBox:   db "SEND BOX@"
+.BaseExp0:  db "经验值[0]@"
+.BaseExp1:  db "经验值[1]@"
+.BaseExp2:  db "经验值[2]@"
+.HPExp0:    db "HP基础点数[0]@"
+.HPExp1:    db "HP基础点数[1]@"
+.AttkExp0:  db "攻击基础点数[0]@"
+.AttkExp1:  db "攻击基础点数[1]@"
+.DfnsExp0:  db "防御基础点数[0]@"
+.DfnsExp1:  db "防御基础点数[1]@"
+.SpeedExp0: db "速度基础点数[0]@"
+.SpeedExp1: db "速度基础点数[1]@"
+.SpclExp0:  db "特殊基础点数[0]@"
+.SpclExp1:  db "特殊基础点数[1]@"
+.PowerRnd0: db "个体值[0]异色:<LF>         --1-1010<LF>个体值@"
+.PowerRnd1: db "个体值[1]<LF>         10101010<LF>招式点数@"
+.PP1:       db "招式点数1@"
+.PP2:       db "招式点数2@"
+.PP3:       db "招式点数3@"
+.PP4:       db "招式点数4@"
+.Friend:    db "亲密度@"
+.Pokerus:   db "宝可病毒@"
+.NoUse0:    db "未使用[0]@"
+.NoUse1:    db "未使用[1]@"
+.Level:     db "等级@"
+.SendBox:   db "送到盒子@"
 
 DebugRoom_BoxAddresses:
 	dba sBox1
@@ -1394,7 +1401,7 @@ DebugRoomMenu_RTCEdit_UpdateClock:
 	ld hl, wDebugRoomRTCCurSec
 	call DebugRoom_GetClock
 	ld de, DebugRoom_DayHTimeString
-	hlcoord 3, 14
+	hlcoord 1, 12
 	call PlaceString
 	ld a, [wDebugRoomRTCCurDay + 0]
 	ld h, a
@@ -1404,20 +1411,20 @@ DebugRoomMenu_RTCEdit_UpdateClock:
 	ld hl, sp+0
 	ld d, h
 	ld e, l
-	hlcoord 7, 14
+	hlcoord 2, 13
 	ld c, 2
 	call PrintHexNumber
 	pop hl
-	hlcoord 8, 15
+	hlcoord 2, 16
 	ld de, wDebugRoomRTCCurHour
 	lb bc, PRINTNUM_LEADINGZEROS | 1, 2
 	call PrintNum
-	ld [hl], ":"
+	ld [hl], "<COLON>" ; ":"
 	inc hl
 	ld de, wDebugRoomRTCCurMin
 	lb bc, PRINTNUM_LEADINGZEROS | 1, 2
 	call PrintNum
-	ld [hl], ":"
+	ld [hl], "<COLON>" ; ":"
 	inc hl
 	ld de, wDebugRoomRTCCurSec
 	lb bc, PRINTNUM_LEADINGZEROS | 1, 2
@@ -1425,7 +1432,7 @@ DebugRoomMenu_RTCEdit_UpdateClock:
 	ret
 
 DebugRoom_DayHTimeString:
-	db "DAY     H<LF>TIME@"
+	db "日期<LF>     H<LF><LF>时间@"
 
 DebugRoom_GetClock:
 	ld a, SRAM_ENABLE
@@ -1471,11 +1478,13 @@ DebugRoomMenu_RTCEdit_Page1Values:
 	paged_value wDebugRoomRTCDay+0, $00, $ff,    0, .DayLString,   NULL, TRUE
 	paged_value wDebugRoomRTCDay+1, $00, $ff,    0, .DayHString,   NULL, TRUE
 
-.SecondString: db "SECOND@"
-.MinuteString: db "MINUTE@"
-.HourString:   db "HOUR@"
-.DayLString:   db "DAY L@"
-.DayHString:   db "DAY H<LF> BIT0:DAY MSB<LF> BIT6:HALT<LF> BIT7:DAY CARRY@"
+.SecondString: db "秒@"
+.MinuteString: db "分@"
+.HourString:   db "时@"
+.DayLString:   db "日期低@"
+.DayHString:   db "日期高 位7:溢出<LF><LF>"
+               db "      位6:挂起<LF><LF>"
+               db "      位0:日最高位@"
 
 DebugRoomMenu_HaltChkClr:
 	call YesNoBox
@@ -1491,7 +1500,7 @@ DebugRoomMenu_HaltChkClr:
 	ret
 
 DebugRoom_PrintRTCHaltChk:
-	hlcoord 16, 9
+	hlcoord 12, 10
 	ld de, .RTCString
 	call PlaceString
 	ld a, BANK(sRTCHaltCheckValue)
@@ -1516,13 +1525,13 @@ DebugRoom_PrintRTCHaltChk:
 	ret
 
 .RTCString:
-	db "RTC:@"
+	db "时钟:@"
 
 .OKString:
-	db "  OK@"
+	db "正常@"
 
 .HaltString:
-	db "HALT@"
+	db "挂起@"
 
 DebugRoomMenu_GBIDSet:
 	ld hl, .PagedValuesHeader
@@ -1602,7 +1611,7 @@ ComputeROMChecksum:
 	hlcoord 16, 16
 	ld c, 1
 	call PrintHexNumber
-	ld [hl], "h"
+	ld [hl], "<BOLD_H>" ; "h"
 	pop de
 	pop bc
 	call ComputeROMXChecksum
@@ -1657,7 +1666,7 @@ DebugRoom_PrintROMChecksum: ; unreferenced
 	ret
 
 .SumString:
-	db "SUM:@"
+	db "校验:@"
 
 DebugRoomMenu_ROMChecksum:
 	ld hl, .WaitText
@@ -1670,17 +1679,17 @@ DebugRoomMenu_ROMChecksum:
 	ld de, wDebugRoomROMChecksum
 	ld c, 2
 	call PrintHexNumber
-	ld [hl], "h"
+	ld [hl], "<BOLD_H>" ; "h"
 	call DebugRoom_JoyWaitABSelect
 	call CloseWindow
 	ret
 
 .WaitText:
-	text "Wait..."
+	text "请等待..."
 	done
 
 .ROMChecksumText:
-	text "ROM CHECKSUM:"
+	text "ROM校验值:"
 	next ""
 	done
 
@@ -1698,7 +1707,7 @@ DebugRoomMenu_BTBugPoke:
 	ret
 
 .NoBugMonText:
-	text "No bug #MON."
+	text "没有错误宝可梦。"
 	done
 
 .bug_mon:
@@ -1710,7 +1719,7 @@ DebugRoomMenu_BTBugPoke:
 	ld de, sIsBugMon
 	ld c, 1
 	call PrintHexNumber
-	ld [hl], "h"
+	ld [hl], "<BOLD_H>" ; "h"
 	call YesNoBox
 	jr c, .done
 	xor a
@@ -1721,8 +1730,8 @@ DebugRoomMenu_BTBugPoke:
 	ret
 
 .ItsBugMonText:
-	text "It'", "s bug #MON!"
-	next "No.    Clear flag?"
+	text "这是错误宝可梦！"
+	next "No.    清除标志？"
 	done
 
 PrintHexNumber:
@@ -1740,11 +1749,19 @@ PrintHexNumber:
 	swap a
 	and $f
 	call .PrintDigit
-	ld [hli], a
+	; ld [hli], a
+	ld [wDFSCode], a
+	ld a, "@"
+	ld [wDFSCode + 1], a
+	call PlaceDFSChar
 	ld a, [de]
 	and $f
 	call .PrintDigit
-	ld [hli], a
+	; ld [hli], a
+	ld [wDFSCode], a
+	ld a, "@"
+	ld [wDFSCode + 1], a
+	call PlaceDFSChar
 	inc de
 	ret
 

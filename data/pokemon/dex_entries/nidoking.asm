@@ -1,10 +1,7 @@
-	db "DRILL@" ; species name
-	dw 407, 1370 ; height, weight
+	db "钻锥@" ; species name
+	dbw 14, 620 ; height, weight
 
-	db   "It uses its thick"
-	next "arms, legs and"
-	next "tail to attack"
+	db   "可以用粗壮的四肢和尾巴"
+	next "进行力道惊人的猛烈攻击。"
+	next "擅长近距离战斗。@"
 
-	page "forcefully. Melee"
-	next "combat is its"
-	next "specialty.@"

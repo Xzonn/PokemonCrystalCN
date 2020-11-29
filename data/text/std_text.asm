@@ -76,6 +76,7 @@ NurseGoodbyeText:
 	line "again."
 	done
 
+NurseSeeYouAgainTextUnused:
 ; not used
 	text "We hope to see you"
 	line "again."
@@ -180,6 +181,7 @@ HomepageText:
 	line "updated…"
 	done
 
+PokemonRadioTextUnused:
 ; not used
 	text "#MON RADIO!"
 
@@ -192,11 +194,13 @@ TrashCanText:
 	line "here…"
 	done
 
+StrengthTextUnused:
 ; not used
 	text "A #MON may be"
 	line "able to move this."
 	done
 
+RockSmashTextUnused:
 ; not used
 	text "Maybe a #MON"
 	line "can break this."

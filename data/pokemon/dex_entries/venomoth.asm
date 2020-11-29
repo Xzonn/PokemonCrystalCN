@@ -1,10 +1,7 @@
-	db "POISONMOTH@" ; species name
-	dw 411, 280 ; height, weight
+	db "毒蛾@" ; species name
+	dbw 15, 125 ; height, weight
 
-	db   "The scales it"
-	next "scatters will"
-	next "paralyze anyone"
+	db   "碰到它播撒的鳞粉后，"
+	next "身体的感觉就会失常，"
+	next "变得无法笔直站立。@"
 
-	page "who touches them,"
-	next "making that person"
-	next "unable to stand.@"

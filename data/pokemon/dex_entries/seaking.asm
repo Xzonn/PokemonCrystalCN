@@ -1,10 +1,7 @@
-	db "GOLDFISH@" ; species name
-	dw 403, 860 ; height, weight
+	db "金鱼@" ; species name
+	dbw 13, 390 ; height, weight
 
-	db   "When autumn comes,"
-	next "the males patrol"
-	next "the area around"
+	db   "一旦到了秋天，"
+	next "就会为了保护自己的巢穴，"
+	next "雄性会在四周巡逻。@"
 
-	page "their nests in"
-	next "order to protect"
-	next "their offspring.@"

@@ -1,10 +1,7 @@
-	db "BAGWORM@" ; species name
-	dw 200, 160 ; height, weight
+	db "蓑衣虫@" ; species name
+	dbw 6, 72 ; height, weight
 
-	db   "It spits out a"
-	next "fluid that it uses"
-	next "to glue tree bark"
+	db   "从口中吐出的液体是"
+	next "把自己黏在树上的胶水，"
+	next "接触空气就会立刻变硬。@"
 
-	page "to its body. The"
-	next "fluid hardens when"
-	next "it touches air.@"

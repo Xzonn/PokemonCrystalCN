@@ -102,24 +102,24 @@ AcademyBlackboard:
 
 .BlackboardMenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 11, 8
+	menu_coords 0, 0, 9, 7
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	dn 3, 2 ; rows, columns
-	db 5 ; spacing
+	db 4 ; spacing
 	dba .Text
 	dbw BANK(@), NULL
 
 .Text:
-	db "PSN@"
-	db "PAR@"
-	db "SLP@"
-	db "BRN@"
-	db "FRZ@"
-	db "QUIT@"
+	db "中毒@"
+	db "麻痹@"
+	db "睡眠@"
+	db "灼伤@"
+	db "冰冻@"
+	db "退出@"
 
 AcademyNotebook:
 	opentext

@@ -1,10 +1,7 @@
-	db "FLAME@" ; species name
-	dw 211, 550 ; height, weight
+	db "火@" ; species name
+	dbw 9, 250 ; height, weight
 
-	db   "Once it has stored"
-	next "up enough heat,"
-	next "this #MON's"
+	db   "将火焰储存在体内时，"
+	next "火伊布的体温也会升高，"
+	next "最多能达到900度。@"
 
-	page "body temperature"
-	next "can reach up to"
-	next "1700 degrees.@"

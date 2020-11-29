@@ -1,10 +1,7 @@
-	db "PSI@" ; species name
-	dw 403, 1250 ; height, weight
+	db "念力@" ; species name
+	dbw 13, 565 ; height, weight
 
-	db   "When it closes its"
-	next "eyes, twice as"
-	next "many alpha parti-"
+	db   "闭上眼睛的时候，"
+	next "从体表发出的特殊阿尔法波"
+	next "是平时的2倍。@"
 
-	page "cles come out of"
-	next "the surface of its"
-	next "body.@"

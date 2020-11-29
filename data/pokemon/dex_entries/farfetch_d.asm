@@ -1,10 +1,7 @@
-	db "WILD DUCK@" ; species name
-	dw 207, 330 ; height, weight
+	db "黄嘴鸭@" ; species name
+	dbw 8, 150 ; height, weight
 
-	db   "In order to pre-"
-	next "vent their"
-	next "extinction, more"
+	db   "为了保护数量减少的"
+	next "大葱鸭，很多人都打算"
+	next "大量种植植物的茎。@"
 
-	page "people have made"
-	next "an effort to breed"
-	next "these #MON.@"

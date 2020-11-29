@@ -103,7 +103,7 @@ InitPartyMenuPalettes:
 	ld hl, PalPacket_PartyMenu + 1
 	call CopyFourPalettes
 	call InitPartyMenuOBPals
-	call WipeAttrmap
+	call WipeAttrmapWithoutVramNo
 	ret
 
 ; SGB layout for SCGB_PARTY_MENU_HP_BARS
@@ -359,7 +359,7 @@ ApplyHPBarPals:
 .PartyMenu:
 	ld e, c
 	inc e
-	hlcoord 11, 1, wAttrmap
+	hlcoord 13, 1, wAttrmap
 	ld bc, 2 * SCREEN_WIDTH
 	ld a, [wCurPartyMon]
 .loop
@@ -370,7 +370,7 @@ ApplyHPBarPals:
 	jr .loop
 
 .done
-	lb bc, 2, 8
+	lb bc, 2, 6
 	ld a, e
 	call FillBoxCGB
 	ret
@@ -390,9 +390,11 @@ LoadStatsScreenPals:
 	ld a, [hli]
 	ld [wBGPals1 palette 0], a
 	ld [wBGPals1 palette 2], a
+	ld [wBGPals1 palette 6 + 4], a
 	ld a, [hl]
 	ld [wBGPals1 palette 0 + 1], a
 	ld [wBGPals1 palette 2 + 1], a
+	ld [wBGPals1 palette 6 + 5], a
 	pop af
 	ldh [rSVBK], a
 	call ApplyPals
@@ -537,6 +539,27 @@ FillBoxCGB:
 	jr nz, .row
 	ret
 
+FillBoxCGBWithoutVramNo:
+.row
+	push bc
+	push hl
+.col
+	ld b, a
+	ld a, [hl]
+	and a, $08
+	or b
+	ld [hli], a
+	ld a, b
+	dec c
+	jr nz, .col
+	pop hl
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	pop bc
+	dec b
+	jr nz, .row
+	ret
+
 ResetBGPals:
 	push af
 	push bc
@@ -578,6 +601,23 @@ WipeAttrmap:
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	xor a
 	call ByteFill
+	ret
+
+WipeAttrmapWithoutVramNo:
+	hlcoord 0, 0, wAttrmap
+	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
+	inc b  ; we bail the moment b hits 0, so include the last run
+	inc c  ; same thing; include last byte
+	jr .HandleLoop
+.Clear:
+	ld a, [hl]
+	and a, $08
+	ld [hli], a
+.HandleLoop:
+	dec c
+	jr nz, .Clear
+	dec b
+	jr nz, .Clear
 	ret
 
 ApplyPals:
@@ -642,7 +682,7 @@ CGB_ApplyPartyMenuHPPals:
 	ld a, [de]
 	inc a
 	ld e, a
-	hlcoord 11, 2, wAttrmap
+	hlcoord 13, 1, wAttrmap
 	ld bc, 2 * SCREEN_WIDTH
 	ld a, [wSGBPals]
 .loop
@@ -652,7 +692,7 @@ CGB_ApplyPartyMenuHPPals:
 	dec a
 	jr .loop
 .done
-	lb bc, 2, 8
+	lb bc, 2, 6
 	ld a, e
 	call FillBoxCGB
 	ret

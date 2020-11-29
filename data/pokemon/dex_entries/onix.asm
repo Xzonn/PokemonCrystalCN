@@ -1,10 +1,7 @@
-	db "ROCK SNAKE@" ; species name
-	dw 2810, 4630 ; height, weight
+	db "岩蛇@" ; species name
+	dbw 88, 2100 ; height, weight
 
-	db   "As it digs through"
-	next "the ground, it"
-	next "absorbs many hard"
+	db   "在地下挖路移动，"
+	next "同时会吸收各种硬物"
+	next "以打造一副结实的身体。@"
 
-	page "objects. This is"
-	next "what makes its"
-	next "body so solid.@"

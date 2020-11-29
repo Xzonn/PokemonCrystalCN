@@ -1,10 +1,7 @@
-	db "AQUAMOUSE@" ; species name
-	dw 104, 190 ; height, weight
+	db "水鼠@" ; species name
+	dbw 4, 85 ; height, weight
 
-	db   "The fur on its"
-	next "body naturally"
-	next "repels water. It"
+	db   "全身的体毛拥有"
+	next "不沾水的特性，所以就算"
+	next "泡在水里也可以保持干燥。@"
 
-	page "can stay dry, even"
-	next "when it plays in"
-	next "the water.@"

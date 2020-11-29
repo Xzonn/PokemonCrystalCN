@@ -1,10 +1,7 @@
-	db "ARMOR@" ; species name
-	dw 607, 4450 ; height, weight
+	db "铠甲@" ; species name
+	dbw 20, 2020 ; height, weight
 
-	db   "In just one of its"
-	next "mighty hands, it"
-	next "has the power to"
+	db   "体内的力量大得惊人，"
+	next "随便挥一挥手，"
+	next "就会造成山崩地裂。@"
 
-	page "make the ground"
-	next "shake and moun-"
-	next "tains crumble.@"

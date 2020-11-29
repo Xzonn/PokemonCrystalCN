@@ -465,7 +465,7 @@ DummyGame_InitStrings:
 .japstr1
 	db "とったもの@"
 .japstr2
-	db "あと　かい@"
+	db "あと<　>かい@"
 
 DummyGame_Card2Coord:
 	ld d, 0

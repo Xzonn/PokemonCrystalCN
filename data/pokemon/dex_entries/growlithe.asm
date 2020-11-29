@@ -1,10 +1,7 @@
-	db "PUPPY@" ; species name
-	dw 204, 420 ; height, weight
+	db "小狗@" ; species name
+	dbw 7, 190 ; height, weight
 
-	db   "It controls a big"
-	next "territory. If it"
-	next "detects an unknown"
+	db   "拥有宽广的领地，"
+	next "会狂吠着驱逐那些"
+	next "散发出陌生气息的对手。@"
 
-	page "smell, it roars"
-	next "loudly to force"
-	next "out the intruder.@"

@@ -1,10 +1,7 @@
-	db "COBRA@" ; species name
-	dw 1106, 1430 ; height, weight
+	db "眼镜蛇@" ; species name
+	dbw 35, 650 ; height, weight
 
-	db   "To intimidate"
-	next "foes, it spreads"
-	next "its chest wide and"
+	db   "展开胸口的花纹进行威吓。"
+	next "嘴里散出的空气带着"
+	next "诡异的声响，令对手丧胆。@"
 
-	page "makes eerie sounds"
-	next "by expelling air"
-	next "from its mouth.@"

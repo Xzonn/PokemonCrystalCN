@@ -1,10 +1,7 @@
-	db "FAIRY@" ; species name
-	dw 407, 1070 ; height, weight
+	db "妖精@" ; species name
+	dbw 14, 487 ; height, weight
 
-	db   "It can make most"
-	next "any #MON run"
-	next "away simply by"
+	db   "看到它张开大嘴"
+	next "展示出自己粗大的獠牙，"
+	next "大多数宝可梦都会被吓跑。@"
 
-	page "opening its mouth"
-	next "wide to reveal its"
-	next "big fangs.@"

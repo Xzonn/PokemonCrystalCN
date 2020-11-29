@@ -1,10 +1,7 @@
-	db "TINY MOUSE@" ; species name
-	dw 100, 40 ; height, weight
+	db "小鼠@" ; species name
+	dbw 3, 20 ; height, weight
 
-	db   "It is unskilled at"
-	next "storing electric"
-	next "power. Any kind of"
+	db   "不善于储存电气。"
+	next "受到一丁点刺激就会"
+	next "立刻把电释放出去。@"
 
-	page "shock causes it to"
-	next "discharge energy"
-	next "spontaneously.@"

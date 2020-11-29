@@ -77,7 +77,7 @@ Kurt_SelectApricorn:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 1, 1, 13, 10
+	menu_coords 1, 1, 10, 10
 	dw .MenuData
 	db 1 ; default option
 
@@ -85,7 +85,7 @@ Kurt_SelectApricorn:
 
 .MenuData:
 	db SCROLLINGMENU_DISPLAY_ARROWS ; flags
-	db 4, 7 ; rows, columns
+	db 4, 4 ; rows, columns
 	db SCROLLINGMENU_ITEMS_NORMAL ; item format
 	dbw 0, wBuffer1
 	dba .Name
@@ -147,14 +147,14 @@ Kurt_SelectQuantity:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 6, 9, SCREEN_WIDTH - 1, 12
+	menu_coords 9, 9, SCREEN_WIDTH - 1, 12
 	dw NULL
 	db -1 ; default option
 	db 0
 
 .PlaceApricornName:
 	call MenuBoxCoord2Tile
-	ld de, SCREEN_WIDTH + 1
+	ld de, 2 * SCREEN_WIDTH + 1
 	add hl, de
 	ld d, h
 	ld e, l
@@ -163,7 +163,7 @@ Kurt_SelectQuantity:
 
 PlaceApricornQuantity:
 	call MenuBoxCoord2Tile
-	ld de, 2 * SCREEN_WIDTH + 10
+	ld de, 2 * SCREEN_WIDTH + 7
 	add hl, de
 	ld [hl], "×"
 	inc hl

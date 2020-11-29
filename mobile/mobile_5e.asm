@@ -524,8 +524,8 @@ Function17a99e:
 	ret
 
 String_17a9b2:
-	db   "でんわばんごうが　ただしく"
-	next "はいって　いません！"
+	db   "でんわばんごうが<　>ただしく"
+	next "はいって<　>いません<！>"
 	db   "@"
 
 Function17a9cb:

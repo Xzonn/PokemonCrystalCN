@@ -1,10 +1,7 @@
-	db "RIVER CRAB@" ; species name
-	dw 104, 140 ; height, weight
+	db "清水蟹@" ; species name
+	dbw 4, 65 ; height, weight
 
-	db   "If it is unable"
-	next "to find food, it"
-	next "will absorb"
+	db   "找不到食物的时候"
+	next "就会吃沙子，然后吸收"
+	next "含在沙土中的养分。@"
 
-	page "nutrients by"
-	next "swallowing a"
-	next "mouthful of sand.@"

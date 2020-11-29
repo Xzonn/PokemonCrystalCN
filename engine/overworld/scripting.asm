@@ -509,8 +509,18 @@ Script_verbosegiveitemvar:
 Script_itemnotify:
 	call GetPocketName
 	call CurItemName
-	ld b, BANK(PutItemInPocketText)
+	ld b, BANK(PutItemInPocketText) ; aka BANK(PutLongItemInPocketText)
 	ld hl, PutItemInPocketText
+	ld a, [wCurItem]
+	cp a, ELIXER + 1
+	jr nc, .end
+	cp a, ETHER ; include ETHER MAX_ETHER ELIXER
+	jr nc, .long_item
+	cp a, MAX_ELIXER
+	jr nz, .end
+.long_item
+	ld hl, PutLongItemInPocketText
+.end
 	call MapTextbox
 	ret
 
@@ -561,6 +571,10 @@ CurItemName:
 
 PutItemInPocketText:
 	text_far _PutItemInPocketText
+	text_end
+
+PutLongItemInPocketText:
+	text_far _PutLongItemInPocketText
 	text_end
 
 PocketIsFullText:
@@ -1702,7 +1716,7 @@ Script_givepokemail:
 	ld b, a
 	push bc
 	inc hl
-	ld bc, MAIL_MSG_LENGTH
+	ld bc, MAIL_MSG_LENGTH + 1 ; for full length msg
 	ld de, wd002
 	ld a, [wScriptBank]
 	call FarCopyBytes

@@ -1,10 +1,7 @@
-	db "PIG@" ; species name
-	dw 104, 140 ; height, weight
+	db "小猪@" ; species name
+	dbw 4, 65 ; height, weight
 
-	db   "It uses the tip of"
-	next "its nose to dig"
-	next "for food. Its nose"
+	db   "用鼻尖挖掘地面来"
+	next "找出食物。就算是"
+	next "冻结的土地也照挖不误。@"
 
-	page "is so tough that"
-	next "even frozen ground"
-	next "poses no problem.@"

@@ -566,7 +566,7 @@ OaksPKMNTalk11:
 	jp PlaceRadioString
 
 .pokemon_string
-	db "#MON@"
+	db "宝可梦@"
 
 OaksPKMNTalk12:
 	ld hl, wRadioTextDelay
@@ -578,7 +578,7 @@ OaksPKMNTalk12:
 	jp PlaceRadioString
 
 .pokemon_channel_string
-	db "#MON Channel@"
+	db "宝可梦频道@"
 
 OaksPKMNTalk13:
 	ld hl, wRadioTextDelay
@@ -623,6 +623,10 @@ CopyBottomLineToTopLine:
 	hlcoord 0, 15
 	decoord 0, 13
 	ld bc, SCREEN_WIDTH * 2
+	call CopyBytes
+	hlcoord 0, 15, wAttrmap
+	decoord 0, 13, wAttrmap
+	ld bc, SCREEN_WIDTH * 2
 	jp CopyBytes
 
 ClearBottomLine:
@@ -633,7 +637,13 @@ ClearBottomLine:
 	hlcoord 1, 16
 	ld bc, SCREEN_WIDTH - 2
 	ld a, " "
-	jp ByteFill
+	call ByteFill
+	hlcoord 1, 15, wAttrmap
+	ld bc, SCREEN_WIDTH - 2
+	call ClearVramNo
+	hlcoord 1, 16, wAttrmap
+	ld bc, SCREEN_WIDTH - 2
+	jp ClearVramNo
 
 PokedexShow_GetDexEntryBank:
 	push hl
@@ -694,13 +704,25 @@ PokedexShow2:
 	push hl
 	call CopyDexEntryPart1
 	dec hl
+	ld [hl] , HIGH("宝")
+	inc hl
+	ld [hl] , LOW("宝")
+	inc hl
+	ld [hl] , HIGH("可")
+	inc hl
+	ld [hl] , LOW("可")
+	inc hl
+	ld [hl] , HIGH("梦")
+	inc hl
+	ld [hl] , LOW("梦")
+	inc hl
 	ld [hl], "<DONE>"
 	ld hl, wPokedexShowPointerAddr
 	call CopyRadioTextToRAM
 	pop hl
 	pop af
 	call CopyDexEntryPart2
-rept 4
+rept 3 ; 4
 	inc hl
 endr
 	ld a, l
@@ -722,7 +744,7 @@ PokedexShow4:
 
 PokedexShow5:
 	call CopyDexEntry
-	ld a, POKEDEX_SHOW_6
+	ld a, POKEDEX_SHOW ; Skip more dex 
 	jp PrintRadioLine
 
 PokedexShow6:
@@ -760,12 +782,13 @@ CopyDexEntry:
 
 CopyDexEntryPart1:
 	ld de, wPokedexShowPointerBank
-	ld bc, SCREEN_WIDTH - 1
+	ld bc, 14 * 2 ;SCREEN_WIDTH - 1
 	call FarCopyBytes
 	ld hl, wPokedexShowPointerAddr
 	ld [hl], TX_START
 	inc hl
 	ld [hl], "<LINE>"
+.loopdoublechar
 	inc hl
 .loop
 	ld a, [hli]
@@ -773,12 +796,23 @@ CopyDexEntryPart1:
 	ret z
 	cp "<NEXT>"
 	ret z
-	cp "<DEXEND>"
-	ret z
+	; cp "<DEXEND>"
+	; ret z
+	and a
+	jr z, .loop
+	cp DFS_CODE_CONTRL_0
+	jr c, .loopdoublechar
+	cp DFS_CODE_CONTRL_2
+	jr nc, .loop
+	bit 3, a
+	jr nz, .loopdoublechar
 	jr .loop
 
 CopyDexEntryPart2:
 	ld d, a
+	jr .loop
+.loopdoublechar
+	inc hl
 .loop
 	ld a, d
 	call GetFarByte
@@ -787,8 +821,17 @@ CopyDexEntryPart2:
 	jr z, .okay
 	cp "<NEXT>"
 	jr z, .okay
-	cp "<DEXEND>"
-	jr nz, .loop
+	; cp "<DEXEND>"
+	; jr nz, .loop
+	and a
+	jr z, .loop
+	cp DFS_CODE_CONTRL_0
+	jr c, .loopdoublechar
+	cp DFS_CODE_CONTRL_2
+	jr nc, .loop
+	bit 3, a
+	jr nz, .loopdoublechar
+	jr .loop
 .okay
 	ld a, l
 	ld [wPokedexShowPointerAddr], a
@@ -1700,7 +1743,7 @@ BuenasPasswordCheckTime:
 	ret
 
 BuenasPasswordChannelName:
-	db "BUENA'S PASSWORD@"
+	db "葵妍的密语@"
 
 BuenaRadioText1:
 	text_far _BuenaRadioText1

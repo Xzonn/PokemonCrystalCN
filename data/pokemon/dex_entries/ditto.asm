@@ -1,10 +1,7 @@
-	db "TRANSFORM@" ; species name
-	dw 100, 90 ; height, weight
+	db "变身@" ; species name
+	dbw 3, 40 ; height, weight
 
-	db   "When it encount-"
-	next "ers another DITTO,"
-	next "it will move"
+	db   "两只百变怪相遇时，"
+	next "为了尽快变成对方那样，"
+	next "动作会比平时更激烈。@"
 
-	page "faster than normal"
-	next "to duplicate that"
-	next "opponent exactly.@"

@@ -153,14 +153,14 @@ Elevator_GetCurrentFloorText:
 	hlcoord 1, 2
 	ld de, Elevator_CurrentFloorText
 	call PlaceString
-	hlcoord 4, 4
+	hlcoord 2, 4
 	call Elevator_GetCurrentFloorString
 	pop af
 	ld [wOptions], a
 	ret
 
 Elevator_CurrentFloorText:
-	db "Now on:@"
+	db "现在的楼层@"
 
 Elevator_GetCurrentFloorString:
 	push hl

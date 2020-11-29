@@ -47,20 +47,20 @@ MeetMomScript:
 	writetext MomGivesPokegearText
 	promptbutton
 	special SetDayOfWeek
-.SetDayOfWeek:
-	writetext IsItDSTText
-	yesorno
-	iffalse .WrongDay
-	special InitialSetDSTFlag
-	yesorno
-	iffalse .SetDayOfWeek
-	sjump .DayOfWeekDone
+; .SetDayOfWeek:
+	; writetext IsItDSTText
+	; yesorno
+	; iffalse .WrongDay
+	; special InitialSetDSTFlag
+	; yesorno
+	; iffalse .SetDayOfWeek
+	; sjump .DayOfWeekDone
 
-.WrongDay:
-	special InitialClearDSTFlag
-	yesorno
-	iffalse .SetDayOfWeek
-.DayOfWeekDone:
+; .WrongDay:
+	; special InitialClearDSTFlag
+	; yesorno
+	; iffalse .SetDayOfWeek
+; .DayOfWeekDone:
 	writetext ComeHomeForDSTText
 	yesorno
 	iffalse .ExplainPhone
@@ -104,7 +104,7 @@ MeetMomTalkedScript:
 	sjump MeetMomScript
 
 PokegearName:
-	db "#GEAR@"
+	db "宝可齿轮@"
 
 PlayersHouse1FReceiveItemStd:
 	jumpstd ReceiveItemScript

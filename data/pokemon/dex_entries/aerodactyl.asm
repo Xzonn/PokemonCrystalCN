@@ -1,10 +1,7 @@
-	db "FOSSIL@" ; species name
-	dw 511, 1300 ; height, weight
+	db "化石@" ; species name
+	dbw 18, 590 ; height, weight
 
-	db   "In prehistoric"
-	next "times, this"
-	next "#MON flew"
+	db   "在远古时代的天空中"
+	next "自由自在地翱翔，"
+	next "大胆无畏的宝可梦。@"
 
-	page "freely and"
-	next "fearlessly through"
-	next "the skies.@"

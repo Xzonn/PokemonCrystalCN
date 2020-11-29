@@ -1,10 +1,7 @@
-	db "LIGHTNING@" ; species name
-	dw 207, 540 ; height, weight
+	db "雷@" ; species name
+	dbw 8, 245 ; height, weight
 
-	db   "The negatively"
-	next "charged ions"
-	next "generated in its"
+	db   "体毛之间的空隙里"
+	next "产生了大量负离子，"
+	next "常常发出噼里啪啦的声音。@"
 
-	page "fur create a"
-	next "constant sparking"
-	next "noise.@"

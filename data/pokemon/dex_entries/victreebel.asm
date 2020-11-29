@@ -1,10 +1,7 @@
-	db "FLYCATCHER@" ; species name
-	dw 507, 340 ; height, weight
+	db "捕蝇@" ; species name
+	dbw 17, 155 ; height, weight
 
-	db   "Once ingested into"
-	next "this #MON's"
-	next "body, even the"
+	db   "被它吞进体内的东西"
+	next "不管有多硬，"
+	next "都会被溶解液溶化殆尽。@"
 
-	page "hardest object"
-	next "will melt into"
-	next "nothing.@"

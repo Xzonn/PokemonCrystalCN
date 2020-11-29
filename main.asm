@@ -734,3 +734,181 @@ SECTION "Stadium 2 Checksums", ROMX[$7DE0], BANK[$7F]
 ; If it is removed, also remove the "tools/stadium" command in the Makefile.
 
 	ds $220
+
+SECTION "DFS", ROMX
+INCLUDE "engine/dfs/dfs.asm"
+
+SECTION "IME", ROMX
+INCLUDE "engine/dfs/ime.asm"
+
+SECTION "IME Table Section 1", ROMX
+INCLUDE "data/ime/ime_table1.asm"
+
+SECTION "IME Table Section 2", ROMX
+INCLUDE "data/ime/ime_table2.asm"
+
+SECTION "Chinese Fonts 71", ROMX
+DFS_C_FF_L::
+DFS_C_FF_H::
+DFS_C_01_L::
+INCBIN "gfx/dfs/ChineseFonts_01_L.bin"
+DFS_C_01_H::
+INCBIN "gfx/dfs/ChineseFonts_01_H.bin"
+DFS_C_02_H::
+INCBIN "gfx/dfs/ChineseFonts_02_H.bin"
+
+SECTION "Chinese Fonts 72", ROMX
+DFS_C_02_L::
+INCBIN "gfx/dfs/ChineseFonts_02_L.bin"
+DFS_C_03_L::
+INCBIN "gfx/dfs/ChineseFonts_03_L.bin"
+
+SECTION "Chinese Fonts 73", ROMX
+DFS_C_03_H::
+INCBIN "gfx/dfs/ChineseFonts_03_H.bin"
+DFS_C_04_L::
+INCBIN "gfx/dfs/ChineseFonts_04_L.bin"
+DFS_C_04_H::
+INCBIN "gfx/dfs/ChineseFonts_04_H.bin"
+DFS_C_05_L::
+INCBIN "gfx/dfs/ChineseFonts_05_L.bin"
+DFS_C_05_H::
+INCBIN "gfx/dfs/ChineseFonts_05_H.bin"
+
+SECTION "Chinese Fonts 74", ROMX
+DFS_C_06_L::
+INCBIN "gfx/dfs/ChineseFonts_06_L.bin"
+DFS_C_06_H::
+INCBIN "gfx/dfs/ChineseFonts_06_H.bin"
+DFS_C_07_L::
+INCBIN "gfx/dfs/ChineseFonts_07_L.bin"
+DFS_C_07_H::
+INCBIN "gfx/dfs/ChineseFonts_07_H.bin"
+DFS_C_08_L::
+INCBIN "gfx/dfs/ChineseFonts_08_L.bin"
+
+SECTION "Chinese Fonts 75", ROMX
+DFS_C_08_H::
+INCBIN "gfx/dfs/ChineseFonts_08_H.bin"
+DFS_C_09_L::
+INCBIN "gfx/dfs/ChineseFonts_09_L.bin"
+DFS_C_09_H::
+INCBIN "gfx/dfs/ChineseFonts_09_H.bin"
+DFS_C_0A_L::
+INCBIN "gfx/dfs/ChineseFonts_0A_L.bin"
+DFS_C_0A_H::
+INCBIN "gfx/dfs/ChineseFonts_0A_H.bin"
+DFS_C_0B_L::
+INCBIN "gfx/dfs/ChineseFonts_0B_L.bin"
+DFS_C_0B_H::
+INCBIN "gfx/dfs/ChineseFonts_0B_H.bin"
+
+SECTION "Chinese Fonts 76", ROMX
+DFS_C_0C_L::
+INCBIN "gfx/dfs/ChineseFonts_0C_L.bin"
+DFS_C_0C_H::
+INCBIN "gfx/dfs/ChineseFonts_0C_H.bin"
+DFS_C_0D_L::
+INCBIN "gfx/dfs/ChineseFonts_0D_L.bin"
+DFS_C_0D_H::
+INCBIN "gfx/dfs/ChineseFonts_0D_H.bin"
+DFS_C_0E_L::
+INCBIN "gfx/dfs/ChineseFonts_0E_L.bin"
+DFS_C_0E_H::
+INCBIN "gfx/dfs/ChineseFonts_0E_H.bin"
+DFS_C_0F_L::
+INCBIN "gfx/dfs/ChineseFonts_0F_L.bin"
+
+SECTION "Chinese Fonts 77", ROMX
+DFS_C_0F_H::
+INCBIN "gfx/dfs/ChineseFonts_0F_H.bin"
+
+SECTION "Chinese Fonts 78", ROMX
+DFS_C_10_L::
+INCBIN "gfx/dfs/ChineseFonts_10_L.bin"
+DFS_C_10_H::
+INCBIN "gfx/dfs/ChineseFonts_10_H.bin"
+DFS_C_11_L::
+INCBIN "gfx/dfs/ChineseFonts_11_L.bin"
+
+SECTION "Chinese Fonts 79", ROMX
+DFS_C_11_H::
+INCBIN "gfx/dfs/ChineseFonts_11_H.bin"
+DFS_C_12_L::
+INCBIN "gfx/dfs/ChineseFonts_12_L.bin"
+DFS_C_12_H::
+INCBIN "gfx/dfs/ChineseFonts_12_H.bin"
+DFS_C_13_L::
+INCBIN "gfx/dfs/ChineseFonts_13_L.bin"
+DFS_C_13_H::
+INCBIN "gfx/dfs/ChineseFonts_13_H.bin"
+DFS_C_18_L::
+INCBIN "gfx/dfs/ChineseFonts_18_L.bin"
+DFS_C_18_H::
+INCBIN "gfx/dfs/ChineseFonts_18_H.bin"
+
+SECTION "Chinese Fonts 7A", ROMX
+DFS_C_19_L::
+INCBIN "gfx/dfs/ChineseFonts_19_L.bin"
+DFS_C_19_H::
+INCBIN "gfx/dfs/ChineseFonts_19_H.bin"
+DFS_C_1A_L::
+INCBIN "gfx/dfs/ChineseFonts_1A_L.bin"
+DFS_C_1A_H::
+INCBIN "gfx/dfs/ChineseFonts_1A_H.bin"
+DFS_C_1B_L::
+INCBIN "gfx/dfs/ChineseFonts_1B_L.bin"
+DFS_C_1B_H::
+INCBIN "gfx/dfs/ChineseFonts_1B_H.bin"
+DFS_C_1C_L::
+INCBIN "gfx/dfs/ChineseFonts_1C_L.bin"
+
+SECTION "Chinese Fonts 7B", ROMX
+DFS_C_1C_H::
+INCBIN "gfx/dfs/ChineseFonts_1C_H.bin"
+DFS_C_1D_L::
+INCBIN "gfx/dfs/ChineseFonts_1D_L.bin"
+DFS_C_1D_H::
+INCBIN "gfx/dfs/ChineseFonts_1D_H.bin"
+DFS_C_1E_L::
+INCBIN "gfx/dfs/ChineseFonts_1E_L.bin"
+DFS_C_1E_H::
+INCBIN "gfx/dfs/ChineseFonts_1E_H.bin"
+
+SECTION "Chinese Fonts 7C", ROMX
+DFS_C_1F_L::
+INCBIN "gfx/dfs/ChineseFonts_1F_L.bin"
+DFS_C_1F_H::
+INCBIN "gfx/dfs/ChineseFonts_1F_H.bin"
+DFS_C_28_L::
+INCBIN "gfx/dfs/ChineseFonts_28_L.bin"
+DFS_C_28_H::
+INCBIN "gfx/dfs/ChineseFonts_28_H.bin"
+DFS_C_29_L::
+INCBIN "gfx/dfs/ChineseFonts_29_L.bin"
+DFS_C_29_H::
+INCBIN "gfx/dfs/ChineseFonts_29_H.bin"
+
+SECTION "Chinese Fonts 7D", ROMX
+DFS_C_2A_L::
+INCBIN "gfx/dfs/ChineseFonts_2A_L.bin"
+DFS_C_2A_H::
+INCBIN "gfx/dfs/ChineseFonts_2A_H.bin"
+DFS_C_2B_L::
+INCBIN "gfx/dfs/ChineseFonts_2B_L.bin"
+
+SECTION "Chinese Fonts 7F", ROMX
+DFS_C_2B_H::
+INCBIN "gfx/dfs/ChineseFonts_2B_H.bin"
+DFS_C_2C_L::
+INCBIN "gfx/dfs/ChineseFonts_2C_L.bin"
+DFS_C_2C_H::
+INCBIN "gfx/dfs/ChineseFonts_2C_H.bin"
+DFS_C_2D_L::
+INCBIN "gfx/dfs/ChineseFonts_2D_L.bin"
+DFS_C_2D_H::
+INCBIN "gfx/dfs/ChineseFonts_2D_H.bin"
+DFS_C_2E_L::
+INCBIN "gfx/dfs/ChineseFonts_2E_L.bin"
+DFS_C_2E_H::
+INCBIN "gfx/dfs/ChineseFonts_2E_H.bin"

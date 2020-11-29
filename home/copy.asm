@@ -51,6 +51,24 @@ ByteFill::
 	jr nz, .PutByte
 	ret
 
+ByteFillWithoutVramNo:: ; 0x3041
+; fill bc bytes with the value of a, starting at hl
+	inc b  ; we bail the moment b hits 0, so include the last run
+	inc c  ; same thing; include last byte
+	jr .HandleLoop
+.PutByte:
+    bit 3, [hl]
+    ld [hl], a
+	jr z, .HandleLoop
+	set 3, [hl]
+.HandleLoop:
+    inc hl
+	dec c
+	jr nz, .PutByte
+	dec b
+	jr nz, .PutByte
+	ret
+
 GetFarByte::
 ; retrieve a single byte from a:hl, and return it in a.
 	; bankswitch to new bank

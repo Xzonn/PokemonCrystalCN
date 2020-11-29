@@ -1,10 +1,7 @@
-	db "COCONUT@" ; species name
-	dw 607, 2650 ; height, weight
+	db "椰子@" ; species name
+	dbw 20, 1200 ; height, weight
 
-	db   "Living in a good"
-	next "environment makes"
-	next "it grow lots of"
+	db   "在良好的环境里过度发育"
+	next "于是长了很多头，"
+	next "随便掉一颗就会变成蛋蛋。@"
 
-	page "heads. A head that"
-	next "drops off becomes"
-	next "an EXEGGCUTE.@"

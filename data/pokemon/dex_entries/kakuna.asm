@@ -1,10 +1,7 @@
-	db "COCOON@" ; species name
-	dw 200, 220 ; height, weight
+	db "蛹@" ; species name
+	dbw 6, 100 ; height, weight
 
-	db   "Nearly incapable"
-	next "of movement, it"
-	next "leans against"
+	db   "一直依偎在大树上"
+	next "等待着进化的那个瞬间。"
+	next "身体基本上无法动弹。@"
 
-	page "stout trees while"
-	next "waiting for its"
-	next "evolution.@"

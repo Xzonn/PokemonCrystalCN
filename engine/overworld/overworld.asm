@@ -38,11 +38,19 @@ _ClearSprites: ; mobile
 	ret
 
 RefreshSprites::
-	call .Refresh
+	call RefreshSprites_Refresh
 	call LoadUsedSpritesGFX
 	ret
+RefreshSprites_VT03::
+	call RefreshSprites_Refresh
+	call LoadUsedSpritesGFX_VT03
+	ret
+RefreshSprites_VT4::
+	call RefreshSprites_Refresh
+	call LoadUsedSpritesGFX_VT4
+	ret
 
-.Refresh:
+RefreshSprites_Refresh:
 	xor a
 	ld bc, wUsedSpritesEnd - wUsedSprites
 	ld hl, wUsedSprites
@@ -142,6 +150,18 @@ LoadUsedSpritesGFX:
 	ld a, MAPCALLBACK_SPRITES
 	call RunMapCallback
 	call GetUsedSprites
+	call LoadMiscTiles
+	ret
+LoadUsedSpritesGFX_VT03:
+	ld a, MAPCALLBACK_SPRITES
+	call RunMapCallback
+	call GetUsedSprites_VT03
+	call LoadMiscTiles
+	ret
+LoadUsedSpritesGFX_VT4:
+	ld a, MAPCALLBACK_SPRITES
+	call RunMapCallback
+	call GetUsedSprites_VT4
 	call LoadMiscTiles
 	ret
 
@@ -561,14 +581,14 @@ GetUsedSprite:
 	ldh a, [hUsedSpriteIndex]
 	call SafeGetSprite
 	ldh a, [hUsedSpriteTile]
-	call .GetTileAddr
+	call GetUsedSprite_GetTileAddr
 	push hl
 	push de
 	push bc
 	ld a, [wSpriteFlags]
 	bit 7, a
 	jr nz, .skip
-	call .CopyToVram
+	call GetUsedSprite_CopyToVram
 
 .skip
 	pop bc
@@ -596,12 +616,12 @@ endr
 	ld a, h
 	add HIGH(vTiles1 - vTiles0)
 	ld h, a
-	call .CopyToVram
+	call GetUsedSprite_CopyToVram
 
 .done
 	ret
 
-.GetTileAddr:
+GetUsedSprite_GetTileAddr:
 ; Return the address of tile (a) in (hl).
 	and $7f
 	ld l, a
@@ -617,7 +637,7 @@ endr
 	ld h, a
 	ret
 
-.CopyToVram:
+GetUsedSprite_CopyToVram:
 	ldh a, [rVBK]
 	push af
 	ld a, [wSpriteFlags]
@@ -631,6 +651,123 @@ endr
 	call Get2bpp
 	pop af
 	ldh [rVBK], a
+	ret
+
+GetUsedSprites_VT03: ; 1439b
+	ld hl, wUsedSprites
+	ld c, SPRITE_GFX_LIST_CAPACITY
+
+.loop
+	ld a, [wSpriteFlags]
+	res 5, a
+	ld [wSpriteFlags], a
+
+	ld a, [hli]
+	and a
+	jr z, .done
+	ld [hUsedSpriteIndex], a
+
+	ld a, [hli]
+	ld [hUsedSpriteTile], a
+
+	bit 7, a
+	jr z, .dont_set
+
+	ld a, [wSpriteFlags]
+	set 5, a ; load VBank0
+	ld [wSpriteFlags], a
+
+.dont_set
+	push bc
+	push hl
+	call GetUsedSprite_VT03
+	pop hl
+	pop bc
+	dec c
+	jr nz, .loop
+
+.done
+	ret
+
+GetUsedSprite_VT03:
+	ld a, [hUsedSpriteIndex]
+	call SafeGetSprite
+	ld a, [hUsedSpriteTile]
+	call GetUsedSprite_GetTileAddr
+	ld a, [wSpriteFlags]
+	bit 7, a
+	jr nz, .done
+	call GetUsedSprite_CopyToVram
+
+
+.done
+	ret
+
+GetUsedSprites_VT4:
+	ld hl, wUsedSprites
+	ld c, SPRITE_GFX_LIST_CAPACITY
+
+.loop
+	ld a, [wSpriteFlags]
+	res 5, a
+	ld [wSpriteFlags], a
+
+	ld a, [hli]
+	and a
+	jr z, .done
+	ld [hUsedSpriteIndex], a
+
+	ld a, [hli]
+	ld [hUsedSpriteTile], a
+
+	bit 7, a
+	jr nz, .dont_set
+
+	push bc
+	push hl
+	call GetUsedSprite_VT4
+	pop hl
+	pop bc
+.dont_set
+	dec c
+	jr nz, .loop
+
+.done
+	ret
+
+GetUsedSprite_VT4:
+	ld a, [hUsedSpriteIndex]
+	call SafeGetSprite
+	ld a, [hUsedSpriteTile]
+	call GetUsedSprite_GetTileAddr
+	push hl
+
+	ld l, c
+	ld h, $0
+rept 4
+	add hl, hl
+endr
+	add hl, de
+	ld d, h
+	ld e, l
+	pop hl
+
+	ld a, [wSpriteFlags]
+	bit 5, a
+	jr nz, .done
+	bit 6, a
+	jr nz, .done
+
+	ld a, [hUsedSpriteIndex]
+	call _DoesSpriteHaveFacings
+	jr c, .done
+
+	ld a, h
+	add HIGH(vTiles1 - vTiles0)
+	ld h, a
+	call GetUsedSprite_CopyToVram
+
+.done
 	ret
 
 LoadEmote::

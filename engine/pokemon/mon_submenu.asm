@@ -16,11 +16,12 @@ MonSubmenu:
 	ld [wMenuSelection], a
 
 	call ExitMenu
+	call WaitBGMap
 	ret
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 6, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
+	menu_coords 11, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
 	dw 0
 	db 1 ; default option
 
@@ -246,7 +247,7 @@ AddMonMenuItem:
 
 BattleMonMenu:
 	ld hl, .MenuHeader
-	call CopyMenuHeader
+	call LoadMenuHeader
 	xor a
 	ldh [hBGMapMode], a
 	call MenuBox
@@ -266,25 +267,29 @@ BattleMonMenu:
 	ldh a, [hJoyPressed]
 	bit B_BUTTON_F, a
 	jr z, .clear_carry
-	ret z
+	; ret z
 
 .set_carry
+	call ExitMenu
+	call WaitBGMap
 	scf
 	ret
 
 .clear_carry
+	call ExitMenu
+	call WaitBGMap
 	and a
 	ret
 
 .MenuHeader:
-	db 0 ; flags
-	menu_coords 11, 11, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
+	db MENU_BACKUP_TILES ; flags
+	menu_coords 11, 10, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
-	db STATICMENU_CURSOR | STATICMENU_NO_TOP_SPACING ; flags
+	db STATICMENU_CURSOR ; flags
 	db 3 ; items
-	db "SWITCH@"
-	db "STATS@"
-	db "CANCEL@"
+	db "替换@"
+	db "查看能力@"
+	db "退出@"

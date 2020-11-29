@@ -145,17 +145,17 @@ GoldenrodGameCornerPrizeVendor_NoCoinCaseScript:
 
 GoldenrodGameCornerTMVendorMenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 2, 15, TEXTBOX_Y - 1
+	menu_coords 0, 3, 18, TEXTBOX_Y
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
-	db "TM25    5500@"
-	db "TM14    5500@"
-	db "TM38    5500@"
-	db "CANCEL@"
+	db "招式学习器25 5500@"
+	db "招式学习器14 5500@"
+	db "招式学习器38 5500@"
+	db "取消@"
 
 GoldenrodGameCornerPrizeMonVendorScript:
 	faceplayer
@@ -231,17 +231,17 @@ GoldenrodGameCornerPrizeMonVendorScript:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 2, 17, TEXTBOX_Y - 1
+	menu_coords 0, 3, 14, TEXTBOX_Y
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
-	db "ABRA        100@"
-	db "CUBONE      800@"
-	db "WOBBUFFET  1500@"
-	db "CANCEL@"
+	db "凯西     100@"
+	db "卡拉卡拉  800@"
+	db "果然翁  1500@"
+	db "取消@"
 
 GoldenrodGameCornerPharmacistScript:
 	faceplayer

@@ -96,7 +96,7 @@ DisableMobile:
 	ldh [hMobile], a
 	xor a
 	ldh [hVBlank], a
-	call NormalSpeed
+	; call NormalSpeed
 	xor a
 	ldh [rIF], a
 	ld a, [wBGMapBuffer]
@@ -333,10 +333,10 @@ Function100232:
 	ret
 
 String10024d:
-	db   "つうしんを　キャンセル　しました@"
+	db   "つうしんを<　>キャンセル<　>しました@"
 
 String10025e:
-	db   "おともだちと　えらんだ　へやが"
+	db   "おともだちと<　>えらんだ<　>へやが"
 	next "ちがうようです@"
 
 Function100276:
@@ -934,7 +934,7 @@ Mobile_CommunicationStandby:
 	ret
 
 .String:
-	db "つうしんたいきちゅう！@"
+	db "つうしんたいきちゅう<！>@"
 
 AdvanceMobileInactivityTimerAndCheckExpired:
 	push bc
@@ -1046,11 +1046,11 @@ Function100697:
 	ret
 
 String1006c2:
-	db "ふん　@"
+	db "ふん<　>@"
 String1006c6:
 	db "びょう@"
 String1006ca:
-	db "１じかんいじょう@"
+	db "<１>じかんいじょう@"
 
 Function1006d3:
 	call UpdateTime
@@ -1327,11 +1327,11 @@ Function100846:
 	ret
 
 String_10088e:
-	db   "モバイルたいせん　できる"
+	db   "モバイルたいせん<　>できる"
 	next "じかん@"
 
 String_10089f:
-	db "　むせいげん@"
+	db "<　>むせいげん@"
 
 MobileBattleGetRemainingTime:
 ; Calculates the difference between 10 minutes and sMobileBattleTimer
@@ -1428,9 +1428,9 @@ Function100902:
 	ret
 
 .string_10095a
-	db "たいせん　しゅうりょう@"
+	db "たいせん<　>しゅうりょう@"
 .string_100966
-	db "のこり　　　ふん！@"
+	db "のこり<　><　><　>ふん<！>@"
 
 Function100970:
 	hlcoord 0, 0
@@ -4500,55 +4500,55 @@ String_101f13:
 	db "@"
 
 String_101f14:
-	db   "モバイルアダプタを　つかって"
-	next "おともだちと　つうしんします@"
+	db   "モバイルアダプタを<　>つかって"
+	next "おともだちと<　>つうしんします@"
 
 String_101f32:
-	db   "でんわを　かけるひとには"
-	next "つうわりょうきんが　かかります@"
+	db   "でんわを<　>かけるひとには"
+	next "つうわりょうきんが<　>かかります@"
 
 String_101f4f:
-	db   "モバイルアダプタの　じゅんびは"
-	next "できて　いますか？@"
+	db   "モバイルアダプタの<　>じゅんびは"
+	next "できて<　>いますか<？>@"
 
 String_101f69:
-	db   "あなたが　おともだちに"
-	next "でんわを　かけますか？@"
+	db   "あなたが<　>おともだちに"
+	next "でんわを<　>かけますか<？>@"
 
 String_101f81:
 	db   "めいしフォルダーを"
-	next "つかいますか？@"
+	next "つかいますか<？>@"
 
 String_101f93:
-	db   "でんわばんごうを　にゅうりょく"
+	db   "でんわばんごうを<　>にゅうりょく"
 	next "してください@"
 
 String_101faa:
-	db   "それでは　おともだちからの"
-	next "でんわを　おまちします⋯@"
+	db   "それでは<　>おともだちからの"
+	next "でんわを<　>おまちします⋯@"
 
 String_101fc5:
-	next "に　でんわを　かけます@"
+	next "に<　>でんわを<　>かけます@"
 
 String_101fd2:
-	next "に　でんわを　かけています@"
+	next "に<　>でんわを<　>かけています@"
 
 String_101fe1:
-	db   "でんわが　つながりました!@"
+	db   "でんわが<　>つながりました!@"
 
 String_101fef:
 	db   "つうわを"
-	next "しゅうりょう　します⋯@"
+	next "しゅうりょう<　>します⋯@"
 
 String_102000:
-	db   "つうしん　しゅうりょう@"
+	db   "つうしん<　>しゅうりょう@"
 
 String_10200c:
-	db   "つうわ　じかん@"
+	db   "つうわ<　>じかん@"
 
 String_102014:
-	db   "それでは　つうしんの"
-	next "せっていを　してください@"
+	db   "それでは<　>つうしんの"
+	next "せっていを<　>してください@"
 
 Function10202c:
 	farcall Function115d99
@@ -6593,7 +6593,7 @@ Function102f15:
 	ret
 
 .TooBadTheTradeWasCanceled:
-	db "こうかんを　キャンセルしました@"
+	db "こうかんを<　>キャンセルしました@"
 
 Function102f32:
 	call Function102dc3
@@ -6613,7 +6613,7 @@ Function102f50:
 	ret
 
 .PleaseWait:
-	db "しょうしょう　おまち　ください@"
+	db "しょうしょう<　>おまち<　>ください@"
 
 Function102f6d:
 	call Function102dc3
@@ -6623,7 +6623,7 @@ Function102f6d:
 	ret
 
 .Finished:
-	db "しゅうりょう　します@"
+	db "しゅうりょう<　>します@"
 
 Function102f85:
 	ld a, [wd003]
@@ -6646,8 +6646,8 @@ Function102f85:
 	ret
 
 String_102fb2:
-	db   "あいてがわ<PKMN>えらんだ　"
-	next "いじょう<PKMN>あるようです！！"
+	db   "あいてがわ<PKMN>えらんだ<　>"
+	next "いじょう<PKMN>あるようです<！><！>"
 	db   "@"
 
 String_102fcc:
@@ -6662,7 +6662,7 @@ Function102fce:
 
 String_102fdb:
 	db   "あいてがわ<NO>せんたくに"
-	next "いじょう<PKMN>あるようです！！"
+	next "いじょう<PKMN>あるようです<！><！>"
 	done
 
 Function102ff5:
@@ -6673,8 +6673,8 @@ Function102ff5:
 	ret
 
 String_103002:
-	db   "その#を　こうかんすると"
-	next "せんとう　できなく　なっちゃうよ！"
+	db   "その#を<　>こうかんすると"
+	next "せんとう<　>できなく<　>なっちゃうよ<！>"
 	db   "@"
 
 Function103021:
@@ -6685,8 +6685,8 @@ Function103021:
 	ret
 
 String_10302e:
-	db   "あいてが　ちゅうしを　えらんだので"
-	next "こうかんを　ちゅうし　します"
+	db   "あいてが<　>ちゅうしを<　>えらんだので"
+	next "こうかんを<　>ちゅうし<　>します"
 	db   "@"
 
 Function10304f:
@@ -7219,16 +7219,16 @@ Unknown_103522:
 	dw String_103545
 
 String_103545: db "@"
-String_103546: db "せんとう　アニメ@"
+String_103546: db "せんとう<　>アニメ@"
 String_10354f: db "でんわばんごう@"
 String_103557: db "めいしこうかん@"
-String_10355f: db "でんわを　かけるひとが　きめられる@"
-String_103571: db "でんわばんごうの　にゅうりょくのしかた@"
-String_103585: db "あたらしいめいしが　あれば　こうかん@"
-String_103598: db "とばして　みる@"
-String_1035a0: db "じっくり　みる@"
+String_10355f: db "でんわを<　>かけるひとが<　>きめられる@"
+String_103571: db "でんわばんごうの<　>にゅうりょくのしかた@"
+String_103585: db "あたらしいめいしが<　>あれば<　>こうかん@"
+String_103598: db "とばして<　>みる@"
+String_1035a0: db "じっくり<　>みる@"
 String_1035a8: db "めいしからえらぶ@"
-String_1035b1: db "すうじで　いれる@"
+String_1035b1: db "すうじで<　>いれる@"
 String_1035ba: db "する@"
 String_1035bd: db "しない@"
 String_1035c1: db "けってい@"

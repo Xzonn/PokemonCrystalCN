@@ -1,10 +1,7 @@
-	db "DUCK@" ; species name
-	dw 507, 1690 ; height, weight
+	db "鸭@" ; species name
+	dbw 17, 766 ; height, weight
 
-	db   "It swims grace-"
-	next "fully along on the"
-	next "quiet, slow-moving"
+	db   "它比较喜欢"
+	next "水流缓和的江河湖泊。"
+	next "游泳时的姿态非常优雅。@"
 
-	page "rivers and lakes"
-	next "of which it is so"
-	next "fond.@"

@@ -1,10 +1,7 @@
-	db "COTTONWEED@" ; species name
-	dw 200, 20 ; height, weight
+	db "棉草@" ; species name
+	dbw 6, 10 ; height, weight
 
-	db   "As soon as it"
-	next "rains, it closes"
-	next "its flower and"
+	db   "下雨时为了避免淋湿，"
+	next "会闭合头顶的花瓣"
+	next "躲到树荫之下。@"
 
-	page "hides in the shade"
-	next "of a tree to avoid"
-	next "getting wet.@"

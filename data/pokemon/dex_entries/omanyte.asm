@@ -1,10 +1,7 @@
-	db "SPIRAL@" ; species name
-	dw 104, 170 ; height, weight
+	db "漩涡@" ; species name
+	dbw 4, 75 ; height, weight
 
-	db   "In prehistoric"
-	next "times, it swam on"
-	next "the sea floor,"
+	db   "很久以前在海底游动，"
+	next "以浮游生物之类的为食。"
+	next "偶尔能发现它的化石。@"
 
-	page "eating plankton."
-	next "Its fossils are"
-	next "sometimes found.@"

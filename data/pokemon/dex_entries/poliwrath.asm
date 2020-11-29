@@ -1,10 +1,7 @@
-	db "TADPOLE@" ; species name
-	dw 403, 1190 ; height, weight
+	db "蝌蚪@" ; species name
+	dbw 13, 540 ; height, weight
 
-	db   "It can use its"
-	next "well-developed"
-	next "arms and legs to"
+	db   "可以凭借发达的四肢"
+	next "在水面上奔跑，"
+	next "但只能跑一小会儿。@"
 
-	page "run on the surface"
-	next "of the water for a"
-	next "split second.@"

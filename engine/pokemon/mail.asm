@@ -148,7 +148,7 @@ CheckPokeMail::
 	pop bc
 
 ; Compare the mail message, byte for byte, with the expected message.
-	ld a, MAIL_MSG_LENGTH
+	ld a, MAIL_MSG_LENGTH + 1 ; for full length msg
 	ld [wTempByteValue], a
 .loop
 	ld a, [de]
@@ -216,8 +216,14 @@ GivePokeMail::
 	ld hl, wPartyMonOT
 	ld bc, NAME_LENGTH
 	call AddNTimes
-	ld bc, NAME_LENGTH - 1
+	ld bc, NAME_LENGTH - 3 ; NAME_LENGTH - 1
 	call CopyBytes
+	ld a, "C"
+	ld [de], a
+	inc de
+	ld a, "N"
+	ld [de], a
+	inc de
 	pop af
 	ld hl, wPartyMon1ID
 	ld bc, PARTYMON_STRUCT_LENGTH
@@ -552,14 +558,14 @@ MailboxPC:
 
 .SubMenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 13, 9
+	menu_coords 0, 0, 11, 9
 	dw .SubMenuData
 	db 1 ; default option
 
 .SubMenuData:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
-	db "READ MAIL@"
-	db "PUT IN PACK@"
-	db "ATTACH MAIL@"
-	db "CANCEL@"
+	db "阅读邮件@"
+	db "放入背包@"
+	db "携带邮件@"
+	db "取消@"

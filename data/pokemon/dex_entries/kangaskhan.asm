@@ -1,10 +1,7 @@
-	db "PARENT@" ; species name
-	dw 703, 1760 ; height, weight
+	db "亲子@" ; species name
+	dbw 22, 800 ; height, weight
 
-	db   "To avoid"
-	next "crushing the"
-	next "baby it carries in"
+	db   "为了避免睡觉时压到"
+	next "腹袋里的宝宝，不会躺着"
+	next "睡觉而是坐着睡觉。@"
 
-	page "its pouch, it"
-	next "always sleeps"
-	next "standing up.@"

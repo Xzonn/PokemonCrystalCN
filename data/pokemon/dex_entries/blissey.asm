@@ -1,10 +1,7 @@
-	db "HAPPINESS@" ; species name
-	dw 411, 1030 ; height, weight
+	db "幸福@" ; species name
+	dbw 15, 468 ; height, weight
 
-	db   "Biting into one"
-	next "of the delicious"
-	next "eggs that BLISSEY"
+	db   "据说能产下包含幸福的蛋，"
+	next "只要能吃上一口，"
+	next "不管是谁都会洋溢笑容。@"
 
-	page "provides will make"
-	next "everyone around"
-	next "smile with joy.@"

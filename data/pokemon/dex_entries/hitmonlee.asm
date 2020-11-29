@@ -1,10 +1,7 @@
-	db "KICKING@" ; species name
-	dw 411, 1100 ; height, weight
+	db "踢腿@" ; species name
+	dbw 15, 498 ; height, weight
 
-	db   "It is also called"
-	next "the Kick Master."
-	next "It uses its"
+	db   "可以用伸缩自如的腿"
+	next "熟练地使出一切脚法。"
+	next "别名为“踢技之鬼”。@"
 
-	page "elastic legs to"
-	next "execute every"
-	next "known kick.@"

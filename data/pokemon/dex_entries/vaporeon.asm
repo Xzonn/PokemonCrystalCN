@@ -1,10 +1,7 @@
-	db "BUBBLE JET@" ; species name
-	dw 303, 640 ; height, weight
+	db "吐泡@" ; species name
+	dbw 10, 290 ; height, weight
 
-	db   "As it uses the"
-	next "fins on the tip"
-	next "of its tail to"
+	db   "摆动尾鳍在水中游泳时，"
+	next "会变得难以看清，"
+	next "仿佛溶解在了水中一样。@"
 
-	page "swim, it blends"
-	next "with the water"
-	next "perfectly.@"

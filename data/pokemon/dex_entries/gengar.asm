@@ -1,10 +1,7 @@
-	db "SHADOW@" ; species name
-	dw 411, 890 ; height, weight
+	db "影子@" ; species name
+	dbw 15, 405 ; height, weight
 
-	db   "Hiding in people's"
-	next "shadows at night,"
-	next "it absorbs their"
+	db   "会在半夜潜入影子，"
+	next "一点点地夺走人的体温。"
+	next "被它盯上就会不断地发寒。@"
 
-	page "heat. The chill it"
-	next "causes makes the"
-	next "victims shake.@"

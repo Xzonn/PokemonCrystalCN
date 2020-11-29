@@ -1,10 +1,7 @@
-	db "FIRE HORSE@" ; species name
-	dw 507, 2090 ; height, weight
+	db "火马@" ; species name
+	dbw 17, 950 ; height, weight
 
-	db   "It just loves to"
-	next "gallop. The faster"
-	next "it goes, the long-"
+	db   "最喜欢一个劲地奔跑。"
+	next "提升速度的话，"
+	next "摇曳着的鬃毛也会变长。@"
 
-	page "er the swaying"
-	next "flames of its mane"
-	next "will become.@"

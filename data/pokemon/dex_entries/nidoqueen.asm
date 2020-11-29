@@ -1,10 +1,7 @@
-	db "DRILL@" ; species name
-	dw 403, 1320 ; height, weight
+	db "钻锥@" ; species name
+	dbw 13, 600 ; height, weight
 
-	db   "The hard scales"
-	next "that cover its"
-	next "strong body serve"
+	db   "拥有覆盖着坚硬鳞片的"
+	next "健壮身躯，无论受到"
+	next "什么样的攻击都毫不在意。@"
 
-	page "as excellent"
-	next "protection from"
-	next "any attack.@"

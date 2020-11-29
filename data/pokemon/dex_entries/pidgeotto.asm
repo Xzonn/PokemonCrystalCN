@@ -1,10 +1,7 @@
-	db "BIRD@" ; species name
-	dw 307, 660 ; height, weight
+	db "鸟@" ; species name
+	dbw 11, 300 ; height, weight
 
-	db   "It slowly flies in"
-	next "a circular pat-"
-	next "tern, all the"
+	db   "在空中缓缓盘旋的同时"
+	next "也在仔细地寻找"
+	next "周围有没有猎物。@"
 
-	page "while keeping a"
-	next "sharp lookout for"
-	next "prey.@"

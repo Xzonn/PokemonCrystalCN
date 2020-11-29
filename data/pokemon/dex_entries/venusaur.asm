@@ -1,10 +1,7 @@
-	db "SEED@" ; species name
-	dw 607, 2210 ; height, weight
+	db "种子@" ; species name
+	dbw 20, 1000 ; height, weight
 
-	db   "As it warms it-"
-	next "self and absorbs"
-	next "the sunlight, its"
+	db   "沐浴阳光让身体变暖的话，"
+	next "就会从花瓣散发出"
+	next "令人神清气爽的香味。@"
 
-	page "flower petals"
-	next "release a pleasant"
-	next "fragrance.@"

@@ -114,11 +114,12 @@ _CGB_BattleColors:
 _CGB_FinishBattleScreenLayout:
 	call InitPartyMenuBGPal7
 	hlcoord 0, 0, wAttrmap
-	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
+	ld bc, SCREEN_WIDTH * ( SCREEN_HEIGHT - 6 )
 	ld a, PAL_BATTLE_BG_ENEMY_HP
-	call ByteFill
+	; call ByteFill
+	call ByteFillWithoutVramNo
 	hlcoord 0, 4, wAttrmap
-	lb bc, 8, 10
+	lb bc, 8, 9
 	ld a, PAL_BATTLE_BG_PLAYER
 	call FillBoxCGB
 	hlcoord 10, 0, wAttrmap
@@ -128,19 +129,23 @@ _CGB_FinishBattleScreenLayout:
 	hlcoord 0, 0, wAttrmap
 	lb bc, 4, 10
 	ld a, PAL_BATTLE_BG_ENEMY_HP
-	call FillBoxCGB
-	hlcoord 10, 7, wAttrmap
-	lb bc, 5, 10
+	; call FillBoxCGB
+	call FillBoxCGBWithoutVramNo
+	hlcoord 9, 7, wAttrmap
+	lb bc, 5, 11
 	ld a, PAL_BATTLE_BG_PLAYER_HP
-	call FillBoxCGB
-	hlcoord 10, 11, wAttrmap
-	lb bc, 1, 9
+	; call FillBoxCGB
+	call FillBoxCGBWithoutVramNo
+	hlcoord 9, 11, wAttrmap
+	lb bc, 1, 10
 	ld a, PAL_BATTLE_BG_EXP
 	call FillBoxCGB
 	hlcoord 0, 12, wAttrmap
-	ld bc, 6 * SCREEN_WIDTH
+	; ld bc, 6 * SCREEN_WIDTH
+	lb bc, 6 , SCREEN_WIDTH
 	ld a, PAL_BATTLE_BG_TEXT
-	call ByteFill
+	; call ByteFill
+	call FillBoxCGBWithoutVramNo
 	ld hl, BattleObjectPals
 	ld de, wOBPals1 palette PAL_BATTLE_OB_GRAY
 	ld bc, 6 palettes
@@ -211,34 +216,39 @@ _CGB_StatsScreenHPPals:
 	call LoadPalette_White_Col1_Col2_Black ; exp palette
 	ld hl, StatsScreenPagePals
 	ld de, wBGPals1 palette 3
-	ld bc, 3 palettes ; pink, green, and blue page palettes
+	ld bc, 4 palettes ; pink, green, and blue page palettes
 	ld a, BANK(wBGPals1)
 	call FarCopyWRAM
 	call WipeAttrmap
 
 	hlcoord 0, 0, wAttrmap
-	lb bc, 8, SCREEN_WIDTH
+	lb bc, SCREEN_HEIGHT, 7
 	ld a, $1 ; mon palette
 	call FillBoxCGB
 
-	hlcoord 10, 16, wAttrmap
+	hlcoord 9, 16, wAttrmap
 	ld bc, 10
 	ld a, $2 ; exp palette
 	call ByteFill
 
-	hlcoord 13, 5, wAttrmap
+	hlcoord 1, 14, wAttrmap
 	lb bc, 2, 2
 	ld a, $3 ; pink page palette
 	call FillBoxCGB
 
-	hlcoord 15, 5, wAttrmap
+	hlcoord 3, 14, wAttrmap
 	lb bc, 2, 2
 	ld a, $4 ; green page palette
 	call FillBoxCGB
 
-	hlcoord 17, 5, wAttrmap
+	hlcoord 5, 14, wAttrmap
 	lb bc, 2, 2
 	ld a, $5 ; blue page palette
+	call FillBoxCGB
+
+	hlcoord 7, 0, wAttrmap
+	lb bc, SCREEN_HEIGHT, 1
+	ld a, $6
 	call FillBoxCGB
 
 	call ApplyAttrmap
@@ -269,7 +279,8 @@ _CGB_Pokedex:
 	call GetMonPalettePointer
 	call LoadPalette_White_Col1_Col2_Black ; mon palette
 .got_palette
-	call WipeAttrmap
+	; call WipeAttrmap
+	call WipeAttrmapWithoutVramNo
 	hlcoord 1, 1, wAttrmap
 	lb bc, 7, 7
 	ld a, $1 ; green question mark palette
@@ -309,9 +320,10 @@ _CGB_BillsPC:
 	call GetPlayerOrMonPalettePointer
 	call LoadPalette_White_Col1_Col2_Black
 .GotPalette:
-	call WipeAttrmap
-	hlcoord 1, 4, wAttrmap
-	lb bc, 7, 7
+	; call WipeAttrmap
+	call WipeAttrmapWithoutVramNo
+	hlcoord 1, 1, wAttrmap
+	lb bc, 8, 8
 	ld a, $1
 	call FillBoxCGB
 	call InitPartyMenuOBPals
@@ -570,7 +582,11 @@ _CGB_Evolution:
 	call FarCopyWRAM
 
 .got_palette
-	call WipeAttrmap
+	; call WipeAttrmap
+	hlcoord 0, 0, wAttrmap
+	ld bc, SCREEN_WIDTH * ( SCREEN_HEIGHT - 6 )
+	call ClearVramNo
+	call WipeAttrmapWithoutVramNo
 	call ApplyAttrmap
 	call ApplyPals
 	ld a, TRUE
@@ -768,7 +784,8 @@ _CGB_PokedexSearchOption:
 	ld a, PREDEFPAL_POKEDEX
 	call GetPredefPal
 	call LoadHLPaletteIntoDE
-	call WipeAttrmap
+	; call WipeAttrmap
+	call WipeAttrmapWithoutVramNo
 	call ApplyAttrmap
 	call ApplyPals
 	ld a, TRUE
@@ -798,23 +815,23 @@ _CGB_PackPals:
 	call FarCopyWRAM
 	call WipeAttrmap
 	hlcoord 0, 0, wAttrmap
-	lb bc, 1, 10
+	lb bc, 2, 10
 	ld a, $1
 	call FillBoxCGB
 	hlcoord 10, 0, wAttrmap
-	lb bc, 1, 10
+	lb bc, 2, 10
 	ld a, $2
 	call FillBoxCGB
-	hlcoord 7, 2, wAttrmap
+	hlcoord 6, 3, wAttrmap
 	lb bc, 9, 1
 	ld a, $3
 	call FillBoxCGB
 	hlcoord 0, 7, wAttrmap
-	lb bc, 3, 5
+	lb bc, 2, 6
 	ld a, $4
 	call FillBoxCGB
-	hlcoord 0, 3, wAttrmap
-	lb bc, 3, 5
+	hlcoord 1, 3, wAttrmap
+	lb bc, 3, 4
 	ld a, $5
 	call FillBoxCGB
 	call ApplyAttrmap

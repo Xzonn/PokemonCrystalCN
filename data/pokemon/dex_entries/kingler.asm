@@ -1,10 +1,7 @@
-	db "PINCER@" ; species name
-	dw 403, 1320 ; height, weight
+	db "钳子@" ; species name
+	dbw 13, 600 ; height, weight
 
-	db   "Its oversized claw"
-	next "is very powerful,"
-	next "but when it's not"
+	db   "破坏力惊人的大钳子很重，"
+	next "所以在不战斗的"
+	next "时候会变得很碍事。@"
 
-	page "in battle, the"
-	next "claw just gets in"
-	next "the way.@"

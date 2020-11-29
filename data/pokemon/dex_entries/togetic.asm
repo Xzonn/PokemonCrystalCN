@@ -1,10 +1,7 @@
-	db "HAPPINESS@" ; species name
-	dw 200, 70 ; height, weight
+	db "幸福@" ; species name
+	dbw 6, 32 ; height, weight
 
-	db   "Although it does"
-	next "not flap its wings"
-	next "very much, it can"
+	db   "即使不拍动翅膀也可以"
+	next "在空中微微地飘起来"
+	next "跟在训练家身后。@"
 
-	page "stay up in the air"
-	next "as it tags along"
-	next "after its trainer.@"

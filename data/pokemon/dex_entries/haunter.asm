@@ -1,10 +1,7 @@
-	db "GAS@" ; species name
-	dw 503, 2 ; height, weight
+	db "气体状@" ; species name
+	dbw 16, 1 ; height, weight
 
-	db   "It hides in the"
-	next "dark, planning to"
-	next "take the life of"
+	db   "一边在黑暗中隐藏气息，"
+	next "一边等待迷途猎物送上门，"
+	next "企图夺走它们的生命。@"
 
-	page "the next living"
-	next "thing that wanders"
-	next "close by.@"

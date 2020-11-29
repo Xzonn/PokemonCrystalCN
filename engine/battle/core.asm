@@ -1649,9 +1649,9 @@ HandleScreens:
 	jp CopyName2
 
 .Your:
-	db "Your@"
+	db "我方@"
 .Enemy:
-	db "Enemy@"
+	db "敌人@"
 
 .LightScreenTick:
 	ld a, [de]
@@ -2068,8 +2068,8 @@ DoubleSwitch:
 	cp USING_EXTERNAL_CLOCK
 	jr z, .player_1
 	call ClearSprites
-	hlcoord 1, 0
-	lb bc, 4, 10
+	hlcoord 0, 0
+	lb bc, 4, 11
 	call ClearBox
 	call PlayerPartyMonEntrance
 	ld a, $1
@@ -2263,8 +2263,8 @@ FaintEnemyPokemon:
 	call EnemyMonFaintedAnimation
 	ld de, SFX_FAINT
 	call PlaySFX
-	hlcoord 1, 0
-	lb bc, 4, 10
+	hlcoord 0, 0
+	lb bc, 4, 11
 	call ClearBox
 	ld hl, BattleText_EnemyMonFainted
 	jp StdBattleTextbox
@@ -2693,7 +2693,7 @@ AskUseNextPokemon:
 	ld hl, BattleText_UseNextMon
 	call StdBattleTextbox
 .loop
-	lb bc, 1, 7
+	lb bc, 0, 6
 	call PlaceYesNoBox
 	ld a, [wMenuCursorY]
 	jr c, .pressed_b
@@ -3481,7 +3481,7 @@ OfferSwitch:
 	callfar Battle_GetTrainerName
 	ld hl, BattleText_EnemyIsAboutToUseWillPlayerChangeMon
 	call StdBattleTextbox
-	lb bc, 1, 7
+	lb bc, 0, 6
 	call PlaceYesNoBox
 	ld a, [wMenuCursorY]
 	dec a
@@ -3520,8 +3520,8 @@ ClearEnemyMonBox:
 	ldh [hBGMapMode], a
 	call ExitMenu
 	call ClearSprites
-	hlcoord 1, 0
-	lb bc, 4, 10
+	hlcoord 0, 0
+	lb bc, 4, 11
 	call ClearBox
 	call WaitBGMap
 	jp FinishBattleAnim
@@ -3963,6 +3963,9 @@ InitEnemyMon:
 	ld de, wEnemyMonNick
 	ld bc, MON_NAME_LENGTH
 	call CopyBytes
+	ld de, wEnemyMonNick
+	lb bc, 15, 0
+	farcall FixStrLength
 	ld hl, wEnemyMonAttack
 	ld de, wEnemyStats
 	ld bc, PARTYMON_STRUCT_LENGTH - MON_ATK
@@ -4637,13 +4640,63 @@ CheckDanger:
 	ret
 
 PrintPlayerHUD:
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	ld de, wBattleMonNick
-	hlcoord 10, 7
-	call ret_3e138
-	call PlaceString
+	farcall GetStrLength
+	ld a, b
+	sub a, 5
+	jr c, .short
+	jr z, .short_if_wo_gender
+	dec a
+	jr z, .normal
+	hlcoord 10, 8
+	dec a
+	jr z, .skip_longlong
+	dec hl
+.skip_longlong
+	call .place_name
+	call .get_stat
+	hlcoord 9, 9
+	call .place_gender
+	hlcoord 17, 8
+	jp .place_level
 
-	push bc
+.short
+	hlcoord 11, 8
+	call .place_name
+	call .get_stat
+	call .place_gender
+	jp .place_level
 
+.short_if_wo_gender
+	call .get_stat
+	push de
+	call .get_gender
+	pop de
+	push af
+	hlcoord 11, 8
+	jr c, .short_wo_gender
+	dec hl
+.short_wo_gender
+	call .place_name
+	pop af
+	call nc, .place_gender_2
+	jr .place_level
+
+.normal
+	hlcoord 10, 8
+	call .place_name
+	call .get_stat
+	push hl
+	hlcoord 9, 9
+	call .place_gender
+	pop hl
+	jr .place_level
+
+.get_stat
+	push hl
+	push de
 	ld a, [wCurBattleMon]
 	ld hl, wPartyMon1DVs
 	call GetPartyLocation
@@ -4664,34 +4717,54 @@ PrintPlayerHUD:
 	ld [wCurPartySpecies], a
 	ld [wCurSpecies], a
 	call GetBaseData
-
+	pop de
 	pop hl
-	dec hl
+	ret
 
+.place_name
+	call ret_3e138
+	call PlaceString
+	ld h, b
+	ld l, c
+	; dec hl
+	ret
+
+.get_gender
 	ld a, TEMPMON
 	ld [wMonType], a
 	callfar GetGender
-	ld a, " "
-	jr c, .got_gender_char
+	ret
+
+.place_gender
+	push hl
+	call .get_gender
+	pop hl
+	; ld a, " "
+	; jr c, .got_gender_char
+	ret c
+.place_gender_2
 	ld a, "♂"
 	jr nz, .got_gender_char
 	ld a, "♀"
-
 .got_gender_char
-	hlcoord 17, 8
-	ld [hl], a
-	hlcoord 14, 8
-	push af ; back up gender
+	ld [hli], a
+	ret
+
+.place_level
+	; hlcoord 17, 8
+	; push af ; back up gender
 	push hl
 	ld de, wBattleMonStatus
 	predef PlaceNonFaintStatus
 	pop hl
-	pop bc
+	; pop bc
+	ld a, DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	ret nz
-	ld a, b
-	cp " "
-	jr nz, .copy_level ; male or female
-	dec hl ; genderless
+	; ld a, b
+	; cp " "
+	; jr nz, .copy_level ; male or female
+	; dec hl ; genderless
 
 .copy_level
 	ld a, [wBattleMonLevel]
@@ -4713,8 +4786,10 @@ DrawEnemyHUD:
 	xor a
 	ldh [hBGMapMode], a
 
-	hlcoord 1, 0
-	lb bc, 4, 11
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
+	hlcoord 0, 0
+	lb bc, 4, 12
 	call ClearBox
 
 	farcall DrawEnemyHUDBorder
@@ -4724,13 +4799,90 @@ DrawEnemyHUD:
 	ld [wCurPartySpecies], a
 	call GetBaseData
 	ld de, wEnemyMonNick
-	hlcoord 1, 0
+	farcall GetStrLength
+	ld a, b
+	sub a, 5
+	jr c, .short
+	jr z, .short_if_wo_gender
+	dec a
+	jr z, .normal
+	push af
+	hlcoord 1, 1
+	ld a, [hl]
+	ldcoord_a 10, 0
+	pop af
+	dec a
+	call IncreaseDFSCombineLevel
+	jr z, .skip_longlong
+	dec hl
+	push de
+	ld b, 0
+	ld a, [de]
+	ld c, a
+	ld d, h
+	ld e, l
+	farcall dfsFirstCharRightAlign
+	pop de
+.skip_longlong
+	call .place_name
+	call DecreaseDFSCombineLevel
+	hlcoord 8, 0
+	call .place_gender
+	hlcoord 8, 1
+	jr .place_level
+
+.short
+	hlcoord 3, 1
+	call .place_name
+	call .place_gender
+	jr .place_level
+
+.short_if_wo_gender
+	push de
+	call .get_gender
+	pop de
+	push af
+	hlcoord 3, 1
+	jr c, .short_wo_gender
+	dec hl
+.short_wo_gender
+	call .place_name
+	pop af
+	call nc, .place_gender_2
+	jr .place_level
+
+.normal
+	hlcoord 2, 1
+	call .place_name
+	push hl
+	hlcoord 8, 0
+	call .place_gender
+	pop hl
+	jr .place_level
+
+.place_name
 	call ret_3e138
 	call PlaceString
 	ld h, b
 	ld l, c
-	dec hl
+	ret
 
+.place_gender
+	push hl
+	call .get_gender
+	pop hl
+	; ld a, " "
+	; jr c, .got_gender
+	ret c
+.place_gender_2
+	ld a, "♂"
+	jr nz, .got_gender
+	ld a, "♀"
+.got_gender
+	ld [hli], a
+	ret
+
+.get_gender
 	ld hl, wEnemyMonDVs
 	ld de, wTempMonDVs
 	ld a, [wEnemySubStatus5]
@@ -4747,28 +4899,22 @@ DrawEnemyHUD:
 	ld a, TEMPMON
 	ld [wMonType], a
 	callfar GetGender
-	ld a, " "
-	jr c, .got_gender
-	ld a, "♂"
-	jr nz, .got_gender
-	ld a, "♀"
+	ret
 
-.got_gender
-	hlcoord 9, 1
-	ld [hl], a
-
-	hlcoord 6, 1
-	push af
+.place_level
+	; push af
 	push hl
 	ld de, wEnemyMonStatus
 	predef PlaceNonFaintStatus
 	pop hl
-	pop bc
+	; pop bc
+	ld a, DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	jr nz, .skip_level
-	ld a, b
-	cp " "
-	jr nz, .print_level
-	dec hl
+	; ld a, b
+	; cp " "
+	; jr nz, .print_level
+	; dec hl
 .print_level
 	ld a, [wEnemyMonLevel]
 	ld [wTempMonLevel], a
@@ -4885,7 +5031,7 @@ BattleMenu:
 	ld a, [wInputType]
 	or a
 	jr z, .skip_dude_pack_select
-	farcall _DudeAutoInput_DownA
+	farcall _DudeAutoInput_WaitRightA
 .skip_dude_pack_select
 	call LoadBattleMenu2
 	ret c
@@ -4896,9 +5042,9 @@ BattleMenu:
 	ld a, [wBattleMenuCursorBuffer]
 	cp $1
 	jp z, BattleMenu_Fight
-	cp $3
-	jp z, BattleMenu_Pack
 	cp $2
+	jp z, BattleMenu_Pack
+	cp $3
 	jp z, BattleMenu_PKMN
 	cp $4
 	jp z, BattleMenu_Run
@@ -5100,11 +5246,11 @@ Battle_StatsScreen:
 
 	ld hl, vTiles2 tile $31
 	ld de, vTiles0
-	ld bc, $11 tiles
+	ld bc, $15 tiles
 	call CopyBytes
 
 	ld hl, vTiles2
-	ld de, vTiles0 tile $11
+	ld de, vTiles0 tile $15
 	ld bc, $31 tiles
 	call CopyBytes
 
@@ -5121,10 +5267,10 @@ Battle_StatsScreen:
 
 	ld hl, vTiles0
 	ld de, vTiles2 tile $31
-	ld bc, $11 tiles
+	ld bc, $15 tiles
 	call CopyBytes
 
-	ld hl, vTiles0 tile $11
+	ld hl, vTiles0 tile $15
 	ld de, vTiles2
 	ld bc, $31 tiles
 	call CopyBytes
@@ -5337,35 +5483,35 @@ MoveSelectionScreen:
 	xor a
 	ldh [hBGMapMode], a
 
-	hlcoord 4, 17 - NUM_MOVES - 1
-	ld b, 4
-	ld c, 14
+	hlcoord 0, 17 - NUM_MOVES * 2 - 1
+	ld b, 4 * 2
+	ld c, 9
 	ld a, [wMoveSelectionMenuType]
 	cp $2
 	jr nz, .got_dims
-	hlcoord 4, 17 - NUM_MOVES - 1 - 4
-	ld b, 4
-	ld c, 14
+	hlcoord 9, 17 - NUM_MOVES * 2 - 2 + 1
+	ld b, 4 * 2
+	ld c, 9
 .got_dims
 	call Textbox
 
-	hlcoord 6, 17 - NUM_MOVES
+	hlcoord 2, 17 - NUM_MOVES * 2 + 1
 	ld a, [wMoveSelectionMenuType]
 	cp $2
 	jr nz, .got_start_coord
-	hlcoord 6, 17 - NUM_MOVES - 4
+	hlcoord 11, 17 - NUM_MOVES * 2 +1
 .got_start_coord
-	ld a, SCREEN_WIDTH
+	ld a, SCREEN_WIDTH * 2
 	ld [wBuffer1], a
 	predef ListMoves
 
-	ld b, 5
+	ld b, 1
 	ld a, [wMoveSelectionMenuType]
 	cp $2
-	ld a, 17 - NUM_MOVES
+	ld a, 17 - NUM_MOVES * 2 + 1
 	jr nz, .got_default_coord
-	ld b, 5
-	ld a, 17 - NUM_MOVES - 4
+	ld b, 10
+	ld a, 17 - NUM_MOVES * 2 + 1
 
 .got_default_coord
 	ld [w2DMenuCursorInitY], a
@@ -5406,7 +5552,7 @@ MoveSelectionScreen:
 	ld [w2DMenuFlags1], a
 	xor a
 	ld [w2DMenuFlags2], a
-	ld a, $10
+	ld a, SCREEN_WIDTH * 2
 	ld [w2DMenuCursorOffsets], a
 .menu_loop
 	ld a, [wMoveSelectionMenuType]
@@ -5424,8 +5570,8 @@ MoveSelectionScreen:
 	ld a, [wMoveSwapBuffer]
 	and a
 	jr z, .interpret_joypad
-	hlcoord 5, 13
-	ld bc, SCREEN_WIDTH
+	hlcoord 1, 10
+	ld bc, SCREEN_WIDTH * 2
 	dec a
 	call AddNTimes
 	ld [hl], "▷"
@@ -5623,9 +5769,9 @@ MoveInfoBox:
 	xor a
 	ldh [hBGMapMode], a
 
-	hlcoord 0, 8
-	ld b, 3
-	ld c, 9
+	hlcoord 10, 12
+	ld b, 4
+	ld c, 8
 	call Textbox
 	call MobileTextBorder
 
@@ -5640,7 +5786,7 @@ MoveInfoBox:
 	cp b
 	jr nz, .not_disabled
 
-	hlcoord 1, 10
+	hlcoord 11, 14
 	ld de, .Disabled
 	call PlaceString
 	jr .done
@@ -5674,33 +5820,33 @@ MoveInfoBox:
 	ld [wStringBuffer1], a
 	call .PrintPP
 
-	hlcoord 1, 9
+	hlcoord 11, 15
 	ld de, .Type
 	call PlaceString
 
-	hlcoord 7, 11
+	hlcoord 13, 16
 	ld [hl], "/"
 
 	callfar UpdateMoveData
 	ld a, [wPlayerMoveStruct + MOVE_ANIM]
 	ld b, a
-	hlcoord 2, 10
+	hlcoord 14, 16
 	predef PrintMoveType
 
 .done
 	ret
 
 .Disabled:
-	db "Disabled!@"
+	db "封住！@"
 .Type:
-	db "TYPE/@"
+	db "属性@"
 
 .PrintPP:
-	hlcoord 5, 11
+	hlcoord 14, 13
 	ld a, [wLinkMode] ; What's the point of this check?
 	cp LINK_MOBILE
 	jr c, .ok
-	hlcoord 5, 11
+	hlcoord 14, 13
 .ok
 	push hl
 	ld de, wStringBuffer1
@@ -6799,7 +6945,9 @@ BadgeStatBoosts:
 .CheckBadge:
 	ld a, b
 	srl b
+	push af ; FIXED
 	call c, BoostStat
+	pop af ; FIXED
 	inc hl
 	inc hl
 ; Check every other badge.
@@ -7296,7 +7444,7 @@ GiveExperiencePoints:
 	ld b, 10
 	ld c, 9
 	call Textbox
-	hlcoord 11, 1
+	hlcoord 11, 2
 	ld bc, 4
 	predef PrintTempMonStats
 	ld c, 30
@@ -8061,8 +8209,8 @@ BattleIntro:
 	hlcoord 9, 7
 	lb bc, 5, 11
 	call ClearBox
-	hlcoord 1, 0
-	lb bc, 4, 10
+	hlcoord 0, 0
+	lb bc, 4, 11
 	call ClearBox
 	call ClearSprites
 	ld a, [wBattleMode]
@@ -8391,7 +8539,7 @@ DisplayLinkBattleResult:
 	jr .store_result
 
 .store_result
-	hlcoord 6, 8
+	hlcoord 8, 9
 	call PlaceString
 	farcall BackupMobileEventIndex
 	ld c, 200
@@ -8418,11 +8566,11 @@ DisplayLinkBattleResult:
 	ret
 
 .YouWin:
-	db "YOU WIN@"
+	db "你赢了@"
 .YouLose:
-	db "YOU LOSE@"
+	db "你输了@"
 .Draw:
-	db "  DRAW@"
+	db " 平局@"
 
 .Mobile_InvalidBattle:
 	hlcoord 6, 8
@@ -8434,7 +8582,7 @@ DisplayLinkBattleResult:
 	ret
 
 .InvalidBattle:
-	db "INVALID BATTLE@"
+	db "不合法战斗@"
 
 IsMobileBattle2:
 	ld a, [wLinkMode]
@@ -8467,6 +8615,9 @@ _DisplayLinkRecord:
 ReadAndPrintLinkBattleRecord:
 	call ClearTilemap
 	call ClearSprites
+	call ClearFullVramNo
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	call .PrintBattleRecord
 	hlcoord 0, 8
 	ld b, NUM_LINK_BATTLE_RECORDS
@@ -8497,7 +8648,7 @@ ReadAndPrintLinkBattleRecord:
 	pop hl
 	call PlaceString
 	pop hl
-	ld de, 26
+	ld de, 6
 	add hl, de
 	push hl
 	ld de, wLinkBattleRecordWins
@@ -8533,67 +8684,88 @@ ReadAndPrintLinkBattleRecord:
 	pop bc
 	dec b
 	jr nz, .loop
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	ret
 
 .PrintBattleRecord:
-	hlcoord 1, 0
+	hlcoord 1, 1
 	ld de, .Record
 	call PlaceString
 
-	hlcoord 0, 6
-	ld de, .Result
-	call PlaceString
+	; hlcoord 0, 6
+	; ld de, .Result
+	; call PlaceString
 
-	hlcoord 0, 2
-	ld de, .Total
-	call PlaceString
+	; hlcoord 0, 2
+	; ld de, .Total
+	; call PlaceString
 
-	hlcoord 6, 4
+	hlcoord 1, 3
 	ld de, sLinkBattleWins
 	call .PrintZerosIfNoSaveFileExists
-	jr c, .quit
+	ld de, .Win
+	call PlaceString
+	; jr c, .quit
 
-	lb bc, 2, 4
-	call PrintNum
+	; lb bc, 2, 4
+	; call PrintNum
 
-	hlcoord 11, 4
+	ld h, b
+	ld l, c
 	ld de, sLinkBattleLosses
 	call .PrintZerosIfNoSaveFileExists
+	ld de, .Lose
+	call PlaceString
 
-	lb bc, 2, 4
-	call PrintNum
+	; lb bc, 2, 4
+	; call PrintNum
 
-	hlcoord 16, 4
+	ld h, b
+	ld l, c
 	ld de, sLinkBattleDraws
 	call .PrintZerosIfNoSaveFileExists
+	ld de, .Draw
+	call PlaceString
 
-	lb bc, 2, 4
-	call PrintNum
+	hlcoord 7, 6
+	ld de, .Win
+	call PlaceString
+	hlcoord 12, 6
+	ld de, .Lose
+	call PlaceString
+	hlcoord 17, 6
+	ld de, .Draw
+	call PlaceString
 
-.quit
+; .quit
 	ret
 
 .PrintZerosIfNoSaveFileExists:
 	ld a, [wSavedAtLeastOnce]
 	and a
-	ret nz
-	ld de, .Scores
-	call PlaceString
-	scf
+	jr z, .PrintZero
+	lb bc, 2 | PRINTNUM_LEFTALIGN, 4
+	call PrintNum
+	ret
+.PrintZero
+	ld a, "0"
+	ld [hli], a
 	ret
 
-.Scores:
-	db "   0    0    0@"
+; .Scores:
+; 	db "   0    0    0@"
 
 .Format:
-	db "  ---  <LF>"
-	db "         -    -    -@"
+	db "----- ---- ---- ----@"
 .Record:
-	db "<PLAYER>'s RECORD@"
-.Result:
-	db "RESULT WIN LOSE DRAW@"
-.Total:
-	db "TOTAL  WIN LOSE DRAW@"
+	db "<PLAYER>的对战成绩@"
+.Win:
+	db "胜@"
+.Lose:
+	db "败@"
+.Draw:
+	db "平@"
 
 BattleEnd_HandleRoamMons:
 	ld a, [wBattleType]
@@ -8914,6 +9086,7 @@ InitBattleDisplay:
 	call LoadStandardFont
 	call _LoadBattleFontsHPBar
 	call .BlankBGMap
+	call ClearFullVramNo
 	xor a
 	ldh [hMapAnims], a
 	ldh [hSCY], a

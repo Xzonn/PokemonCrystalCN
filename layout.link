@@ -31,6 +31,7 @@ ROM0
 	"Home"
 ROMX $01
 	"bank1"
+	"DFS"
 ROMX $02
 	"bank2"
 ROMX $03
@@ -283,28 +284,60 @@ ROMX $70
 	"Text 2"
 ROMX $71
 	"Text 3"
+	org $6500
+	"Chinese Fonts 71"
 ROMX $72
 	"Miscellaneous Text"
+	org $6e00
+	"Chinese Fonts 72"
 ROMX $73
 	"Pokedex Entries 129-192"
+	org $5300
+	"Chinese Fonts 73"
 ROMX $74
 	"Pokedex Entries 193-251"
+	org $5300
+	"Chinese Fonts 74"
+ROMX $75
+	org $4100
+	"Chinese Fonts 75"
+ROMX $76
+	org $4100
+	"Chinese Fonts 76"
 ROMX $77
 	"bank77"
 	"Tileset Data 7"
 	"bank77_2"
+	org $7700
+	"Chinese Fonts 77"
 ROMX $78
 	"Debug Room"
 	"Tileset Data 8"
+	org $6500
+	"Chinese Fonts 78"
+ROMX $79
+	org $4100
+	"Chinese Fonts 79"
+ROMX $7a
+	org $4100
+	"Chinese Fonts 7A"
 ROMX $7b
 	"Battle Tower Text"
+	org $5300
+	"Chinese Fonts 7B"
 ROMX $7c
 	"Battle Tower Trainer Data"
+	org $4a00
+	"Chinese Fonts 7C"
 ROMX $7d
 	"Mobile News Data"
+	org $6500
+	"Chinese Fonts 7D"
 ROMX $7e
 	"Crystal Events"
 ROMX $7f
+	org $4100
+	"Chinese Fonts 7F"
 	org $7de0
 	"Stadium 2 Checksums"
 WRAM0
@@ -324,8 +357,12 @@ WRAMX 1
 	"Party"
 WRAMX 2
 	"Pic Animations"
+	org $d1d0
+	"Dynamic Fonts"
 WRAMX 3
 	"Battle Tower RAM"
+WRAMX 4
+	"Code RAM"
 WRAMX 5
 	align 8
 	"GBC Video"

@@ -1,10 +1,7 @@
-	db "LIVE COAL@" ; species name
-	dw 204, 470 ; height, weight
+	db "火种@" ; species name
+	dbw 7, 214 ; height, weight
 
-	db   "It naturally spits"
-	next "an 1100-degree"
-	next "flame. It is said"
+	db   "生来就可以喷出600度的"
+	next "火焰。据说鸭嘴宝宝大量"
+	next "出现是火山爆发的前兆。@"
 
-	page "when many appear,"
-	next "it heralds a"
-	next "volcanic eruption.@"

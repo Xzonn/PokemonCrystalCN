@@ -3,11 +3,14 @@ IsMailEuropean:
 ; return 2 if German
 ; return 3 if Italian
 ; return 4 if Spanish
+; return 5 if Chinese
 ; return 0 if none of the above
 	ld c, $0
 	ld hl, sPartyMon1MailAuthorNationality - sPartyMon1Mail
 	add hl, de
 	ld a, [hli]
+	cp "C"
+	jr z, .cnmail
 	cp "E"
 	ret nz
 	ld a, [hli]
@@ -24,6 +27,12 @@ IsMailEuropean:
 	cp "S"
 	ret z
 	ld c, $0
+	ret
+.cnmail
+	ld a, [hli]
+	cp "N"
+	ret nz
+	ld c, $5
 	ret
 
 ; The regular font.

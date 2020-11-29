@@ -56,6 +56,11 @@ MovePlayerPic:
 	jr .loop
 
 ShowPlayerNamingChoices:
+	ld de, PlayerGFX_Name
+	ld hl, vTiles2 tile $62
+	lb bc, BANK(PlayerGFX_Name), 5
+	call Get2bpp
+
 	ld hl, ChrisNameMenuHeader
 	ld a, [wPlayerGender]
 	bit PLAYERGENDER_FEMALE_F, a
@@ -71,6 +76,9 @@ ShowPlayerNamingChoices:
 	ret
 
 INCLUDE "data/player_names.asm"
+
+PlayerGFX_Name:
+INCBIN "gfx/new_game/name_chinese.2bpp"
 
 GetPlayerNameArray: ; unreferenced
 	ld hl, wPlayerName

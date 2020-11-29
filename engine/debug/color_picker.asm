@@ -1058,7 +1058,7 @@ DebugColor_PlaceCursor:
 	ret
 
 DebugColor_AreYouFinishedString:
-	db   "おわりますか？"                        ; Are you finished?
+	db   "おわりますか<？>"                        ; Are you finished?
 	next "はい<DOT><DOT><DOT>", DEBUGTEST_A ; YES...(A)
 	next "いいえ<DOT><DOT>", DEBUGTEST_B     ; NO..(B)
 	db   "@"

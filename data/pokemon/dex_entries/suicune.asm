@@ -1,10 +1,7 @@
-	db "AURORA@" ; species name
-	dw 607, 4120 ; height, weight
+	db "极光@" ; species name
+	dbw 20, 1870 ; height, weight
 
-	db   "This divine"
-	next "#MON blows"
-	next "around the world,"
+	db   "在大地上驰骋的同时，会去"
+	next "寻找那些流淌着清净水流的"
+	next "地方。圣洁的宝可梦。@"
 
-	page "always in search"
-	next "of a pure"
-	next "reservoir.@"

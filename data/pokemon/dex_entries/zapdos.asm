@@ -1,10 +1,7 @@
-	db "ELECTRIC@" ; species name
-	dw 503, 1160 ; height, weight
+	db "电击@" ; species name
+	dbw 16, 526 ; height, weight
 
-	db   "Legendary bird"
-	next "#MON. They say"
-	next "lightning caused"
+	db   "扇动翅膀就会落下闪电，"
+	next "因此引发夏季的暴风雨。"
+	next "传说中的鸟宝可梦。@"
 
-	page "by the flapping of"
-	next "its wings causes"
-	next "summer storms.@"

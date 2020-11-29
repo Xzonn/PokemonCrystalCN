@@ -1,10 +1,7 @@
-	db "MOUSE@" ; species name
-	dw 200, 260 ; height, weight
+	db "鼠@" ; species name
+	dbw 6, 120 ; height, weight
 
-	db   "It prefers dry,"
-	next "sandy places"
-	next "because it uses"
+	db   "喜欢干燥的沙地。"
+	next "因为遇到紧急状况的时候"
+	next "可以用沙子来保护自己。@"
 
-	page "the sand to"
-	next "protect itself"
-	next "when threatened.@"

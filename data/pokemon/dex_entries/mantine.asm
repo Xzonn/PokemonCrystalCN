@@ -1,10 +1,7 @@
-	db "KITE@" ; species name
-	dw 611, 4850 ; height, weight
+	db "风筝@" ; species name
+	dbw 21, 2200 ; height, weight
 
-	db   "It swims along"
-	next "freely, eating"
-	next "things that swim"
+	db   "随心所欲地游泳的同时"
+	next "会吃掉游到嘴边的东西。"
+	next "全身都有粗糙的触感。@"
 
-	page "into its mouth."
-	next "Its whole body is"
-	next "very coarse.@"

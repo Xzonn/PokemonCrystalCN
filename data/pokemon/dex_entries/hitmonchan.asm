@@ -1,10 +1,7 @@
-	db "PUNCHING@" ; species name
-	dw 407, 1110 ; height, weight
+	db "拳击@" ; species name
+	dbw 14, 502 ; height, weight
 
-	db   "To increase the"
-	next "strength of all"
-	next "its punch moves,"
+	db   "为了可以提高各种拳击的"
+	next "威力，会一边旋转拳头"
+	next "一边朝对手猛击。@"
 
-	page "it spins its arms"
-	next "just before making"
-	next "contact.@"

@@ -1,10 +1,7 @@
-	db "GENETIC@" ; species name
-	dw 607, 2690 ; height, weight
+	db "基因@" ; species name
+	dbw 20, 1220 ; height, weight
 
-	db   "Said to rest qui-"
-	next "etly in an"
-	next "undiscovered cave,"
+	db   "专门为了战斗而被"
+	next "创造出来。据说现在"
+	next "正沉睡在某个洞窟的深处。@"
 
-	page "this #MON was"
-	next "created solely for"
-	next "battling.@"

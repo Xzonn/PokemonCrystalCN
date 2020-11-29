@@ -1,10 +1,7 @@
-	db "VIRTUAL@" ; species name
-	dw 207, 800 ; height, weight
+	db "虚拟@" ; species name
+	dbw 8, 365 ; height, weight
 
-	db   "An artificial"
-	next "#MON created"
-	next "due to extensive"
+	db   "为了宝可梦研究"
+	next "而诞生的人工宝可梦。"
+	next "所有动作只能按程序进行。@"
 
-	page "research, it can"
-	next "perform only what"
-	next "is in its program.@"

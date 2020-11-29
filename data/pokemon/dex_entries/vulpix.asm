@@ -1,10 +1,7 @@
-	db "FOX@" ; species name
-	dw 200, 220 ; height, weight
+	db "狐狸@" ; species name
+	dbw 6, 99 ; height, weight
 
-	db   "As its body grows"
-	next "larger, its six"
-	next "warm tails become"
+	db   "长着6条温暖的尾巴，"
+	next "随着身体的发育成长，"
+	next "尾巴的毛色也会变漂亮。@"
 
-	page "more beautiful,"
-	next "with a more luxur-"
-	next "ious coat of fur.@"

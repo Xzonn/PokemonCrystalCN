@@ -13,6 +13,8 @@ TrainerCard:
 	push af
 	xor a
 	ld [wVramState], a
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	ld hl, wOptions
 	ld a, [hl]
 	push af
@@ -32,6 +34,8 @@ TrainerCard:
 	jr .loop
 
 .quit
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	pop af
 	ld [wOptions], a
 	pop af
@@ -234,7 +238,7 @@ TrainerCard_PrintTopHalfOfCard:
 	hlcoord 2, 4
 	ld de, .ID_No
 	call TrainerCardSetup_PlaceTilemapString
-	hlcoord 7, 2
+	hlcoord 6, 2
 	ld de, wPlayerName
 	call PlaceString
 	hlcoord 5, 4
@@ -256,9 +260,9 @@ TrainerCard_PrintTopHalfOfCard:
 	ret
 
 .Name_Money:
-	db   "NAME/"
+	db   "名字/"
 	next ""
-	next "MONEY@"
+	next "零花钱@"
 
 .ID_No:
 	db $27, $28, -1 ; ID NO
@@ -267,39 +271,61 @@ TrainerCard_PrintTopHalfOfCard:
 	db $25, $25, $25, $25, $25, $25, $25, $25, $25, $25, $25, $25, $26, -1 ; ____________>
 
 TrainerCard_Page1_PrintDexCaught_GameTime:
+	ld a, [wStatusFlags]
+	bit STATUSFLAGS_POKEDEX_F, a
+	jr z, .skip
 	hlcoord 2, 10
-	ld de, .Dex_PlayTime
+	; ld de, .Dex_PlayTime
+	ld de, .Dex
 	call PlaceString
-	hlcoord 10, 15
-	ld de, .Badges
-	call PlaceString
+	; hlcoord 10, 15
+	; ld de, .Badges
+	; call PlaceString
 	ld hl, wPokedexCaught
 	ld b, wEndPokedexCaught - wPokedexCaught
 	call CountSetBits
 	ld de, wNumSetBits
-	hlcoord 15, 10
+	hlcoord 13, 10
 	lb bc, 1, 3
 	call PrintNum
+	hlcoord 16, 10
+	ld de, .quantity
+	call PlaceString
+.skip
+	hlcoord 2, 12
+	ld de, .PlayTime
+	call PlaceString
+	hlcoord 15, 15
+	ld de, .Badges
+	call PlaceString
 	call TrainerCard_Page1_PrintGameTime
 	hlcoord 2, 8
 	ld de, .StatusTilemap
 	call TrainerCardSetup_PlaceTilemapString
-	ld a, [wStatusFlags]
-	bit STATUSFLAGS_POKEDEX_F, a
-	ret nz
-	hlcoord 1, 9
-	lb bc, 2, 17
-	call ClearBox
+	; ld a, [wStatusFlags]
+	; bit STATUSFLAGS_POKEDEX_F, a
+	; ret nz
+	; hlcoord 1, 9
+	; lb bc, 2, 17
+	; call ClearBox
 	ret
 
-.Dex_PlayTime:
-	db   "#DEX"
-	next "PLAY TIME@"
+; .Dex_PlayTime:
+; 	db   "#DEX"
+; 	next "PLAY TIME@"
 
-	db "@" ; unused
+.Dex
+    db "图鉴@"
+.PlayTime:
+	db "游戏时间@"
+
+.quantity:
+	db "只@"
+
+	; db "@" ; unused
 
 .Badges:
-	db "  BADGES▶@"
+	db "徽章▶@"
 
 .StatusTilemap:
 	db $29, $2a, $2b, $2c, $2d, -1

@@ -1,10 +1,7 @@
-	db "WILD BULL@" ; species name
-	dw 407, 1950 ; height, weight
+	db "暴牛@" ; species name
+	dbw 14, 884 ; height, weight
 
-	db   "These violent"
-	next "#MON fight"
-	next "with other mem-"
+	db   "性格狂野的宝可梦。"
+	next "总会在群体中打闹，"
+	next "以确认自己的实力。@"
 
-	page "bers of their herd"
-	next "in order to prove"
-	next "their strength.@"

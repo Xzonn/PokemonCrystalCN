@@ -1,10 +1,7 @@
-	db "COCOON@" ; species name
-	dw 204, 220 ; height, weight
+	db "蛹@" ; species name
+	dbw 7, 99 ; height, weight
 
-	db   "This is its pre-"
-	next "evolved form. At"
-	next "this stage, it can"
+	db   "一直都在等待进化。"
+	next "除了变硬什么都做不了，"
+	next "为避免袭击只好保持不动。@"
 
-	page "only harden, so it"
-	next "remains motionless"
-	next "to avoid attack.@"

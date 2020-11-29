@@ -43,6 +43,7 @@ PrintDexEntry:
 	ld a, [wPrinterQueueLength]
 	push af
 
+	call ClearFullVramNo
 	ld hl, vTiles1
 	ld de, FontInversed
 	lb bc, BANK(FontInversed), $80
@@ -59,6 +60,9 @@ PrintDexEntry:
 	ld a, (1 << SERIAL) | (1 << VBLANK)
 	ldh [rIE], a
 
+	ld a, DFS_VRAM_LIMIT_VRAM0 | DFS_VRAM_LIMIT_NOATTR
+	ld [wDFSVramLimit], a
+
 	call Printer_StartTransmission
 	ln a, 1, 0
 	ld [wPrinterMargins], a
@@ -73,7 +77,7 @@ PrintDexEntry:
 	push af
 	ld [hl], 4
 
-	ld a, 8 ; 16 rows
+	ld a, 5 ; 10 rows
 	ld [wPrinterQueueLength], a
 	call Printer_ResetJoypadRegisters
 	call SendScreenToPrinter
@@ -99,7 +103,8 @@ PrintDexEntry:
 	ldh [hVBlank], a
 	call Printer_CleanUpAfterSend
 
-	xor a
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	ldh [rIF], a
 	pop af
 	ldh [rIE], a
@@ -148,6 +153,9 @@ PrintPCBox:
 	push af
 	ld [hl], $4
 
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
+
 	xor a
 	ldh [hBGMapMode], a
 	call PrintPCBox_Page1
@@ -190,6 +198,9 @@ PrintPCBox:
 	call Printer_PrepareTilemapForPrint
 	call Printer_ResetRegistersAndStartDataSend
 .cancel
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
+
 	pop af
 	ldh [hVBlank], a
 	call Printer_CleanUpAfterSend
@@ -271,6 +282,7 @@ PrintUnownStamp:
 PrintMailAndExit:
 	call PrintMail
 	call Printer_ExitPrinter
+	call ClearFullVramNo
 	ret
 
 PrintMail:
@@ -332,6 +344,7 @@ PrintPartymon:
 	xor a
 	ldh [hBGMapMode], a
 	farcall PrintPartyMonPage1
+	call WaitBGMap
 	ln a, 1, 0 ; to be loaded to wPrinterMargins
 	call Printer_PrepareTilemapForPrint
 
@@ -340,27 +353,27 @@ PrintPartymon:
 	push af
 	ld [hl], $4
 
-	ld a, 16 / 2
-	ld [wPrinterQueueLength], a
-	call Printer_ResetJoypadRegisters
-	call SendScreenToPrinter
-	jr c, .cancel
+	; ld a, 16 / 2
+	; ld [wPrinterQueueLength], a
+	; call Printer_ResetJoypadRegisters
+	; call SendScreenToPrinter
+	; jr c, .cancel
 
-	call Printer_CleanUpAfterSend
-	ld c, 12
-	call DelayFrames
+	; call Printer_CleanUpAfterSend
+	; ld c, 12
+	; call DelayFrames
 
-	xor a
-	ldh [hBGMapMode], a
-	farcall PrintPartyMonPage2
-	ln a, 0, 3 ; to be loaded to wPrinterMargins
-	call Printer_PrepareTilemapForPrint
+	; xor a
+	; ldh [hBGMapMode], a
+	; farcall PrintPartyMonPage2
+	; ln a, 0, 3 ; to be loaded to wPrinterMargins
+	; call Printer_PrepareTilemapForPrint
 
 	ld a, 18 / 2
 	ld [wPrinterQueueLength], a
 	call Printer_ResetJoypadRegisters
 	call SendScreenToPrinter
-.cancel
+; .cancel
 	pop af
 	ldh [hVBlank], a
 	call Printer_CleanUpAfterSend
@@ -551,8 +564,8 @@ PlacePrinterStatusString:
 	push af
 	xor a
 	ldh [hBGMapMode], a
-	hlcoord 0, 5
-	lb bc, 10, 18
+	hlcoord 2, 5
+	lb bc, 10, 14
 	call Textbox
 	pop af
 	ld e, a
@@ -563,12 +576,18 @@ PlacePrinterStatusString:
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	hlcoord 1, 7
+	ld a, [wDFSVramLimit]
+	push af
+	ld a, DFS_VRAM_LIMIT_VRAM1
+	ld [wDFSVramLimit], a
+	hlcoord 3, 7
 	ld a, BANK(GBPrinterStrings)
 	call FarString
-	hlcoord 2, 15
+	hlcoord 6, 15
 	ld de, String_PressBToCancel
 	call PlaceString
+	pop af
+	ld [wDFSVramLimit], a
 	ld a, $1
 	ldh [hBGMapMode], a
 	xor a
@@ -609,7 +628,7 @@ PlacePrinterStatusStringBorderless: ; unreferenced
 	ret
 
 String_PressBToCancel:
-	db "Press B to Cancel@"
+	db "按B键中止@"
 
 PrinterStatusStringPointers:
 	dw GBPrinterString_Null ; @
@@ -628,6 +647,7 @@ PrintPCBox_Page1:
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	ld a, " "
 	call ByteFill
+	call ClearFullVramNo
 	call Printer_PlaceEmptyBoxSlotString
 
 	hlcoord 0, 0
@@ -638,7 +658,7 @@ PrintPCBox_Page1:
 	call Printer_PlaceSideBorders
 	call Printer_PlaceTopBorder
 
-	hlcoord 4, 3
+	hlcoord 6, 3
 	ld de, .String_PokemonList
 	call PlaceString
 
@@ -650,15 +670,16 @@ PrintPCBox_Page1:
 	ld e, l
 	hlcoord 6, 5
 	call PlaceString
+	call Printer_MoveHalfPageTileToStaticArea
 	ld a, 1
 	call Printer_GetBoxMonSpecies
-	hlcoord 2, 9
+	hlcoord 1, 10
 	ld c, 3
 	call Printer_PrintBoxListSegment
 	ret
 
 .String_PokemonList:
-	db "#MON LIST@"
+	db "宝可梦列表@"
 
 PrintPCBox_Page2:
 	hlcoord 0, 0
@@ -672,8 +693,17 @@ PrintPCBox_Page2:
 	ret nz
 	ld a, 4
 	call Printer_GetBoxMonSpecies
-	hlcoord 2, 0
-	ld c, 6
+	hlcoord 1, 1
+	ld c, 3
+	call Printer_PrintBoxListSegment
+	ld a, [wFinishedPrintingBox]
+	and a
+	ret nz
+	call Printer_MoveHalfPageTileToStaticArea
+	ld a, 7
+	call Printer_GetBoxMonSpecies
+	hlcoord 1, 10
+	ld c, 3
 	call Printer_PrintBoxListSegment
 	ret
 
@@ -689,8 +719,17 @@ PrintPCBox_Page3:
 	ret nz
 	ld a, 10
 	call Printer_GetBoxMonSpecies
-	hlcoord 2, 0
-	ld c, 6
+	hlcoord 1, 1
+	ld c, 3
+	call Printer_PrintBoxListSegment
+    ld a, [wFinishedPrintingBox]
+	and a
+	ret nz
+	call Printer_MoveHalfPageTileToStaticArea
+	ld a, 13
+	call Printer_GetBoxMonSpecies
+	hlcoord 1, 10
+	ld c, 3
 	call Printer_PrintBoxListSegment
 	ret
 
@@ -710,8 +749,17 @@ PrintPCBox_Page4:
 	ret nz
 	ld a, 16
 	call Printer_GetBoxMonSpecies
-	hlcoord 2, 0
-	ld c, 5
+	hlcoord 1, 1
+	ld c, 3
+	call Printer_PrintBoxListSegment
+	ld a, [wFinishedPrintingBox]
+	and a
+	ret nz
+	call Printer_MoveHalfPageTileToStaticArea
+	ld a, 19
+	call Printer_GetBoxMonSpecies
+	hlcoord 1, 10
+	ld c, 2
 	call Printer_PrintBoxListSegment
 	ret
 
@@ -740,6 +788,14 @@ Printer_PrintBoxListSegment:
 	pop hl
 
 	push hl
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	ld bc, 16
+	ld a, " "
+	call ByteFill
+	pop hl
+
+	push hl
 	call GetBasePokemonName
 	pop hl
 
@@ -750,40 +806,21 @@ Printer_PrintBoxListSegment:
 	pop hl
 	jr z, .ok2
 
-	ld bc, MON_NAME_LENGTH
+	ld bc, SCREEN_WIDTH
 	add hl, bc
 	call Printer_GetMonGender
-	ld bc, SCREEN_WIDTH - MON_NAME_LENGTH
-	add hl, bc
-	ld a, "/"
-	ld [hli], a
+	; ld bc, SCREEN_WIDTH - MON_NAME_LENGTH
+	; add hl, bc
+	; ld a, "/"
+	; ld [hli], a
 
 	push hl
-	ld bc, 14
-	ld a, " "
-	call ByteFill
-	pop hl
+	; ld bc, 14
+	; ld a, " "
+	; call ByteFill
+	; pop hl
+	inc hl
 
-	push hl
-	ld a, [wAddrOfBoxToPrint]
-	ld l, a
-	ld a, [wAddrOfBoxToPrint + 1]
-	ld h, a
-	ld bc, sBoxMonNicknames - sBox
-	add hl, bc
-	ld bc, MON_NAME_LENGTH
-	ld a, [wWhichBoxMonToPrint]
-	call AddNTimes
-	ld e, l
-	ld d, h
-	pop hl
-
-	push hl
-	call PlaceString
-	pop hl
-
-	ld bc, MON_NAME_LENGTH
-	add hl, bc
 	push hl
 	ld a, [wAddrOfBoxToPrint]
 	ld l, a
@@ -794,9 +831,36 @@ Printer_PrintBoxListSegment:
 	ld bc, BOXMON_STRUCT_LENGTH
 	ld a, [wWhichBoxMonToPrint]
 	call AddNTimes
+	; ld e, l
+	; ld d, h
 	ld a, [hl]
 	pop hl
+
+	; push hl
+	; call PlaceString
 	call PrintLevel_Force3Digits
+	pop hl
+
+	ld bc, $0006
+	add hl, bc
+	ld a, "/"
+	ld [hli], a
+	push hl
+	ld a, [wAddrOfBoxToPrint]
+	ld l, a
+	ld a, [wAddrOfBoxToPrint + 1]
+	ld h, a
+	ld bc, sBoxMonNicknames - sBox
+	add hl, bc
+	ld bc, MON_NAME_LENGTH
+	ld a, [wWhichBoxMonToPrint]
+	call AddNTimes
+	; ld a, [hl]
+	ld e, l
+	ld d, h
+	pop hl
+	; call PrintLevel_Force3Digits
+	call PlaceString
 .ok2
 	ld hl, wWhichBoxMonToPrint
 	inc [hl]
@@ -904,12 +968,19 @@ Printer_PlaceBottomBorders:
 	ret
 
 Printer_PlaceEmptyBoxSlotString:
-	hlcoord 2, 0
+	hlcoord 1, 1
 	ld c, 6
 .loop
 	push bc
 	push hl
-	ld de, .EmptyBoxSlotString
+	; ld de, .EmptyBoxSlotString
+	push hl
+	ld de, .str1
+	call PlaceString
+	pop hl
+	ld bc, SCREEN_WIDTH + 7
+	add hl, bc
+	ld de, .str2
 	call PlaceString
 	pop hl
 	ld bc, 3 * SCREEN_WIDTH
@@ -919,5 +990,44 @@ Printer_PlaceEmptyBoxSlotString:
 	jr nz, .loop
 	ret
 
-.EmptyBoxSlotString:
-	db "  ------@"
+; .EmptyBoxSlotString:
+; 	db "  ------@"
+
+.str2
+    db "/"
+	; fallthrough
+.str1:
+	db "-----@"
+
+Printer_MoveHalfPageTileToStaticArea:
+	ld hl, vTiles1
+	ld de, vTiles2 tile $00
+	ld bc, ( DFS_TILENO_VRAM0_END + 1 - DFS_TILENO_VRAM0_START ) tiles + $0100 ; 正常+$0101再跳dec c
+.loop0
+	ldh a, [rSTAT]
+	bit 1, a
+	jr nz, .loop0
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop0
+	dec b
+	jr nz, .loop0
+
+	hlcoord 0, 0
+	ld bc, SCREEN_WIDTH * 9 + $0100 ; 正常+$0101再跳dec c
+.loop1
+	ld a, [hl]
+	cp a, DFS_CODE_SINGLE_STA_1
+	jr nc, .skip
+	sub a, DFS_CODE_SINGLE_DYN_0
+	jr c, .skip
+	ld [hl], a
+.skip
+	inc hl
+	dec c
+	jr nz, .loop1
+	dec b
+	jr nz, .loop1
+	ret

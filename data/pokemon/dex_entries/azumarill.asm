@@ -1,10 +1,7 @@
-	db "AQUARABBIT@" ; species name
-	dw 207, 630 ; height, weight
+	db "水兔@" ; species name
+	dbw 8, 285 ; height, weight
 
-	db   "The bubble-like"
-	next "pattern on its"
-	next "stomach helps it"
+	db   "肚子上的花纹如同水泡，"
+	next "在水中可以起到"
+	next "类似于迷彩的作用。@"
 
-	page "camouflage itself"
-	next "when it's in the"
-	next "water.@"

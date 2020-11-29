@@ -94,7 +94,7 @@ NameRival:
 	ret
 
 .default
-	db "SILVER@"
+	db "小银@"
 
 NameRater:
 	farcall _NameRater
@@ -423,4 +423,11 @@ TrainerHouse:
 	call OpenSRAM
 	ld a, [sMysteryGiftTrainerHouseFlag]
 	ld [wScriptVar], a
+	jp CloseSRAM
+
+SetGSBallEvent:
+	ld a, BANK(sMobileEventIndex)
+	call OpenSRAM
+	ld a, MOBILE_EVENT_OBJECT_GS_BALL
+	ld [sMobileEventIndex], a
 	jp CloseSRAM

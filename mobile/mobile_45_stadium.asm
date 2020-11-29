@@ -462,11 +462,11 @@ YessNoString_1179c5:
 
 AskSavePasswordString:
 	db   "こ<NO>パスワード¯ほぞんして"
-	line "おきますか？@"
+	line "おきますか<？>@"
 
 NotAPokemonPasswordString:
 	db   "パスワード<PKMN>にゅうりょく"
-	line "されていません！@"
+	line "されていません<！>@"
 
 SavedPasswordString:
 	db   "ログインパスワード¯ほぞん"

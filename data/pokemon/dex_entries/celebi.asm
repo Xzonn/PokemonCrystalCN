@@ -1,10 +1,7 @@
-	db "TIMETRAVEL@" ; species name
-	dw 200, 110 ; height, weight
+	db "时空穿越@" ; species name
+	dbw 6, 50 ; height, weight
 
-	db   "Revered as a"
-	next "guardian of the"
-	next "forest, CELEBI"
+	db   "被人们奉为森林之神。"
+	next "哪里拥有美丽森林，"
+	next "哪里就会出现时拉比。@"
 
-	page "appears wherever"
-	next "beautiful forests"
-	next "exist.@"

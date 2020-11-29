@@ -143,15 +143,21 @@ PlaceMapNameCenterAlign:
 	ld a, [wCurLandmark]
 	ld e, a
 	farcall GetLandmarkName
-	call .GetNameLength
+	; call .GetNameLength
+	ld de, wStringBuffer1
+	farcall GetStrLength
+	bit 7, c
+	jr z, .normal
+	dec b
+.normal
 	ld a, SCREEN_WIDTH
-	sub c
+	sub b
 	srl a
 	ld b, $0
 	ld c, a
 	hlcoord 0, 2
 	add hl, bc
-	ld de, wStringBuffer1
+	; ld de, wStringBuffer1
 	call PlaceString
 	ret
 

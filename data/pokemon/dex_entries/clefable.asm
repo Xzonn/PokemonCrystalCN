@@ -1,10 +1,7 @@
-	db "FAIRY@" ; species name
-	dw 403, 880 ; height, weight
+	db "妖精@" ; species name
+	dbw 13, 400 ; height, weight
 
-	db   "Said to live in"
-	next "quiet, remote"
-	next "mountains, this"
+	db   "不喜欢被别人看到，"
+	next "或许是某种妖精。"
+	next "据说栖息在静谧深山中。@"
 
-	page "type of fairy has"
-	next "a strong aversion"
-	next "to being seen.@"

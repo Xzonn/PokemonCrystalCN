@@ -1,10 +1,7 @@
-	db "HYPNOSIS@" ; species name
-	dw 503, 1670 ; height, weight
+	db "催眠@" ; species name
+	dbw 16, 756 ; height, weight
 
-	db   "The longer it"
-	next "swings its"
-	next "pendulum, the"
+	db   "手里的摆晃动得越剧烈，"
+	next "催眠术的效力就会"
+	next "持续得越长久。@"
 
-	page "longer the effects"
-	next "of its hypnosis"
-	next "last.@"

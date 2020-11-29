@@ -1,10 +1,7 @@
-	db "PSI@" ; species name
-	dw 411, 1060 ; height, weight
+	db "念力@" ; species name
+	dbw 15, 480 ; height, weight
 
-	db   "It has an IQ of"
-	next "5000. It calcu-"
-	next "lates many things"
+	db   "智商高达5000。"
+	next "会计算一切情况，"
+	next "将战斗向有利的方向推进。@"
 
-	page "in order to gain"
-	next "the edge in every"
-	next "battle.@"

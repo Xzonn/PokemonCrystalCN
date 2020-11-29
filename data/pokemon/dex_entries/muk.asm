@@ -1,10 +1,7 @@
-	db "SLUDGE@" ; species name
-	dw 311, 660 ; height, weight
+	db "污泥@" ; species name
+	dbw 12, 300 ; height, weight
 
-	db   "As it moves, a"
-	next "very strong poison"
-	next "leaks from it,"
+	db   "臭臭泥经过后留下痕迹的"
+	next "地方含有剧毒，即使过了"
+	next "3年也不会长出新的草木。@"
 
-	page "making the ground"
-	next "there barren for"
-	next "three years.@"

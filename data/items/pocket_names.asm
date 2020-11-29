@@ -5,7 +5,7 @@ ItemPocketNames:
 	dw .Ball
 	dw .TM
 
-.Item: db "ITEM POCKET@"
-.Key:  db "KEY POCKET@"
-.Ball: db "BALL POCKET@"
-.TM:   db "TM POCKET@"
+.Item: db "道具口袋@"
+.Key:  db "重要口袋@"
+.Ball: db "精灵球口袋@"
+.TM:   db "招式口袋@"

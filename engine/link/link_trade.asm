@@ -112,15 +112,16 @@ _LinkTextbox:
 InitTradeSpeciesList:
 	call _LoadTradeScreenBorderGFX
 	call Function16d6ae
+	call ClearFullVramNo
 	farcall InitMG_Mobile_LinkTradePalMap
 	farcall PlaceTradePartnerNamesAndParty
-	hlcoord 10, 17
+	hlcoord 3, 17
 	ld de, .CancelString
 	call PlaceString
 	ret
 
 .CancelString:
-	db "CANCEL@"
+	db "取消@"
 
 _LoadTradeScreenBorderGFX:
 	call __LoadTradeScreenBorderGFX
@@ -162,9 +163,9 @@ Function16d6ce:
 	ret
 
 Function16d6e1:
-	hlcoord 4, 10
-	ld b, 1
-	ld c, 10
+	hlcoord 4, 9
+	ld b, 2
+	ld c, 9
 	predef LinkTextboxAtHL
 	hlcoord 5, 11
 	ld de, .Waiting
@@ -175,7 +176,7 @@ Function16d6e1:
 	jp DelayFrames
 
 .Waiting:
-	db "WAITING..!@"
+	db "请稍等……！@"
 
 LinkTradeMenu:
 	call .MenuAction
@@ -259,13 +260,13 @@ LinkTradeMenu:
 	jr nz, .not_currently_selected
 	ld a, [wCursorOffCharacter]
 	ld [hl], a
-	push hl
-	push bc
-	ld bc, MON_NAME_LENGTH
-	add hl, bc
-	ld [hl], a
-	pop bc
-	pop hl
+	; push hl
+	; push bc
+	; ld bc, MON_NAME_LENGTH
+	; add hl, bc
+	; ld [hl], a
+	; pop bc
+	; pop hl
 
 .not_currently_selected
 	ld a, [w2DMenuCursorInitY]
@@ -311,13 +312,13 @@ LinkTradeMenu:
 	jr z, .cursor_already_there
 	ld [wCursorOffCharacter], a
 	ld [hl], $1f
-	push hl
-	push bc
-	ld bc, MON_NAME_LENGTH
-	add hl, bc
-	ld [hl], $1f
-	pop bc
-	pop hl
+	; push hl
+	; push bc
+	; ld bc, MON_NAME_LENGTH
+	; add hl, bc
+	; ld [hl], $1f
+	; pop bc
+	; pop hl
 .cursor_already_there
 	ld a, l
 	ld [wCursorCurrentTile], a

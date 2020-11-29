@@ -1,10 +1,7 @@
-	db "HANDSTAND@" ; species name
-	dw 407, 1060 ; height, weight
+	db "倒立@" ; species name
+	dbw 14, 480 ; height, weight
 
-	db   "After doing a"
-	next "handstand to"
-	next "throw off the"
+	db   "用倒立姿势打乱对方节奏，"
+	next "然后会找准时机发出"
+	next "华丽的踢技回应对手。@"
 
-	page "opponent's timing,"
-	next "it presents its"
-	next "fancy kick moves.@"

@@ -1,10 +1,7 @@
-	db "DARK@" ; species name
-	dw 407, 770 ; height, weight
+	db "阴暗@" ; species name
+	dbw 14, 350 ; height, weight
 
-	db   "The pungent-"
-	next "smelling flame"
-	next "that shoots from"
+	db   "口中喷出的火焰是"
+	next "用体内的毒素烧出来的，"
+	next "带有一种刺鼻的气味。@"
 
-	page "its mouth results"
-	next "from toxins burn-"
-	next "ing in its body.@"

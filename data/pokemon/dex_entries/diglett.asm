@@ -1,10 +1,7 @@
-	db "MOLE@" ; species name
-	dw 8, 20 ; height, weight
+	db "鼹鼠@" ; species name
+	dbw 2, 8 ; height, weight
 
-	db   "It digs under-"
-	next "ground and chews"
-	next "on tree roots,"
+	db   "挖掘泥土在地下移动，"
+	next "会要断地下的树根。"
+	next "阳光微弱时会露出地表。@"
 
-	page "sticking its head"
-	next "out only when the"
-	next "sun isn't bright.@"

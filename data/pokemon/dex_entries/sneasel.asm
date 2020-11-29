@@ -1,10 +1,7 @@
-	db "SHARP CLAW@" ; species name
-	dw 211, 620 ; height, weight
+	db "钩爪@" ; species name
+	dbw 9, 280 ; height, weight
 
-	db   "This cunning"
-	next "#MON hides"
-	next "under the cover"
+	db   "为了不被发现，"
+	next "会藏在黑暗中偷袭猎物，"
+	next "十分狡诈的宝可梦。@"
 
-	page "of darkness,"
-	next "waiting to attack"
-	next "its prey.@"

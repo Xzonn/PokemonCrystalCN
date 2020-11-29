@@ -1,10 +1,7 @@
-	db "FLAME@" ; species name
-	dw 307, 420 ; height, weight
+	db "火焰@" ; species name
+	dbw 11, 190 ; height, weight
 
-	db   "If it becomes"
-	next "agitated during"
-	next "battle, it spouts"
+	db   "在对战中感到兴奋的话，"
+	next "就会喷出灼热的火焰"
+	next "烧遍周围的一切。@"
 
-	page "intense flames,"
-	next "incinerating its"
-	next "surroundings.@"

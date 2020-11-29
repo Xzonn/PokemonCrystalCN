@@ -1,10 +1,7 @@
-	db "PIG MONKEY@" ; species name
-	dw 303, 710 ; height, weight
+	db "猪猴@" ; species name
+	dbw 10, 320 ; height, weight
 
-	db   "It will beat up"
-	next "anyone who makes"
-	next "it mad, even if it"
+	db   "任何冒犯它的东西都会被它"
+	next "穷追不舍，然后遭到猛揍。"
+	next "十分凶暴的宝可梦。@"
 
-	page "has to chase them"
-	next "until the end of"
-	next "the world.@"

@@ -109,17 +109,17 @@ CeladonPrizeRoom_NoCoinCase:
 
 CeladonPrizeRoom_TMMenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 2, 15, TEXTBOX_Y - 1
+	menu_coords 0, 3, 18, TEXTBOX_Y
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
-	db "TM32    1500@"
-	db "TM29    3500@"
-	db "TM15    7500@"
-	db "CANCEL@"
+	db "招式学习器32 1500@"
+	db "招式学习器29 3500@"
+	db "招式学习器15 7500@"
+	db "取消@"
 
 CeladonGameCornerPrizeRoomPokemonVendor:
 	faceplayer
@@ -195,17 +195,17 @@ CeladonGameCornerPrizeRoomPokemonVendor:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 2, 17, TEXTBOX_Y - 1
+	menu_coords 0, 3, 15, TEXTBOX_Y
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
-	db "PIKACHU    2222@"
-	db "PORYGON    5555@"
-	db "LARVITAR   8888@"
-	db "CANCEL@"
+	db "皮卡丘   2222@"
+	db "立方兽   5555@"
+	db "幼基拉斯  8888@"
+	db "取消@"
 
 CeladonGameCornerPrizeRoomGentlemanText:
 	text "I wanted PORYGON,"

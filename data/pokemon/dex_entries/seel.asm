@@ -1,10 +1,7 @@
-	db "SEA LION@" ; species name
-	dw 307, 1980 ; height, weight
+	db "海狮@" ; species name
+	dbw 11, 900 ; height, weight
 
-	db   "The light blue fur"
-	next "that covers it"
-	next "keeps it protected"
+	db   "被水蓝色体毛覆盖的"
+	next "身体非常耐寒。"
+	next "喜欢漂着浮冰的海域。@"
 
-	page "against the cold."
-	next "It loves iceberg-"
-	next "filled oceans.@"

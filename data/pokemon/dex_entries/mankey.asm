@@ -1,10 +1,7 @@
-	db "PIG MONKEY@" ; species name
-	dw 108, 620 ; height, weight
+	db "猪猴@" ; species name
+	dbw 5, 280 ; height, weight
 
-	db   "It lives in groups"
-	next "in the treetops."
-	next "If it loses sight"
+	db   "会成群地在树上生活。"
+	next "和伙伴走散的猴怪"
+	next "会因为寂寞而突然发脾气。@"
 
-	page "of its group, it"
-	next "becomes infuriated"
-	next "by its loneliness.@"

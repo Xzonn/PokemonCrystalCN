@@ -1,10 +1,7 @@
-	db "BUTTERFLY@" ; species name
-	dw 307, 710 ; height, weight
+	db "蝴蝶@" ; species name
+	dbw 11, 320 ; height, weight
 
-	db   "It flits from"
-	next "flower to flower,"
-	next "collecting honey."
+	db   "为了收集搭到花蜜，"
+	next "会在花丛中来回飞舞。"
+	next "还能探测出开在远方的花。@"
 
-	page "It can even"
-	next "identify distant"
-	next "flowers in bloom.@"

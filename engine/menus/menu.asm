@@ -590,8 +590,8 @@ _PushWindow::
 	set 0, [hl]
 	call MenuBoxCoord2Tile
 	call .copy
-	call MenuBoxCoord2Attr
-	call .copy
+	; call MenuBoxCoord2Attr
+	; call .copy
 	jr .done
 
 .not_bit_7
@@ -604,7 +604,7 @@ _PushWindow::
 
 .done
 	pop hl
-	call .ret ; empty function
+	; call .ret ; empty function
 	ld a, h
 	ld [de], a
 	dec de
@@ -626,16 +626,94 @@ _PushWindow::
 	call GetMenuBoxDims
 	inc b
 	inc c
-	call .ret ; empty function
+	; call .ret ; empty function
 
 .row
 	push bc
 	push hl
 
 .col
+	push bc
+	ld a, [hl]
+	cp DFS_TILENO_VRAM0_START
+	jr c, .normal
+	push hl
+	ld bc, wAttrmap - wTilemap
+	add hl, bc
+	cp DFS_TILENO_VRAM0_END + 1
+	bit OAM_TILE_BANK, [hl] ; bit keep cy
+
+ASSERT LOW(wDFSCache) == 0, "Error wDFSCache is not $XX00 !"
+	ld h, HIGH(wDFSCache)
+	jr nz, .dfs_code
+	inc h                   ; inc keep cy
+	jr c, .dfs_code
+
+	pop hl
+.normal
+	ld [de], a
+	ld a, BANK(wDFSCodeStack)
+	ldh [rSVBK], a
+	ld a, DFS_MASK_CLEAR
+	ld [de], a
+	dec de
+	ld a, BANK(wWindowStack)
+	ldh [rSVBK], a
+	ld bc, wAttrmap - wTilemap
+	add hl, bc
+	ld a, [hl]
+	ld [de], a
+	dec de
+	ld bc, wTilemap - wAttrmap + 1
+	add hl, bc
+	jr .next
+
+.dfs_code
+	push af
+
+	and a, %01111110
+	rlca
+	ld l, a ; l = 图块号（过滤最高位） * DFS_CACHE_SIZE
+
+	push de
+	ld de, wDFSCode
+	ld bc, DFS_CACHE_SIZE
+	ld a, BANK(wDFSCache)
+	call FarCopyWRAM
+	pop de
+
+	pop bc ; push af
+	ld hl, wDFSCode
+	ld a, BANK(wDFSCodeStack)
+	ldh [rSVBK], a
 	ld a, [hli]
 	ld [de], a
 	dec de
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+
+	; CCHHHHHH -> ICHHHHHH
+	; I用于标志使用缓存块中的哪部分，覆盖的C通过前面的CC还原
+	rla
+	rr b
+	rra
+
+	ld [de], a
+	inc de
+	ld a, BANK(wWindowStack)
+	ldh [rSVBK], a
+	ld a, c
+	ld [de], a
+	dec de
+	ld a, [hl]
+	ld [de], a
+	dec de
+	pop hl
+	inc hl
+
+.next
+	pop bc
 	dec c
 	jr nz, .col
 
@@ -648,8 +726,6 @@ _PushWindow::
 
 	ret
 
-.ret
-	ret
 
 _ExitMenu::
 	xor a

@@ -1,10 +1,7 @@
-	db "HAIRY BUG@" ; species name
-	dw 100, 70 ; height, weight
+	db "毛毛虫@" ; species name
+	dbw 3, 32 ; height, weight
 
-	db   "The barb on top of"
-	next "its head secretes"
-	next "a strong poison."
+	db   "会从头顶的独角里"
+	next "释放出强力毒素，"
+	next "以保护自己免受袭击。@"
 
-	page "It uses this toxic"
-	next "barb to protect"
-	next "itself.@"

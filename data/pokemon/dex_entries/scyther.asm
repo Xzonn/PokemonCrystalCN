@@ -1,10 +1,7 @@
-	db "MANTIS@" ; species name
-	dw 411, 1230 ; height, weight
+	db "螳螂@" ; species name
+	dbw 15, 560 ; height, weight
 
-	db   "It's very proud of"
-	next "its speed. It"
-	next "moves so fast that"
+	db   "以迅捷的动作为傲。"
+	next "动作极快，对手还没反应"
+	next "过来就已经将其打倒了。@"
 
-	page "its opponent does"
-	next "not even know what"
-	next "knocked it down.@"

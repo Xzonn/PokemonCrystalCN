@@ -94,17 +94,17 @@ MoveTutorScript:
 
 .MoveMenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 2, 15, TEXTBOX_Y - 1
+	menu_coords 0, 3, 9, TEXTBOX_Y
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
-	db "FLAMETHROWER@"
-	db "THUNDERBOLT@"
-	db "ICE BEAM@"
-	db "CANCEL@"
+	db "喷射火焰@"
+	db "十万伏特@"
+	db "冰冻光束@"
+	db "取消@"
 
 .Refused:
 	writetext GoldenrodCityMoveTutorAwwButTheyreAmazingText

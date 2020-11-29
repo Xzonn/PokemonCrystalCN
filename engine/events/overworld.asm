@@ -1516,14 +1516,17 @@ FishFunction:
 
 Script_NotEvenANibble:
 	scall Script_FishCastRod
+	callasm SetDFSV0Only
 	writetext RodNothingText
 	sjump Script_NotEvenANibble_FallThrough
 
 Script_NotEvenANibble2:
 	scall Script_FishCastRod
+	callasm SetDFSV0Only
 	writetext RodNothingText
 
 Script_NotEvenANibble_FallThrough:
+	callasm UnsetDFSV0Only
 	loademote EMOTE_SHADOW
 	callasm PutTheRodAway
 	closetext
@@ -1542,7 +1545,9 @@ Script_GotABite:
 .FightTheHookedPokemon:
 	pause 40
 	applymovement PLAYER, .Movement_RestoreRod
+	callasm SetDFSV0Only
 	writetext RodBiteText
+	callasm UnsetDFSV0Only
 	callasm PutTheRodAway
 	closetext
 	randomwildmon

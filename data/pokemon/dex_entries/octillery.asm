@@ -1,10 +1,7 @@
-	db "JET@" ; species name
-	dw 211, 630 ; height, weight
+	db "喷射@" ; species name
+	dbw 9, 285 ; height, weight
 
-	db   "Its instinct is to"
-	next "bury itself in"
-	next "holes. It often"
+	db   "只要看到洞穴就想钻进去，"
+	next "会霸占其它宝可梦建造的"
+	next "巢穴，躲在里面睡觉。@"
 
-	page "steals the nesting"
-	next "holes of others to"
-	next "sleep in them.@"

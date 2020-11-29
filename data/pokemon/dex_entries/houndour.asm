@@ -1,10 +1,7 @@
-	db "DARK@" ; species name
-	dw 200, 240 ; height, weight
+	db "阴暗@" ; species name
+	dbw 6, 108 ; height, weight
 
-	db   "Around dawn, its"
-	next "ominous howl"
-	next "echoes through the"
+	db   "黎明时分会用发出一种"
+	next "响彻四周的诡异长嚎，"
+	next "这是在宣示它们的领土。@"
 
-	page "area to announce"
-	next "that this is its"
-	next "territory.@"

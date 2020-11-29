@@ -30,6 +30,10 @@ BattleIntroSlidingPics:
 	inc a
 .loop1
 	push af
+.loopex
+	ldh a, [rLY]
+	cp LY_VBLANK
+	jr nc, .loopex
 .loop2
 	ldh a, [rLY]
 	cp $60

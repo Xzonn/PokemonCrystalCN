@@ -1,10 +1,7 @@
-	db "TINY BIRD@" ; species name
-	dw 100, 40 ; height, weight
+	db "小鸟@" ; species name
+	dbw 3, 18 ; height, weight
 
-	db   "It rapidly flaps"
-	next "its wings in the"
-	next "grass, stirring up"
+	db   "会在草丛里激烈地"
+	next "拍打翅膀扬起沙尘，"
+	next "捕食从中跳出来的虫子。@"
 
-	page "a dust cloud that"
-	next "drives insect prey"
-	next "out into the open.@"

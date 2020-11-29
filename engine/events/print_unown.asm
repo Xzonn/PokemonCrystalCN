@@ -39,7 +39,10 @@ _UnownPrinter:
 	lb bc, 2, 18
 	call Textbox
 
-	hlcoord 1, 2
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
+
+	hlcoord 5, 2
 	ld de, AlphRuinsStampString
 	call PlaceString
 
@@ -51,7 +54,8 @@ _UnownPrinter:
 	ld de, UnownDexMenuString
 	call PlaceString
 
-	xor a
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	ld [wJumptableIndex], a
 	call .UpdateUnownFrontpic
 	call WaitBGMap
@@ -85,6 +89,7 @@ _UnownPrinter:
 	ld a, [wJumptableIndex]
 	push af
 	farcall PrintUnownStamp
+	call WaitBGMap
 	call RestartMapMusic
 	pop af
 	ld [wJumptableIndex], a
@@ -176,10 +181,13 @@ _UnownPrinter:
 	hlcoord 1, 6
 	lb bc, 7, 7
 	call ClearBox
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	hlcoord 1, 9
 	ld de, UnownDexVacantString
 	call PlaceString
-	xor a ; sScratch
+	xor a ; sScratch ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	call OpenSRAM
 	ld hl, sScratch
 	ld bc, $31 tiles
@@ -197,20 +205,20 @@ _UnownPrinter:
 	ret
 
 AlphRuinsStampString:
-	db " ALPH RUINS STAMP@"
+	db "阿露福纪念章@"
 
 UnownDexDoWhatString:
-	db "Do what?@"
+	db "做什么呢？@"
 
 UnownDexMenuString:
-	db   UNOWNSTAMP_BOLD_A, " PRINT"
-	next UNOWNSTAMP_BOLD_B, " CANCEL"
-	next "← PREVIOUS"
-	next "→ NEXT"
+	db   UNOWNSTAMP_BOLD_A, "键▶打印"
+	next UNOWNSTAMP_BOLD_B, "键▶取消"
+	next "←键▶上个"
+	next "→键▶下个"
 	db   "@"
 
 UnownDexVacantString:
-	db "VACANT@"
+	db "空白@"
 
 UnownDexATile:
 INCBIN "gfx/printer/bold_a.1bpp"

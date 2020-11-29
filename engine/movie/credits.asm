@@ -19,6 +19,7 @@ Credits::
 	call ClearBGPalettes
 	call ClearTilemap
 	call ClearSprites
+	call LoadStandardFont
 
 	ld hl, wCreditsBlankFrame2bpp
 	ld c, (wCreditsBlankFrame2bppEnd - wCreditsBlankFrame2bpp) / 2
@@ -258,7 +259,7 @@ ParseCredits:
 	cp CREDITS_END
 	jp z, .end
 	cp CREDITS_WAIT
-	jr z, .wait
+	jp z, .wait
 	cp CREDITS_SCENE
 	jr z, .scene
 	cp CREDITS_CLEAR
@@ -308,7 +309,7 @@ ParseCredits:
 	call .get
 	ld bc, SCREEN_WIDTH * 2
 	call AddNTimes
-	call PlaceString
+	call PlaceString_Credits
 	jr .loop
 
 .theend
@@ -394,6 +395,49 @@ ParseCredits:
 	pop de
 	pop hl
 	ret
+
+PlaceString_Credits:
+	push hl
+
+PlaceNextChar_Credits:
+	ld a, [de]
+	cp "@"
+	jr nz, CheckDict_Credits
+	ld b, h
+	ld c, l
+	pop hl
+	ret
+
+NextChar_Credits:
+	inc de
+	jp PlaceNextChar_Credits
+	
+CheckDict_Credits:
+    cp "<NEXT>"
+    jp z, NextLineChar_Credits
+    cp "#"
+    jp z, PlacePOKe_Credits
+    ld [hli], a
+    jp NextChar_Credits
+    
+NextLineChar_Credits:
+	pop hl
+	ld bc, SCREEN_WIDTH * 2
+	add hl, bc
+	push hl
+	jp NextChar_Credits
+	
+PlacePOKe_Credits:
+	push de
+	ld de, PlacePOKeText
+; 	jp PlaceCommandCharacter_Credits
+; 	
+; PlaceCommandCharacter_Credits:
+	call PlaceString_Credits
+	ld h, b
+	ld l, c
+	pop de
+	jp NextChar_Credits
 
 ConstructCreditsTilemap:
 	xor a

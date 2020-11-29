@@ -1,10 +1,7 @@
-	db "DRAGON@" ; species name
-	dw 104, 180 ; height, weight
+	db "龙@" ; species name
+	dbw 4, 80 ; height, weight
 
-	db   "When they're in a"
-	next "safe location,"
-	next "they can be seen"
+	db   "如果身处安全的环境，"
+	next "就能看到墨海马们"
+	next "相互缠着尾巴玩耍。@"
 
-	page "playfully tangling"
-	next "their tails"
-	next "together.@"

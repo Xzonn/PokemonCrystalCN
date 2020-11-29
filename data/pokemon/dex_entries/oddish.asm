@@ -1,10 +1,7 @@
-	db "WEED@" ; species name
-	dw 108, 120 ; height, weight
+	db "杂草@" ; species name
+	dbw 5, 54 ; height, weight
 
-	db   "During the day, it"
-	next "stays in the cold"
-	next "underground to"
+	db   "白天会为躲避太阳而"
+	next "钻入凉爽的地下。"
+	next "通过沐浴月光来生长。@"
 
-	page "avoid the sun."
-	next "It grows by bath-"
-	next "ing in moonlight.@"

@@ -271,6 +271,16 @@ _PutItemInPocketText::
 	text "."
 	prompt
 
+_PutLongItemInPocketText::
+	text "<PLAYER> put the"
+	line "@"
+	text_ram wStringBuffer1
+	text " in"
+	cont "the @"
+	text_ram wStringBuffer3
+	text "."
+	prompt
+
 _PocketIsFullText::
 	text "The @"
 	text_ram wStringBuffer3

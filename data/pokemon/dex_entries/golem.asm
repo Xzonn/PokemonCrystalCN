@@ -1,10 +1,7 @@
-	db "MEGATON@" ; species name
-	dw 407, 6620 ; height, weight
+	db "重量级@" ; species name
+	dbw 14, 3000 ; height, weight
 
-	db   "Its rock-like body"
-	next "is so durable,"
-	next "even high-powered"
+	db   "拥有坚如磐石的身体，"
+	next "哪怕是强力的TNT炸药"
+	next "也无法伤到它。@"
 
-	page "dynamite blasts"
-	next "fail to scratch"
-	next "its rugged hide.@"

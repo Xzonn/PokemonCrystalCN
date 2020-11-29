@@ -234,3 +234,22 @@ GetHPPal::
 	ret nc
 	inc d ; HP_RED
 	ret
+
+SetShortHPPal::
+; Set palette for hp bar pixel length e at hl.
+	call GetShortHPPal
+	ld [hl], d
+	ret
+
+GetShortHPPal::
+; Get palette for hp bar pixel length e in d.
+	ld d, HP_GREEN
+	ld a, e
+	cp (HP_BAR_SHORT_LENGTH_PX * 50 / 100) ; 24?
+	ret nc
+	inc d ; HP_YELLOW
+	cp (HP_BAR_SHORT_LENGTH_PX * 32 / 100) ; 10?
+	ret nc
+	inc d ; HP_RED
+	ret
+

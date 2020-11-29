@@ -16,13 +16,13 @@ LinkCommunications:
 	call LoadFontsBattleExtra
 	farcall LinkComms_LoadPleaseWaitTextboxBorderGFX
 	call WaitBGMap2
-	hlcoord 3, 8
+	hlcoord 6, 8
 	ld b, 2
-	ld c, 12
+	ld c, 6
 	ld d, h
 	ld e, l
 	farcall LinkTextbox2
-	hlcoord 4, 10
+	hlcoord 7, 10
 	ld de, String_PleaseWait
 	call PlaceString
 	call SetTradeRoomBGPals
@@ -140,7 +140,7 @@ Gen2ToGen1LinkComms:
 	ld hl, wLinkPlayerName
 	ld de, wOTPlayerName
 	ld bc, NAME_LENGTH
-	call CopyBytes
+	call CopyBytes ; call CopyOrConvertBytes_G2I
 	ld de, wOTPartyCount
 	ld a, [hli]
 	ld [de], a
@@ -369,6 +369,8 @@ Gen2ToGen2LinkComms:
 	ld a, c
 	or a
 	jr z, .next
+	cp a, $5
+	jr z, .next
 	sub $3
 	jr nc, .skip
 	farcall ConvertEnglishMailToFrenchGerman
@@ -543,7 +545,7 @@ ExchangeBytes:
 	ret
 
 String_PleaseWait:
-	db "PLEASE WAIT!@"
+	db "请稍等！@"
 
 ClearLinkData:
 	ld hl, wLinkData
@@ -640,7 +642,7 @@ Link_PrepPartyData_Gen1:
 	jr nz, .loop1
 	ld hl, wPlayerName
 	ld bc, NAME_LENGTH
-	call CopyBytes
+	call CopyBytes ; call CopyOrConvertBytes_I2G
 	push de
 	ld hl, wPartyCount
 	ld a, [hli]
@@ -684,6 +686,15 @@ Link_PrepPartyData_Gen1:
 .copy_ot_nicks
 	ld bc, PARTY_LENGTH * NAME_LENGTH
 	jp CopyBytes
+; 	ld b, PARTY_LENGTH
+; .loop_copy_ot_nicks
+; 	push bc
+; 	ld bc, NAME_LENGTH
+; 	call CopyOrConvertBytes_I2G
+; 	pop bc
+; 	dec b
+; 	jr nz, .loop_copy_ot_nicks
+; 	ret
 
 .ConvertPartyStruct2to1:
 	ld b, h
@@ -873,6 +884,8 @@ Link_PrepPartyData_Gen2:
 	ld a, c
 	or a
 	jr z, .next
+	cp a, $5
+	jr z, .next
 	sub $3
 	jr nc, .italian_spanish
 	farcall ConvertFrenchGermanMailToEnglish
@@ -964,9 +977,26 @@ Function2868a:
 	ld de, wOTPartyMonOT
 	ld bc, PARTY_LENGTH * NAME_LENGTH
 	call CopyBytes
+; 	ld b, PARTY_LENGTH
+; .loop2
+; 	push bc
+; 	ld bc, NAME_LENGTH
+; 	call CopyOrConvertBytes_G2I
+; 	pop bc
+; 	dec b
+; 	jr nz, .loop2
 	ld de, wOTPartyMonNicknames
 	ld bc, PARTY_LENGTH * MON_NAME_LENGTH
 	jp CopyBytes
+; 	ld b, PARTY_LENGTH
+; .loop3
+; 	push bc
+; 	ld bc, MON_NAME_LENGTH
+; 	call CopyOrConvertBytes_G2I
+; 	pop bc
+; 	dec b
+; 	jr nz, .loop3
+; 	ret
 
 .ConvertToGen2:
 	ld b, h
@@ -1113,6 +1143,320 @@ TimeCapsule_ReplaceTeruSama:
 
 INCLUDE "data/items/catch_rate_items.asm"
 
+; 与皮卡丘汉化版通信使用的转码程序
+; 程序中的内码是旧定义，已不适用当前版本
+; 皮卡丘汉化版，另寻方法处理。
+
+; CopyOrConvertBytes_G2I:
+; 	call CheckConvertGB2312ToInternal
+; 	call c, ConvertGB2312ToInternal
+; 	jp CopyBytes
+
+; CopyOrConvertBytes_I2G:
+; 	call CheckConvertInternalToGB2312
+; 	call c, ConvertInternalToGB2312
+; 	jp CopyBytes
+
+; CheckConvertGB2312ToInternal:
+; 	push hl
+; 	push bc
+; .loop
+; 	ld a, [hli]
+; 	cp a, "@"
+; 	jr z, .match
+; 	cp a, $A1
+; 	jr c, .notmatch
+; 	cp a, $A9
+; 	jr c, .next
+; 	cp a, $B0
+; 	jr c, .notmatch
+; 	cp a, $F7 + 1
+; 	jr nc, .notmatch
+; .next
+; 	dec bc
+; 	ld a, b
+; 	or c
+; 	jr z, .notmatch
+; 	ld a, [hli]
+; 	cp a, $A0
+; 	jr c, .notmatch
+; 	cp a, $FD + 1
+; 	jr nc, .notmatch
+; 	dec bc
+; 	ld a, b
+; 	or c
+; 	jr nz, .loop
+; .notmatch
+; 	pop bc
+; 	pop hl
+; 	and a
+; 	ret
+; .match
+; 	pop bc
+; 	pop hl
+; 	scf
+; 	ret
+
+; CheckConvertInternalToGB2312:
+; ;hl to de
+; 	push hl
+; 	push bc
+; .loop
+; 	ld a, [hli]
+; 	cp a, "@"
+; 	jr z, .match
+; 	and a
+; 	jr z, .notmatch
+; 	cp $10
+; 	jr c, .next
+; 	cp $2F
+; 	jr nc, .notmatch
+; 	bit 3, a
+; 	jr z, .notmatch
+; .next
+; 	dec bc
+; 	ld a, b
+; 	or c
+; 	jr z, .notmatch
+; 	ld a, [hli]
+; 	cp a, "@"
+; 	jr z, .notmatch
+; 	cp a, $FE
+; 	jr z, .notmatch
+; 	dec bc
+; 	ld a, b
+; 	or c
+; 	jr nz, .loop
+; .notmatch
+; 	pop bc
+; 	pop hl
+; 	and a
+; 	ret
+; .match
+; 	pop bc
+; 	pop hl
+; 	scf
+; 	ret
+
+; Convert_I2G2I_debug:
+; 	ld a, $01
+; .loop
+; 	cp a, $10
+; 	jr nz, .not10
+; 	add a, 8
+; .not10
+; 	cp a, $20
+; 	jr nz, .not20
+; 	add a, 8
+; .not20
+; 	push af
+; 	ld d, a
+; 	ld bc, $0000
+; 	ld hl, $D000
+; 	ld a, 0
+; .loop2
+; 	cp a, "@"
+; 	jr nz, .not50
+; 	inc a
+; .not50
+; 	cp a, $FE
+; 	jr nz, .notFE
+; 	inc a
+; .notFE
+; 	ld [hl], d
+; 	inc hl
+; 	inc bc
+; 	ld [hli], a
+; 	inc bc
+; 	inc a
+; 	jr nz, .loop2
+; 	ld [hl], "@"
+; 	inc bc
+; 	push bc
+; 	ld hl, $D000
+; 	ld de, $D200
+; 	call ConvertInternalToGB2312
+; 	pop bc
+; 	push bc
+; 	ld hl, $D200
+; 	ld de, $D400
+; 	call ConvertGB2312ToInternal
+; 	pop bc
+; 	ld de, $D400
+; 	ld hl, $D000
+; .checkloop
+; 	ld a, [de]
+; 	inc de
+; 	cp [hl]
+; 	inc hl
+; 	jr z, .notbreak
+; .errloop
+; 	jr .errloop
+; .notbreak
+; 	dec bc
+; 	ld a, b
+; 	or c
+; 	jr nz, .checkloop
+; 	pop af
+; 	inc a
+; 	cp a, $2F
+; 	jr nz, .loop
+; .finishloop
+; 	jr .finishloop
+
+; ConvertGB2312ToInternal:
+; 	push bc
+; 	ld b, h
+; 	ld c, l
+; .loop
+; 	ld a, [bc]
+; 	inc bc
+; 	cp a, "@"
+; 	jr z, .end
+; 	cp a, $B0
+; 	jr c, .skip
+; 	sub a, $06
+; .skip
+; 	sub a, $A0
+; 	push de
+; 	ld de, $0060 - 2
+; 	ld hl, -$0060 + 2
+; .loop2
+; 	add hl, de
+; 	dec a
+; 	jr nz, .loop2
+; 	ld a, [bc]
+; 	inc bc
+; 	sub a, $A0
+; 	jr nz, .skipGB2312FE
+; 	ld a, $FE - $A0 ; not standard GB2312, replace $FE to $A0
+; .skipGB2312FE
+; 	dec a ; A1A1 <-> 0000, A1 - A0 - 1
+; 	ld e, a
+; 	add hl, de
+; 	call .expend50FE
+; 	inc h
+; 	ld a, h
+; 	cp a, $10
+; 	jr c, .notalign
+; 	and $08
+; 	add $08
+; 	add h
+; .notalign
+; 	; ld h, a
+; 	pop de
+; 	; ld a, h
+; 	ld [de], a
+; 	inc de
+; 	ld a, l
+; 	ld [de], a
+; 	inc de
+; 	pop hl ; bc(LENGTH) in start
+; 	dec hl
+; 	dec hl
+; 	push hl
+; 	jr .loop
+; .end
+; 	ld [de], a
+; 	inc de
+; 	ld h, b
+; 	ld l, c
+; 	pop bc
+; 	dec bc
+; 	ret
+; .expend50FE:
+; 	xor a
+; 	ld d, a
+; 	jr .e50feloop_entry
+; .e50feloop
+; 	cpl
+; 	inc a
+; 	add a, a
+; 	ld e, a
+; 	ld a, h
+; 	add hl, de
+; .e50feloop_entry
+; 	sub h
+; 	jr nz, .e50feloop
+; 	ld a, l
+; 	cp a, "@"
+; 	ret c
+; 	inc hl
+; 	cp a, $FF - 2
+; 	ret c
+; 	inc hl
+; 	ret
+
+; ConvertInternalToGB2312:
+; 	push bc
+; 	ld b, h
+; 	ld c, l
+; .loop
+; 	ld a, [bc]
+; 	inc bc
+; 	cp a, "@"
+; 	jr z, .end
+; 	push de
+; 	ld d, a
+; 	and a, $30 ; $1X - 8 , $2X - 16
+; 	rrca
+; 	ld h, a
+; 	ld a, d
+; 	sub h
+; 	dec a
+; 	ld h, a
+; 	ld a, [bc]
+; 	inc bc
+; 	ld l, a
+; 	call .sqeeze50FE
+; 	ld de, $FFFF - $60 + 2 + 1
+; 	ld a, $A0
+; .loop2
+; 	inc a
+; 	add hl, de
+; 	jr c, .loop2
+; 	cp a, $AA
+; 	jr c, .skip3
+; 	add a, $06
+; .skip3
+; 	pop de
+; 	ld [de], a
+; 	inc de
+; 	ld a, l
+; 	dec a ; SqueezeFF, so sub loop end at $A2, fit to $A1
+; 	cp a, $FE
+; 	jr nz, .skipGB2312FE
+; 	ld a, $A0 ; not standard GB2312, replace $FE to $A0
+; .skipGB2312FE
+; 	ld [de], a
+; 	inc de
+; 	pop hl ; bc(LENGTH) in start
+; 	dec hl
+; 	dec hl
+; 	push hl
+; 	jr .loop
+; .end
+; 	ld [de], a
+; 	inc de
+; 	ld h, b
+; 	ld l, c
+; 	pop bc
+; 	dec bc
+; 	ret
+; .sqeeze50FE:
+; 	ld a, $FF
+; 	ld d, a
+; 	inc hl ; move FF to next h, hl + 1
+; 	sub h
+; 	sub h
+; 	ld e, a
+; 	ld a, l
+; 	add hl, de ; above: hl + 1 - h * 2 - 1
+; 	cp a, "@" + 1
+; 	ret c
+; 	dec hl
+; 	ret
+
 Link_CopyOTData:
 .loop
 	ld a, [hli]
@@ -1187,19 +1531,19 @@ InitTradeMenuDisplay:
 LinkTrade_OTPartyMenu:
 	ld a, OTPARTYMON
 	ld [wMonType], a
-	ld a, A_BUTTON | D_UP | D_DOWN
+	ld a, A_BUTTON | D_UP | D_DOWN | D_LEFT
 	ld [wMenuJoypadFilter], a
 	ld a, [wOTPartyCount]
 	ld [w2DMenuNumRows], a
 	ld a, 1
 	ld [w2DMenuNumCols], a
-	ld a, 9
+	ld a, 3
 	ld [w2DMenuCursorInitY], a
-	ld a, 6
+	ld a, 11
 	ld [w2DMenuCursorInitX], a
 	ld a, 1
 	ld [wMenuCursorX], a
-	ln a, 1, 0
+	ln a, 2, 0
 	ld [w2DMenuCursorOffsets], a
 	ld a, MENU_UNUSED_3
 	ld [w2DMenuFlags1], a
@@ -1221,6 +1565,21 @@ LinkTradeOTPartymonMenuLoop:
 	jp LinkTradePartiesMenuMasterLoop
 
 .not_a_button
+	bit D_LEFT_F, a
+	jr z, .not_d_left
+	xor a
+	ld [wMonType], a
+	call HideCursor
+	ld a, [wMenuCursorY]
+	ld b, a
+	ld a, [wPartyCount]
+	cp b
+	jr nc, LinkTrade_PlayerPartyMenu
+	ld [wMenuCursorY], a
+.skip
+	jr LinkTrade_PlayerPartyMenu
+
+.not_d_left
 	bit D_UP_F, a
 	jr z, .not_d_up
 	ld a, [wMenuCursorY]
@@ -1228,42 +1587,48 @@ LinkTradeOTPartymonMenuLoop:
 	ld a, [wOTPartyCount]
 	cp b
 	jp nz, LinkTradePartiesMenuMasterLoop
-	xor a
-	ld [wMonType], a
+	; xor a
+	; ld [wMonType], a
 	call HideCursor
-	push hl
-	push bc
-	ld bc, NAME_LENGTH
-	add hl, bc
-	ld [hl], " "
-	pop bc
-	pop hl
-	ld a, [wPartyCount]
-	ld [wMenuCursorY], a
-	jr LinkTrade_PlayerPartyMenu
+	; push hl
+	; push bc
+	; ld bc, NAME_LENGTH
+	; add hl, bc
+	; ld [hl], " "
+	; pop bc
+	; pop hl
+	; ld a, [wPartyCount]
+	; ld [wMenuCursorY], a
+	; jr LinkTrade_PlayerPartyMenu
+	jp Function28ade
 
 .not_d_up
 	bit D_DOWN_F, a
 	jp z, LinkTradePartiesMenuMasterLoop
-	jp Function28ac9
+	; jp Function28ac9
+	ld a, [wMenuCursorY]
+	dec a
+	jp nz, LinkTradePartiesMenuMasterLoop
+	call HideCursor
+	jp Function28ade
 
 LinkTrade_PlayerPartyMenu:
 	farcall InitMG_Mobile_LinkTradePalMap
 	xor a
 	ld [wMonType], a
-	ld a, A_BUTTON | D_UP | D_DOWN
+	ld a, A_BUTTON | D_UP | D_DOWN | D_RIGHT
 	ld [wMenuJoypadFilter], a
 	ld a, [wPartyCount]
 	ld [w2DMenuNumRows], a
 	ld a, 1
 	ld [w2DMenuNumCols], a
-	ld a, 1
+	ld a, 3
 	ld [w2DMenuCursorInitY], a
-	ld a, 6
+	ld a, 8
 	ld [w2DMenuCursorInitX], a
 	ld a, 1
 	ld [wMenuCursorX], a
-	ln a, 1, 0
+	ln a, 2, 0
 	ld [w2DMenuCursorOffsets], a
 	ld a, MENU_UNUSED_3
 	ld [w2DMenuFlags1], a
@@ -1284,24 +1649,40 @@ LinkTradePartymonMenuLoop:
 	jp Function28926
 
 .not_a_button
+	bit D_RIGHT_F, a
+	jr z, .not_d_right
+	ld a,OTPARTYMON
+	ld [wMonType], a
+	call HideCursor
+	ld a, [wMenuCursorY]
+	ld b, a
+	ld a, [wOTPartyCount]
+	cp b
+	jp nc, LinkTrade_OTPartyMenu
+	ld [wMenuCursorY], a
+.skip
+	jp LinkTrade_OTPartyMenu
+
+.not_d_right
 	bit D_DOWN_F, a
 	jr z, .not_d_down
 	ld a, [wMenuCursorY]
 	dec a
 	jp nz, LinkTradePartiesMenuMasterLoop
-	ld a, OTPARTYMON
-	ld [wMonType], a
+	; ld a, OTPARTYMON
+	; ld [wMonType], a
 	call HideCursor
-	push hl
-	push bc
-	ld bc, NAME_LENGTH
-	add hl, bc
-	ld [hl], " "
-	pop bc
-	pop hl
-	ld a, 1
-	ld [wMenuCursorY], a
-	jp LinkTrade_OTPartyMenu
+	; push hl
+	; push bc
+	; ld bc, NAME_LENGTH
+	; add hl, bc
+	; ld [hl], " "
+	; pop bc
+	; pop hl
+	; ld a, 1
+	; ld [wMenuCursorY], a
+	; jp LinkTrade_OTPartyMenu
+	jp Function28ade
 
 .not_d_down
 	bit D_UP_F, a
@@ -1312,13 +1693,13 @@ LinkTradePartymonMenuLoop:
 	cp b
 	jr nz, LinkTradePartiesMenuMasterLoop
 	call HideCursor
-	push hl
-	push bc
-	ld bc, NAME_LENGTH
-	add hl, bc
-	ld [hl], " "
-	pop bc
-	pop hl
+	; push hl
+	; push bc
+	; ld bc, NAME_LENGTH
+	; add hl, bc
+	; ld [hl], " "
+	; pop bc
+	; pop hl
 	jp Function28ade
 
 LinkTradePartiesMenuMasterLoop:
@@ -1331,8 +1712,8 @@ Function28926:
 	call LoadTilemapToTempTilemap
 	ld a, [wMenuCursorY]
 	push af
-	hlcoord 0, 15
-	ld b, 1
+	hlcoord 0, 14
+	ld b, 2
 	ld c, 18
 	call LinkTextboxAtHL
 	hlcoord 2, 16
@@ -1408,12 +1789,12 @@ Function28926:
 	callfar InitList
 	farcall LinkMonStatsScreen
 	call SafeLoadTempTilemapToTilemap
-	hlcoord 6, 1
-	lb bc, 6, 1
-	ld a, " "
-	call LinkEngine_FillBox
-	hlcoord 17, 1
-	lb bc, 6, 1
+	hlcoord 8, 3
+	lb bc, 11, 1
+	; ld a, " "
+	; call LinkEngine_FillBox
+	; hlcoord 17, 1
+	; lb bc, 6, 1
 	ld a, " "
 	call LinkEngine_FillBox
 	jp LinkTrade_PlayerPartyMenu
@@ -1491,7 +1872,7 @@ Function28926:
 	text_end
 
 .String_Stats_Trade:
-	db "STATS     TRADE@"
+	db "状态       交换@"
 
 .LinkAbnormalMonText:
 	text_far _LinkAbnormalMonText
@@ -1502,17 +1883,17 @@ Function28ac9:
 	cp 1
 	jp nz, LinkTradePartiesMenuMasterLoop
 	call HideCursor
-	push hl
-	push bc
-	ld bc, NAME_LENGTH
-	add hl, bc
-	ld [hl], " "
-	pop bc
-	pop hl
+	; push hl
+	; push bc
+	; ld bc, NAME_LENGTH
+	; add hl, bc
+	; ld [hl], " "
+	; pop bc
+	; pop hl
 Function28ade:
 .loop1
 	ld a, "▶"
-	ldcoord_a 9, 17
+	ldcoord_a 2, 17
 .loop2
 	call JoyTextDelay
 	ldh a, [hJoyLast]
@@ -1522,13 +1903,13 @@ Function28ade:
 	jr nz, .a_button
 	push af
 	ld a, " "
-	ldcoord_a 9, 17
+	ldcoord_a 2, 17
 	pop af
 	bit D_UP_F, a
 	jr z, .d_up
-	ld a, [wOTPartyCount]
+	ld a, [wPartyCount]
 	ld [wMenuCursorY], a
-	jp LinkTrade_OTPartyMenu
+	jp LinkTrade_PlayerPartyMenu
 
 .d_up
 	ld a, $1
@@ -1537,7 +1918,7 @@ Function28ade:
 
 .a_button
 	ld a, "▷"
-	ldcoord_a 9, 17
+	ldcoord_a 2, 17
 	ld a, $f
 	ld [wPlayerLinkAction], a
 	farcall Function16d6ce
@@ -1579,8 +1960,8 @@ Function28b42: ; unreferenced
 
 Function28b68:
 	ld a, [wOtherPlayerLinkMode]
-	hlcoord 6, 9
-	ld bc, SCREEN_WIDTH
+	hlcoord 11, 3
+	ld bc, SCREEN_WIDTH * 2
 	call AddNTimes
 	ld [hl], "▷"
 	ret
@@ -1634,16 +2015,16 @@ LinkTrade:
 	bccoord 1, 14
 	call PlaceHLTextAtBC
 	call LoadStandardMenuHeader
-	hlcoord 10, 7
-	ld b, 3
-	ld c, 7
+	hlcoord 13, 6
+	ld b, 4
+	ld c, 4
 	call LinkTextboxAtHL
 	ld de, String28eab
-	hlcoord 12, 8
+	hlcoord 15, 8
 	call PlaceString
 	ld a, 8
 	ld [w2DMenuCursorInitY], a
-	ld a, 11
+	ld a, 14
 	ld [w2DMenuCursorInitX], a
 	ld a, 1
 	ld [w2DMenuNumCols], a
@@ -1949,19 +2330,19 @@ Function28ea3:
 	jp InitTradeMenuDisplay
 
 String28eab:
-	db   "TRADE"
-	next "CANCEL@"
+	db   "交换"
+	next "取消@"
 
 LinkAskTradeForText:
 	text_far _LinkAskTradeForText
 	text_end
 
 String28ebd:
-	db   "Trade completed!@"
+	db   "交换结束！@"
 
 String_TooBadTheTradeWasCanceled:
-	db   "Too bad! The trade"
-	next "was canceled!@"
+	db   "真遗憾！"
+	next "交换被切断了！@"
 
 LinkTextboxAtHL:
 	ld d, h

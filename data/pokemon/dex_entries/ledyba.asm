@@ -1,10 +1,7 @@
-	db "FIVE STAR@" ; species name
-	dw 303, 240 ; height, weight
+	db "五星@" ; species name
+	dbw 10, 108 ; height, weight
 
-	db   "It is timid and"
-	next "clusters together"
-	next "with others. The"
+	db   "很胆小，落单时会立刻"
+	next "结群。通过腿部分泌液的"
+	next "气味来告知自己的位置。@"
 
-	page "fluid secreted by"
-	next "its feet indicates"
-	next "its location.@"

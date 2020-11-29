@@ -1,10 +1,7 @@
-	db "TURTLE@" ; species name
-	dw 303, 500 ; height, weight
+	db "龟@" ; species name
+	dbw 10, 225 ; height, weight
 
-	db   "Its long, furry"
-	next "tail is a symbol"
-	next "of longevity,"
+	db   "蓬松的长尾巴被当作"
+	next "长寿的象征，因此在"
+	next "老年人中特别受欢迎。@"
 
-	page "making it quite"
-	next "popular among"
-	next "older people.@"

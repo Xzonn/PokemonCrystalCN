@@ -1,10 +1,7 @@
-	db "ROCK@" ; species name
-	dw 104, 440 ; height, weight
+	db "岩石@" ; species name
+	dbw 4, 200 ; height, weight
 
-	db   "Proud of their"
-	next "sturdy bodies,"
-	next "they bash against"
+	db   "坚硬的身体令它引以为豪。"
+	next "为了比试坚硬程度，"
+	next "同伴之间会猛烈地对撞。@"
 
-	page "each other in a"
-	next "contest to prove"
-	next "whose is harder.@"

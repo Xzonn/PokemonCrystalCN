@@ -1733,6 +1733,51 @@ wMinutesSince:: db
 wHoursSince:: db
 wDaysSince:: db
 
+; Dynamic Fonts and IME
+
+; DFS编码
+wDFSCode:: ds DFS_CODE_SIZE * 2
+
+; DFS字体效果
+; 0: 普通
+; 1: 图鉴字体
+; 2: 地图字体
+; 3: 欧洲字体（调用特殊方式打印）
+wDFSFontSytle:: ds 1
+
+; 限定VRAM范围
+; XXXXXSBB
+; BB: 00不限定(0与1均可)，01仅限VRAM0，10仅限VRAM1
+; S:  跳过Attr改变（一般与仅限VRAM0搭配，用于打印）
+wDFSVramLimit:: ds 1
+
+; DFS合并层数计算
+; 用于判断两个分句是否需要合并
+; 每次call PlaceString与返回时自动增减
+; 默认为0，增或减至0时清除合并编码
+wDFSCombineLevel:: ds 1
+
+; DFS合并编码
+; 用于判断是否可以合并
+wDFSCombineCode:: ds DFS_CODE_SIZE
+
+; 输入法拼音数据
+wIMEPinyin:: ds 7
+
+; 输入法拼音返回字符
+wIMEChar:: ds 2
+
+; 输入法选字当前行
+wIMELine:: ds 1
+
+; 输入法选字最大行
+wIMEMaxLine:: ds 1
+
+; 输入法选字所在页
+wIMEBank:: ds 1
+
+; 输入法选字所在地址
+wIMEAddr:: ds 2
 
 SECTION "WRAM 1", WRAMX
 
@@ -3124,6 +3169,57 @@ wPokeAnimBitmaskBuffer:: ds 7
 wPokeAnimStructEnd::
 
 
+SECTION "Dynamic Fonts", WRAMX
+
+UNION
+; DFS可用英文
+; 每个缓存块可以存放两个英文字符
+; 一个缓存块分配给一个英文字符时，在这里记录用于下次分配
+wDFSFreeEng:: ds 1
+
+; DFS原始4px字体片
+; 4*12 的汉字字体片的原始数据
+; 每 3 片合并为一个完整的 12*12 汉字
+; 原始数据， 1BPP
+; wDFSRaw4Font:: ds DFS_RAW_4FONT_SIZE
+
+; DFS合并地址
+; 用于判断是否可以合并
+wDFSCombineAddr:: ds 2
+NEXTU
+	ds 16
+ENDU
+
+; DFS 8px字体片
+; 8*12 的汉字字体片或者 8*8 的英文字符
+; 2BPP ，符合 GB Tile 格式
+wDFS8Font::
+	ds DFS_8FONT_SIZE
+
+UNION
+; DFS 已使用的缓存块标记
+; 目前必须对齐地址 $XX00
+; 0: 未使用
+; 1: 已使用
+wDFSUsed::
+	ds DFS_CACHE_NUM
+NEXTU
+	ds $100
+ENDU
+
+; DFS 缓存块
+; 目前必须对齐地址 $XX00
+; 每块记录缓存块对应的字符编码
+; 格式:
+wDFSCache::
+	ds DFS_CACHE_NUM * DFS_CACHE_SIZE
+
+; DFS 复杂临时 Tilemap
+; 用于记录带编码的缓存块
+wDFSComplexTempTilemap::
+	ds SCREEN_WIDTH * SCREEN_HEIGHT * DFS_CACHE_SIZE
+
+
 SECTION "Battle Tower RAM", WRAMX
 
 w3_d000:: ds 1
@@ -3292,6 +3388,9 @@ wSurfWaveBGEffect:: ds $40
 wSurfWaveBGEffectEnd::
 ENDU
 
+SECTION "Code RAM", WRAMX
+wDFSCodeStack:: ds $1000 - 1
+wDFSCodeStackBottom:: ds 1
 
 SECTION "Mobile RAM", WRAMX
 

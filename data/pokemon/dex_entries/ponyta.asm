@@ -1,10 +1,7 @@
-	db "FIRE HORSE@" ; species name
-	dw 303, 660 ; height, weight
+	db "火马@" ; species name
+	dbw 10, 300 ; height, weight
 
-	db   "Training by"
-	next "jumping over grass"
-	next "that grows longer"
+	db   "跳过日渐长高的杂草"
+	next "而锻炼出来的弹跳力在"
+	next "所有宝可梦中是顶级水平。@"
 
-	page "every day has made"
-	next "it a world-class"
-	next "jumper.@"

@@ -1,10 +1,7 @@
-	db "WEED@" ; species name
-	dw 207, 190 ; height, weight
+	db "杂草@" ; species name
+	dbw 8, 86 ; height, weight
 
-	db   "The smell from its"
-	next "drool-like syrup"
-	next "and the pollen on"
+	db   "头顶的花中溢出的花粉"
+	next "以及嘴边像水一样的花蜜，"
+	next "都带有令人昏厥的气味。@"
 
-	page "its petals is so"
-	next "bad, it may make"
-	next "opponents faint.@"

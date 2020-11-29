@@ -173,96 +173,193 @@ HaveWantPals:
 	RGB  0,  0,  0
 
 CheckStringForErrors:
+	ld b, 1
+	jr CheckStringForErrors_DFS
 ; Valid character ranges:
 ; $0, $5 - $13, $19 - $1c, $26 - $34, $3a - $3e, $40 - $48, $60 - $ff
-.loop
+; .loop
+; 	ld a, [de]
+; 	inc de
+; 	and a ; "<NULL>"
+; 	jr z, .NextChar
+; 	cp FIRST_REGULAR_TEXT_CHAR
+; 	jr nc, .NextChar
+; 	cp "<NEXT>"
+; 	jr z, .NextChar
+; 	cp "@"
+; 	jr z, .Done
+; 	cp "ガ"
+; 	jr c, .Fail
+; 	cp "<PLAY_G>"
+; 	jr c, .NextChar
+; 	cp "<JP_18>" + 1
+; 	jr c, .Fail
+; 	cp "<NI>"
+; 	jr c, .NextChar
+; 	cp "<NO>" + 1
+; 	jr c, .Fail
+; 	cp "<ROUTE>"
+; 	jr c, .NextChar
+; 	cp "<GREEN>" + 1
+; 	jr c, .Fail
+; 	cp "<ENEMY>"
+; 	jr c, .NextChar
+; 	cp "<ENEMY>" + 1
+; 	jr c, .Fail
+; 	cp "<MOM>"
+; 	jr c, .NextChar
+
+; .Fail:
+; 	scf
+; 	ret
+
+; .NextChar:
+; 	dec c
+; 	jr nz, .loop
+
+; .Done:
+; 	and a
+; 	ret
+
+CheckStringForErrors_IgnoreTerminator:
+	ld b, 0
+	; FALL THROUGH
+; Find control chars
+; .loop
+; 	ld a, [de]
+; 	inc de
+; 	and a
+; 	jr z, .next
+; 	cp "<DEXEND>" + 1
+; 	jr nc, .next
+; 	cp "<NEXT>"
+; 	jr z, .next
+; 	cp "@"
+; 	jr z, .next
+
+; 	cp "ガ"
+; 	jr c, .end
+; 	cp "<PLAY_G>"
+; 	jr c, .next
+; 	cp "<JP_18>" + 1
+; 	jr c, .end
+; 	cp "<NI>"
+; 	jr c, .next
+; 	cp "<NO>" + 1
+; 	jr c, .end
+; 	cp "<ROUTE>"
+; 	jr c, .next
+; 	cp "<GREEN>" + 1
+; 	jr c, .end
+; 	cp "<ENEMY>"
+; 	jr c, .next
+; 	cp "<ENEMY>" + 1
+; 	jr c, .end
+; 	cp "<MOM>"
+; 	jr c, .next
+
+; .end
+; 	scf
+; 	ret
+
+; .next
+; 	dec c
+; 	jr nz, .loop
+; 	and a
+; 	ret
+
+CheckStringForErrors_DFS:
+; Copy from CorrectNickErrors
+; CheckStringForErrors_Debug at dfs.asm, Bank $5F is full
+.checkchar
+; end of nick?
 	ld a, [de]
+	cp "@" ; terminator
+	jr z, .Terminator
+	and a
+	jr z, .singlechar
+	cp DFS_CODE_CONTRL_0
+	jr c, .doublechar
+	cp DFS_CODE_CONTRL_2
+	jr nc, .singlechar
+	bit 3, a
+	jr nz, .doublechar
+
+.singlechar
+; check if this char is a text command
+	ld hl, .textcommands - 1
+	; dec hl
+	jr .loop
+
+.doublechar
+	dec c
+	jr z, .Fail
 	inc de
-	and a ; "<NULL>"
+	ld a, [de]
+	; cp "@"
+	; jr z, .Fail
+	cp DFS_CODE_L_CONTRL_4_END
+	jr z, .Fail
+	ld hl, .textcommands_double - 1
+	; dec hl
+
+.loop
+; next entry
+	inc hl
+; reached end of commands table?
+	ld a, [hl]
+	cp -1
 	jr z, .NextChar
-	cp FIRST_REGULAR_TEXT_CHAR
-	jr nc, .NextChar
-	cp "<NEXT>"
-	jr z, .NextChar
-	cp "@"
-	jr z, .Done
-	cp "ガ"
-	jr c, .Fail
-	cp "<PLAY_G>"
-	jr c, .NextChar
-	cp "<JP_18>" + 1
-	jr c, .Fail
-	cp "<NI>"
-	jr c, .NextChar
-	cp "<NO>" + 1
-	jr c, .Fail
-	cp "<ROUTE>"
-	jr c, .NextChar
-	cp "<GREEN>" + 1
-	jr c, .Fail
-	cp "<ENEMY>"
-	jr c, .NextChar
-	cp "<ENEMY>" + 1
-	jr c, .Fail
-	cp "<MOM>"
-	jr c, .NextChar
+
+; is the current char between this value (inclusive)...
+	ld a, [de]
+	cp [hl]
+	inc hl
+	jr c, .loop
+; ...and this one?
+	cp [hl]
+	jr nc, .loop
 
 .Fail:
 	scf
 	ret
 
+.Terminator:
+	bit 0, b
+	jr nz, .Done
+
 .NextChar:
+	inc de
 	dec c
-	jr nz, .loop
+	jr nz, .checkchar
 
 .Done:
 	and a
 	ret
 
-CheckStringForErrors_IgnoreTerminator:
-; Find control chars
-.loop
-	ld a, [de]
-	inc de
-	and a
-	jr z, .next
-	cp "<DEXEND>" + 1
-	jr nc, .next
-	cp "<NEXT>"
-	jr z, .next
-	cp "@"
-	jr z, .next
+.textcommands
+; table defining which characters are actually text commands
+; format:
+	;      ≥           <
+	db "<NULL>",   "ガ"
+	db "<PLAY_G>", "<JP_18>" + 1
+	db "<NI>",     "<NO>"    + 1
+	db "<ROUTE>",  "<GREEN>" + 1
+	db "<ENEMY>",  "<ENEMY>" + 1
+	db "<MOM>", FIRST_REGULAR_TEXT_CHAR
+	db -1 ; end
 
-	cp "ガ"
-	jr c, .end
-	cp "<PLAY_G>"
-	jr c, .next
-	cp "<JP_18>" + 1
-	jr c, .end
-	cp "<NI>"
-	jr c, .next
-	cp "<NO>" + 1
-	jr c, .end
-	cp "<ROUTE>"
-	jr c, .next
-	cp "<GREEN>" + 1
-	jr c, .end
-	cp "<ENEMY>"
-	jr c, .next
-	cp "<ENEMY>" + 1
-	jr c, .end
-	cp "<MOM>"
-	jr c, .next
-
-.end
-	scf
-	ret
-
-.next
-	dec c
-	jr nz, .loop
-	and a
-	ret
+.textcommands_double
+; table defining which characters are actually text commands
+; format:
+	;      ≥           <
+	db DFS_CODE_L_NULL,     DFS_CODE_L_NULL         + 1
+	db DFS_CODE_L_CONTRL_0, DFS_CODE_L_CONTRL_0_END + 1
+	db DFS_CODE_L_CONTRL_1, DFS_CODE_L_CONTRL_1_END + 1
+	db DFS_CODE_L_CONTRL_2, DFS_CODE_L_CONTRL_2_END + 1
+	db DFS_CODE_L_CONTRL_3, DFS_CODE_L_CONTRL_3_END + 1
+	db DFS_CODE_L_CONTRL_4, DFS_CODE_L_CONTRL_4_END + 1 - 1 ; max $ff
+	db -1 ; end
 
 Function17d0f3:
 	ld a, [wc608 + 5]
@@ -340,7 +437,7 @@ Mobile_CopyDefaultNickname:
 	ret
 
 .DefaultNickname:
-	db "？？？？？"
+	db "<？><？><？><？><？>"
 
 Mobile_CopyDefaultMail:
 	ld a, "@"
@@ -482,16 +579,16 @@ MenuData_17d272:
 
 MenuHeader_ChallengeExplanationCancel:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 14, 7
+	menu_coords 0, 0, 7, 7
 	dw MenuData_ChallengeExplanationCancel
 	db 1 ; default option
 
 MenuData_ChallengeExplanationCancel:
 	db STATICMENU_CURSOR | STATICMENU_WRAP ; flags
 	db 3
-	db "Challenge@"
-	db "Explanation@"
-	db "Cancel@"
+	db "挑战@"
+	db "听说明@"
+	db "取消@"
 
 Function17d2b6:
 	call Function17d2c0
@@ -4676,12 +4773,12 @@ Function17f6b7:
 	ret
 
 MobileCommunicationErrorText:
-	db "つうしんエラー　　　ー@"
+	db "つうしんエラー<　><　><　>ー@"
 
 String_17f6e8:
 	db   "みていぎ<NO>エラーです"
 	next "プログラム<WO>"
-	next "かくにん　してください"
+	next "かくにん<　>してください"
 	db   "@"
 
 MobileErrorCodeTable:
@@ -4839,31 +4936,31 @@ MobileErrorCodes_33: db 19
 MobileErrorCode_10_000_Text:
 ; The Mobile Adapter is not properly plugged in.
 ; Ensure you have taken a good look at and properly followed the instructions.
-	db   "モバイルアダプタが　ただしく"
+	db   "モバイルアダプタが<　>ただしく"
 	next "さしこまれていません"
 	next "とりあつかいせつめいしょを"
-	next "ごらんのうえ　しっかりと"
-	next "さしこんで　ください"
+	next "ごらんのうえ<　>しっかりと"
+	next "さしこんで<　>ください"
 	db   "@"
 
 MobileErrorCode_11_000_Text:
 MobileErrorCode_13_000_Text:
 ; Could not connect because either the phone cannot make the call, or the telephone line is busy.
 ; Please wait for a while and call again.
-	db   "でんわが　うまく　かけられないか"
-	next "でんわかいせんが　こんでいるので"
-	next "つうしん　できません"
-	next "しばらく　まって"
-	next "かけなおして　ください"
+	db   "でんわが<　>うまく<　>かけられないか"
+	next "でんわかいせんが<　>こんでいるので"
+	next "つうしん<　>できません"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
 	db   "@"
 
 MobileErrorCode_12_000_Text:
 ; As the telephone line is busy, the phone was not able to gather enough information (?)
 ; Please wait for a while and call again.
-	db   "でんわかいせんが　こんでいるため"
-	next "でんわが　かけられません"
-	next "しばらく　まって"
-	next "かけなおして　ください"
+	db   "でんわかいせんが<　>こんでいるため"
+	next "でんわが<　>かけられません"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
 	db   "@"
 
 MobileErrorCode_15_000_Text:
@@ -4873,10 +4970,10 @@ MobileErrorCode_15_003_Text:
 ; There is an error with the Mobile Adapter.
 ; Please wait for a little while before calling again.
 ; If the problem persists, please contact the Mobile Support Center.
-	db   "モバイルアダプタの　エラーです"
-	next "しばらく　まって"
-	next "かけなおして　ください"
-	next "なおらない　ときは"
+	db   "モバイルアダプタの<　>エラーです"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
+	next "なおらない<　>ときは"
 	next "モバイルサポートセンターへ"
 	next "おといあわせください"
 	db   "@"
@@ -4886,9 +4983,9 @@ MobileErrorCode_CommuncationErrorText:
 ; Please wait a moment, and then try again.
 ; If the issue persists, please contact the Mobile Support Center.
 	db   "つうしんエラーです"
-	next "しばらく　まって"
-	next "かけなおして　ください"
-	next "なおらない　ときは"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
+	next "なおらない<　>ときは"
 	next "モバイルサポートセンターへ"
 	next "おといあわせください"
 	db   "@"
@@ -4897,21 +4994,21 @@ MobileErrorCode_22_000_Text:
 ; There is a mistake either with the login password, or the login ID.
 ; Please confirm the password, wait for a while, and try again.
 	db   "ログインパスワードか"
-	next "ログイン　アイディーに"
+	next "ログイン<　>アイディーに"
 	next "まちがいがあります"
-	next "パスワードを　かくにんして"
-	next "しばらく　まって"
-	next "かけなおして　ください"
+	next "パスワードを<　>かくにんして"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
 	db   "@"
 
 MobileErrorCode_23_000_Text:
 ; The call was ended.
 ; Please see the instruction manual, wait a moment, and try again.
-	db   "でんわが　きれました"
+	db   "でんわが<　>きれました"
 	next "とりあつかいせつめいしょを"
 	next "ごらんのうえ"
-	next "しばらく　まって"
-	next "かけなおして　ください"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
 	db   "@"
 
 MobileErrorCode_ServerErrorText:
@@ -4920,7 +5017,7 @@ MobileErrorCode_ServerErrorText:
 	db   "モバイルセンターの"
 	next "つうしんエラーです"
 	next "しばらくまって"
-	next "かけなおして　ください"
+	next "かけなおして<　>ください"
 	db   "@"
 
 MobileErrorCode_14_000_Text:
@@ -4928,10 +5025,10 @@ MobileErrorCode_25_000_Text:
 ; The Mobile Adapter's details have expired and the information is not correct.
 ; Please use the Mobile Trainer to repeat the initial registration (process).
 	db   "モバイルアダプタに"
-	next "とうろくされた　じょうほうが"
-	next "ただしく　ありません"
+	next "とうろくされた<　>じょうほうが"
+	next "ただしく<　>ありません"
 	next "モバイルトレーナーで"
-	next "しょきとうろくを　してください"
+	next "しょきとうろくを<　>してください"
 	db   "@"
 
 MobileErrorCode_32_503_Text:
@@ -4939,11 +5036,11 @@ MobileErrorCode_32_503_Text:
 ; Please wait a moment and try again.
 ; For details, please see the instruction manual.
 	db   "モバイルセンターが"
-	next "こんでいて　つながりません"
+	next "こんでいて<　>つながりません"
 	next "しばらくまって"
-	next "かけなおして　ください"
-	next "くわしくは　とりあつかい"
-	next "せつめいしょを　ごらんください"
+	next "かけなおして<　>ください"
+	next "くわしくは<　>とりあつかい"
+	next "せつめいしょを<　>ごらんください"
 	db   "@"
 
 MobileErrorCode_30_450_Text:
@@ -4952,9 +5049,9 @@ MobileErrorCode_30_551_Text:
 MobileErrorCode_30_553_Text:
 ; There is a mistake with the email address of the addressee.
 ; Please replace with a / the correct email address.
-	db   "あてさき　メールアドレスに"
+	db   "あてさき<　>メールアドレスに"
 	next "まちがいがあります"
-	next "ただしい　メールアドレスを"
+	next "ただしい<　>メールアドレスを"
 	next "いれなおしてください"
 	db   "@"
 
@@ -4962,11 +5059,11 @@ MobileErrorCode_31_002_Text:
 ; There is a mistake with the email address.
 ; Please see the instruction manual, and use the Mobile Trainer to repeat the initial registration (process).
 	db   "メールアドレスに"
-	next "まちがいが　あります"
+	next "まちがいが<　>あります"
 	next "とりあつかいせつめいしょを"
 	next "ごらんのうえ"
 	next "モバイルトレーナーで"
-	next "しょきとうろくを　してください"
+	next "しょきとうろくを<　>してください"
 	db   "@"
 
 MobileErrorCode_31_003_Text:
@@ -4974,11 +5071,11 @@ MobileErrorCode_33_201_Text:
 ; There is either an error with the login password, or an error with the Mobile Center.
 ; Please confirm the password, wait a moment, and then try again.
 	db   "ログインパスワードに"
-	next "まちがいが　あるか"
-	next "モバイルセンターの　エラーです"
-	next "パスワードを　かくにんして"
-	next "しばらく　まって"
-	next "かけなおして　ください"
+	next "まちがいが<　>あるか"
+	next "モバイルセンターの<　>エラーです"
+	next "パスワードを<　>かくにんして"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
 	db   "@"
 
 MobileErrorCode_32_403_Text:
@@ -4986,10 +5083,10 @@ MobileErrorCode_32_404_Text:
 ; Cannot read data.
 ; Please wait a moment, and then try again.
 ; If the issue persists, please contact the Mobile Support Center.
-	db   "データの　よみこみが　できません"
+	db   "データの<　>よみこみが<　>できません"
 	next "しばらくまって"
-	next "かけなおして　ください"
-	next "なおらない　ときは"
+	next "かけなおして<　>ください"
+	next "なおらない<　>ときは"
 	next "モバイルサポートセンターへ"
 	next "おといあわせください"
 	db   "@"
@@ -5001,60 +5098,60 @@ MobileErrorCode_32_408_Text:
 ; Please try again.
 ; For details, please see the instruction manual.
 	db   "じかんぎれです"
-	next "でんわが　きれました"
-	next "でんわを　かけなおしてください"
-	next "くわしくは　とりあつかい"
-	next "せつめいしょを　ごらんください"
+	next "でんわが<　>きれました"
+	next "でんわを<　>かけなおしてください"
+	next "くわしくは<　>とりあつかい"
+	next "せつめいしょを<　>ごらんください"
 	db   "@"
 
 MobileErrorCode_33_101_Text:
 ; The service cannot be used if payments for usage fees are late.
 ; For details, please see the instruction manual.
-	db   "ごりよう　りょうきんの　"
-	next "おしはらいが　おくれたばあいには"
-	next "ごりようが　できなくなります"
-	next "くわしくは　とりあつかい"
-	next "せつめいしょを　ごらんください"
+	db   "ごりよう<　>りょうきんの<　>"
+	next "おしはらいが<　>おくれたばあいには"
+	next "ごりようが<　>できなくなります"
+	next "くわしくは<　>とりあつかい"
+	next "せつめいしょを<　>ごらんください"
 	db   "@"
 
 MobileErrorCode_33_102_Text:
 MobileErrorCode_33_299_Text:
 ; Your access to this service has been restricted. Service cannot be used.
 ; For details, please see the instruction manual.
-	db   "おきゃくさまの　ごつごうにより"
+	db   "おきゃくさまの<　>ごつごうにより"
 	next "ごりようできません"
-	next "くわしくは　とりあつかい"
-	next "せつめいしょを　ごらんください"
+	next "くわしくは<　>とりあつかい"
+	next "せつめいしょを<　>ごらんください"
 	db   "@"
 
 MobileErrorCode_ServerConnectionFailedText:
 ; The telephone line is busy. Due to this error, the Mobile Center cannot communicate.
 ; Please wait for a little while and call again.
-	db   "でんわかいせんが　こんでいるか"
-	next "モバイルセンターの　エラーで"
-	next "つうしんが　できません"
-	next "しばらく　まって"
-	next "かけなおして　ください"
+	db   "でんわかいせんが<　>こんでいるか"
+	next "モバイルセンターの<　>エラーで"
+	next "つうしんが<　>できません"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
 	db   "@"
 
 MobileErrorCode_33_103_Text:
 ; Service cannot be used this month because usage fees have exceeded conditions.
 ; For details, please see the instruction manual.
-	db   "ごりよう　りょうきんが"
-	next "じょうげんを　こえているため"
-	next "こんげつは　ごりようできません"
-	next "くわしくは　とりあつかい"
-	next "せつめいしょを　ごらんください"
+	db   "ごりよう<　>りょうきんが"
+	next "じょうげんを<　>こえているため"
+	next "こんげつは<　>ごりようできません"
+	next "くわしくは<　>とりあつかい"
+	next "せつめいしょを<　>ごらんください"
 	db   "@"
 
 MobileErrorCode_33_106_Text:
 ; Cannot communicate because the Mobile Center is currently undergoing maintenance.
 ; Please wait a moment, then try again.
-	db   "げんざい　モバイルセンターの"
-	next "てんけんを　しているので"
-	next "つうしんが　できません"
-	next "しばらく　まって"
-	next "かけなおして　ください"
+	db   "げんざい<　>モバイルセンターの"
+	next "てんけんを<　>しているので"
+	next "つうしんが<　>できません"
+	next "しばらく<　>まって"
+	next "かけなおして<　>ください"
 	db   "@"
 
 MobileErrorCode_33_104_Text:
@@ -5064,25 +5161,25 @@ MobileErrorCode_33_206_Text:
 MobileErrorCode_101_004_Text:
 ; Cannot read data.
 ; For details, please see the instruction manual.
-	db   "データの　よみこみが　できません"
-	next "くわしくは　とりあつかい"
-	next "せつめいしょを　ごらんください"
+	db   "データの<　>よみこみが<　>できません"
+	next "くわしくは<　>とりあつかい"
+	next "せつめいしょを<　>ごらんください"
 	db   "@"
 
 MobileErrorCode_101_006_Text:
 ; Call ended because more than 3 minutes elapsed with no input.
-	db   "３ぷん　いじょう　なにも"
-	next "にゅうりょく　しなかったので"
-	next "でんわが　きれました"
+	db   "<３>ぷん<　>いじょう<　>なにも"
+	next "にゅうりょく<　>しなかったので"
+	next "でんわが<　>きれました"
 	db   "@"
 
 MobileErrorCode_101_001_Text:
 MobileErrorCode_101_002_Text:
 ; Could not connect properly.
 ; Please try again from the beginning (of the process).
-	db   "つうしんが　うまく"
+	db   "つうしんが<　>うまく"
 	next "できませんでした"
-	next "もういちど　はじめから"
+	next "もういちど<　>はじめから"
 	next "やりなおしてください"
 	db   "@"
 
@@ -5092,27 +5189,27 @@ MobileErrorCode_101_009_Text:
 ; Cannot read data.
 ; Please wait a moment, then try again.
 ; If the issue persists, please contact the Mobile Support Center.
-	db   "データの　よみこみが　できません"
+	db   "データの<　>よみこみが<　>できません"
 	next "しばらくまって"
-	next "かけなおして　ください"
-	next "なおらない　ときは"
+	next "かけなおして<　>ください"
+	next "なおらない<　>ときは"
 	next "モバイルサポートセンターへ"
 	next "おといあわせください"
 	db   "@"
 
 MobileErrorCode_101_007_Text:
 ; Call ended due to long waiting time.
-	db   "まちじかんが　ながいので"
-	next "でんわが　きれました"
+	db   "まちじかんが<　>ながいので"
+	next "でんわが<　>きれました"
 	db   "@"
 
 MobileErrorCode_101_005_Text:
 ; (Your adapter's) type differs from the other user’s Mobile Adapter.
 ; For details, please see the instruction manual.
-	db   "あいての　モバイルアダプタと"
-	next "タイプが　ちがいます"
-	next "くわしくは　とりあつかい"
-	next "せつめいしょを　ごらんください"
+	db   "あいての<　>モバイルアダプタと"
+	next "タイプが<　>ちがいます"
+	next "くわしくは<　>とりあつかい"
+	next "せつめいしょを<　>ごらんください"
 	db   "@"
 
 String_17fe9a: ; unused
@@ -5120,19 +5217,19 @@ String_17fe9a: ; unused
 ; Please send your save data after loading new Pokémon News.
 	db   "ポケモンニュースが"
 	next "あたらしくなっているので"
-	next "レポートを　おくれません"
-	next "あたらしい　ポケモンニュースの"
-	next "よみこみを　さきに　してください"
+	next "レポートを<　>おくれません"
+	next "あたらしい<　>ポケモンニュースの"
+	next "よみこみを<　>さきに<　>してください"
 	db   "@"
 
 MobileErrorCode_101_000_Text:
 ; Either bad communication status, or the other user called was the incorrect user.
 ; Please confirm and try again.
-	db   "つうしんの　じょうきょうが"
-	next "よくないか　かけるあいてが"
+	db   "つうしんの<　>じょうきょうが"
+	next "よくないか<　>かけるあいてが"
 	next "まちがっています"
-	next "もういちど　かくにんをして"
-	next "でんわを　かけなおして　ください"
+	next "もういちど<　>かくにんをして"
+	next "でんわを<　>かけなおして<　>ください"
 	db   "@"
 
 Function17ff23:
@@ -5172,4 +5269,4 @@ Function17ff3c:
 	ret
 
 String_17ff68:
-	db "１０１@"
+	db "<１><０><１>@"

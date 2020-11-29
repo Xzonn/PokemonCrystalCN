@@ -198,6 +198,10 @@ PokeBallEffect:
 	dec a
 	jp nz, UseBallInTrainerBattle
 
+	ld a, [wBattleType] ; FIXED
+	cp BATTLETYPE_TUTORIAL
+	jr z, .room_in_party
+
 	ld a, [wPartyCount]
 	cp PARTY_LENGTH
 	jr nz, .room_in_party
@@ -328,7 +332,7 @@ PokeBallEffect:
 	and 1 << FRZ | SLP
 	ld c, 10
 	jr nz, .addstatus
-	; ld a, [wEnemyMonStatus]
+	ld a, [wEnemyMonStatus] ; FIXED
 	and a
 	ld c, 5
 	jr nz, .addstatus
@@ -346,7 +350,7 @@ PokeBallEffect:
 	ld d, a
 	push de
 	ld a, [wBattleMonItem]
-	; ld b, a
+	ld b, a ; FIXED
 	farcall GetItemHeldEffect
 	ld a, b
 	cp HELD_CATCH_CHANCE
@@ -434,16 +438,16 @@ PokeBallEffect:
 ; caught as a Ditto, even if it was something else like Mew.
 ; To fix, do not set [wTempEnemyMonSpecies] to DITTO.
 	bit SUBSTATUS_TRANSFORMED, a
-	jr nz, .ditto
-	jr .not_ditto
+	jr nz, .load_data ; FIXED - jr nz, .ditto
+	; jr .not_ditto
 
 .ditto
-	ld a, DITTO
-	ld [wTempEnemyMonSpecies], a
-	jr .load_data
+	; ld a, DITTO
+	; ld [wTempEnemyMonSpecies], a
+	; jr .load_data
 
 .not_ditto
-	set SUBSTATUS_TRANSFORMED, [hl]
+	; set SUBSTATUS_TRANSFORMED, [hl]
 	ld hl, wEnemyBackupDVs
 	ld a, [wEnemyMonDVs]
 	ld [hli], a
@@ -751,7 +755,7 @@ GetPokedexEntryBank:
 	push hl
 	push de
 	ld a, [wEnemyMonSpecies]
-	; dec a
+	dec a ; FIXED - BUG: No.64/128/192 get wrong bank!
 	rlca
 	rlca
 	maskbits NUM_DEX_ENTRY_BANKS
@@ -794,45 +798,46 @@ HeavyBallMultiplier:
 	jr nz, .SkipText
 
 	call GetPokedexEntryBank
-	push bc
-	inc hl
+	; push bc
+	; inc hl
 	inc hl
 	call GetFarHalfword
 
-	srl h
-	rr l
-	ld b, h
-	ld c, l
+	; srl h
+	; rr l
+	; ld b, h
+	; ld c, l
 
-rept 4
-	srl b
-	rr c
-endr
-	call .subbc
+; rept 4
+	; srl b
+	; rr c
+; endr
+	; call .subbc
 
-	srl b
-	rr c
-	call .subbc
+	; srl b
+	; rr c
+	; call .subbc
 
-	ld a, h
-	pop bc
-	jr .compare
+	; ld a, h
+	; pop bc
+	; jr .compare
 
-.subbc
+; .subbc
 	; subtract bc from hl
-	push bc
-	ld a, b
-	cpl
-	ld b, a
-	ld a, c
-	cpl
-	ld c, a
-	inc bc
-	add hl, bc
-	pop bc
-	ret
+	; push bc
+	; ld a, b
+	; cpl
+	; ld b, a
+	; ld a, c
+	; cpl
+	; ld c, a
+	; inc bc
+	; add hl, bc
+	; pop bc
+	; ret
 
-.compare
+; .compare
+	ld a, h
 	ld c, a
 	cp HIGH(1024) ; 102.4 kg
 	jr c, .lightmon
@@ -921,7 +926,7 @@ MoonBallMultiplier:
 	push bc
 	ld a, BANK("Evolutions and Attacks")
 	call GetFarByte
-	cp MOON_STONE_RED ; BURN_HEAL
+	cp MOON_STONE ; FIXED - MOON_STONE_RED ; BURN_HEAL
 	pop bc
 	ret nz
 
@@ -980,7 +985,7 @@ LoveBallMultiplier:
 	pop de
 	cp d
 	pop bc
-	ret nz ; for the intended effect, this should be "ret z"
+	ret z ; FIXED - for the intended effect, this should be "ret z"
 
 	sla b
 	jr c, .max
@@ -1018,7 +1023,7 @@ FastBallMultiplier:
 	cp -1
 	jr z, .next
 	cp c
-	jr nz, .next ; for the intended effect, this should be "jr nz, .loop"
+	jr nz, .loop ; FIXED for the intended effect, this should be "jr nz, .loop"
 	sla b
 	jr c, .max
 
@@ -1237,11 +1242,11 @@ StatStrings:
 	dw .speed
 	dw .special
 
-.health  db "HEALTH@"
-.attack  db "ATTACK@"
-.defense db "DEFENSE@"
-.speed   db "SPEED@"
-.special db "SPECIAL@"
+.health  db "体力@"
+.attack  db "攻击@"
+.defense db "防御@"
+.speed   db "速度@"
+.special db "特殊能力@"
 
 GetStatExpRelativePointer:
 	ld a, [wCurItem]
@@ -1352,7 +1357,7 @@ RareCandyEffect:
 	ld c, 9
 	call Textbox
 
-	hlcoord 11, 1
+	hlcoord 11, 2
 	ld bc, 4
 	predef PrintTempMonStats
 
@@ -1690,7 +1695,7 @@ HealHP_SFX_GFX:
 	call WaitPlaySFX
 	pop de
 	ld a, [wCurPartyMon]
-	hlcoord 11, 0
+	hlcoord 13, 0
 	ld bc, SCREEN_WIDTH * 2
 	call AddNTimes
 	ld a, $2

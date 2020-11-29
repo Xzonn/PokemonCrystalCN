@@ -481,7 +481,7 @@ endr
 	ret
 
 BT_ChrisName:
-	db "CHRIS@"
+	db "克丽丝@"
 
 Function17042c:
 	ld hl, w3_d202TrainerData

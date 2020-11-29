@@ -1,10 +1,7 @@
-	db "BIVALVE@" ; species name
-	dw 100, 90 ; height, weight
+	db "双壳贝@" ; species name
+	dbw 3, 40 ; height, weight
 
-	db   "Clamping on to an"
-	next "opponent reveals"
-	next "its vulnerable"
+	db   "用贝壳夹击的同时"
+	next "也会露出柔软的内在物，"
+	next "是孤注一掷的手段。@"
 
-	page "parts, so it uses"
-	next "this move only as"
-	next "a last resort.@"

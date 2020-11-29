@@ -1,10 +1,7 @@
-	db "MOLD@" ; species name
-	dw 200, 450 ; height, weight
+	db "发酵@" ; species name
+	dbw 6, 205 ; height, weight
 
-	db   "The fluid secreted"
-	next "by its toes carves"
-	next "holes in rocks for"
+	db   "凿开岩石筑巢时会从脚尖"
+	next "分泌出一种液体，这种液体"
+	next "可以和树果混合成果汁。@"
 
-	page "nesting and can be"
-	next "mixed with BERRIES"
-	next "to make a drink.@"

@@ -1,10 +1,7 @@
-	db "MYSTIC@" ; species name
-	dw 411, 330 ; height, weight
+	db "神秘@" ; species name
+	dbw 15, 150 ; height, weight
 
-	db   "Once it begins to"
-	next "meditate at sun-"
-	next "rise, the entire"
+	db   "清晨会静静地看着初升的"
+	next "太阳并对之祈祷，之后几乎"
+	next "一动不动地度过这一天。@"
 
-	page "day will pass"
-	next "before it will"
-	next "move again.@"

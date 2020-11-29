@@ -1,10 +1,7 @@
-	db "FIRE MOUSE@" ; species name
-	dw 108, 170 ; height, weight
+	db "火鼠@" ; species name
+	dbw 5, 79 ; height, weight
 
-	db   "The fire that"
-	next "spouts from its"
-	next "back burns hottest"
+	db   "从背上喷出的火焰"
+	next "在生气时会达到最大火力，"
+	next "以此来威吓对手。@"
 
-	page "when it is angry."
-	next "The flaring flames"
-	next "intimidate foes.@"

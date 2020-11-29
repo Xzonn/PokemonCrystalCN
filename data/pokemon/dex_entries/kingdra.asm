@@ -1,10 +1,7 @@
-	db "DRAGON@" ; species name
-	dw 511, 3350 ; height, weight
+	db "龙@" ; species name
+	dbw 18, 1520 ; height, weight
 
-	db   "It stores energy"
-	next "by sleeping at"
-	next "underwater depths"
+	db   "据说它会在任何生物都"
+	next "无法下潜的深海底部沉睡，"
+	next "同时会积蓄力量。@"
 
-	page "at which no other"
-	next "life forms can"
-	next "survive.@"

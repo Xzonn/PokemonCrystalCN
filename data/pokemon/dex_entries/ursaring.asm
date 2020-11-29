@@ -1,10 +1,7 @@
-	db "HIBERNANT@" ; species name
-	dw 511, 2770 ; height, weight
+	db "冬眠@" ; species name
+	dbw 18, 1258 ; height, weight
 
-	db   "Although it has a"
-	next "large body, it is"
-	next "quite skilled at"
+	db   "尽管体型巨大，"
+	next "却可以灵活地爬树，"
+	next "会在树上吃东西或睡觉。@"
 
-	page "climbing trees. It"
-	next "eats and sleeps in"
-	next "the treetops.@"

@@ -7,7 +7,8 @@ _DudeAutoInput_RightA:
 	jr _DudeAutoInput
 
 _DudeAutoInput_DownA:
-	ld hl, DudeAutoInput_DownA
+_DudeAutoInput_WaitRightA:
+	ld hl, DudeAutoInput_WaitRightA
 	jr _DudeAutoInput
 
 _DudeAutoInput:
@@ -29,12 +30,13 @@ DudeAutoInput_RightA:
 	db A_BUTTON, $00
 	db NO_INPUT, $ff ; end
 
-DudeAutoInput_DownA:
+DudeAutoInput_DownA: ; DudeAutoInput_WaitRightA now
+DudeAutoInput_WaitRightA:
 	db NO_INPUT, $fe
 	db NO_INPUT, $fe
 	db NO_INPUT, $fe
 	db NO_INPUT, $fe
-	db D_DOWN,   $00
+	db D_RIGHT,  $00 ; D_DOWN in English version
 	db NO_INPUT, $fe
 	db NO_INPUT, $fe
 	db NO_INPUT, $fe

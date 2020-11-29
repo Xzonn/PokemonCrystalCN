@@ -1,10 +1,7 @@
-	db "JELLYFISH@" ; species name
-	dw 211, 1000 ; height, weight
+	db "水母@" ; species name
+	dbw 9, 455 ; height, weight
 
-	db   "As it floats along"
-	next "on the waves, it"
-	next "uses its toxic"
+	db   "随着波浪漂流的时候，"
+	next "只要是碰到它的东西，"
+	next "它都会用毒触手刺过去。@"
 
-	page "feelers to stab"
-	next "anything it"
-	next "touches.@"

@@ -101,20 +101,28 @@ CheckAnyOtherAliveMonsForTrade:
 	ret
 
 PlaceTradePartnerNamesAndParty:
-	hlcoord 4, 0
-	ld de, wPlayerName
+	ld de, wStringBuffer1
+	ld hl, wPlayerName
+	ld bc, NAME_LENGTH
+	call CopyBytes
+	ld de, wStringBuffer1
+	lb bc, 10, 0
+	farcall FixStrLength
+	hlcoord 3, 1
 	call PlaceString
-	ld a, $14
-	ld [bc], a
-	hlcoord 4, 8
-	ld de, wOTPlayerName
+	ld de, wStringBuffer1
+	ld hl, wOTPlayerName
+	ld bc, NAME_LENGTH
+	call CopyBytes
+	ld de, wStringBuffer1
+	lb bc, 10, 0
+	farcall FixStrLength
+	hlcoord 12, 1
 	call PlaceString
-	ld a, $14
-	ld [bc], a
-	hlcoord 7, 1
+	hlcoord 0, 3
 	ld de, wPartySpecies
 	call .PlaceSpeciesNames
-	hlcoord 7, 9
+	hlcoord 12, 3
 	ld de, wOTPartySpecies
 .PlaceSpeciesNames:
 	ld c, 0
@@ -135,7 +143,7 @@ PlaceTradePartnerNamesAndParty:
 	pop de
 	inc de
 	pop hl
-	ld bc, SCREEN_WIDTH
+	ld bc, SCREEN_WIDTH * 2
 	add hl, bc
 	pop bc
 	inc c

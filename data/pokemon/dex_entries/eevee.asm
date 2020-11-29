@@ -1,10 +1,7 @@
-	db "EVOLUTION@" ; species name
-	dw 100, 140 ; height, weight
+	db "进化@" ; species name
+	dbw 3, 65 ; height, weight
 
-	db   "Its ability to"
-	next "evolve into many"
-	next "forms allows it to"
+	db   "为了让自己能够迅速"
+	next "适应环境变化而产生了"
+	next "很多种进化的可能性。@"
 
-	page "adapt smoothly"
-	next "and perfectly to"
-	next "any environment.@"

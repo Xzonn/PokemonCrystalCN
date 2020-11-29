@@ -1,10 +1,7 @@
-	db "TADPOLE@" ; species name
-	dw 200, 270 ; height, weight
+	db "蝌蚪@" ; species name
+	dbw 6, 124 ; height, weight
 
-	db   "The swirl on its"
-	next "belly is its"
-	next "insides showing"
+	db   "腹部的漩涡是透过皮肤"
+	next "露出的一部分内脏。"
+	next "入食后会变得更加明显。@"
 
-	page "through the skin."
-	next "It looks clearer"
-	next "after it eats.@"

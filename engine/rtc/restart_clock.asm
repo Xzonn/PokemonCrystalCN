@@ -19,13 +19,13 @@ endr
 
 .WrapAroundTimes:
 	dw wBuffer4
-	db 7, 4
+	db 7, 3
 
 	dw wBuffer5
 	db 24, 12
 
 	dw wBuffer6
-	db 60, 15
+	db 60, 16
 
 RestartClock:
 ; If we're here, we had an RTC overflow.
@@ -59,7 +59,7 @@ RestartClock:
 	ld a, 1
 	ld [wBuffer1], a ; which digit
 	ld [wBuffer2], a
-	ld a, 8
+	ld a, 7
 	ld [wBuffer3], a
 	call UpdateTime
 	call GetWeekday
@@ -68,7 +68,10 @@ RestartClock:
 	ld [wBuffer5], a
 	ldh a, [hMinutes]
 	ld [wBuffer6], a
-
+	hlcoord 0, 5
+	ld b, 5
+	ld c, 18
+	call Textbox
 .loop
 	call .joy_loop
 	jr nc, .loop
@@ -182,10 +185,11 @@ RestartClock:
 	ret
 
 .PrintTime:
-	hlcoord 0, 5
-	ld b, 5
-	ld c, 18
-	call Textbox
+	; reduce cpu usage
+	; hlcoord 0, 5
+	; ld b, 5
+	; ld c, 18
+	; call Textbox
 	decoord 1, 8
 	ld a, [wBuffer4]
 	ld b, a
@@ -194,8 +198,8 @@ RestartClock:
 	ld b, a
 	ld a, [wBuffer6]
 	ld c, a
-	decoord 11, 8
-	farcall PrintHoursMins
+	decoord 7, 8
+	farcall PrintDayHourMin
 	ld a, [wBuffer2]
 	lb de, " ", " "
 	call .PlaceChars
@@ -221,7 +225,7 @@ RestartClock:
 	call Coord2Tile
 	pop de
 	ld [hl], d
-	ld bc, 2 * SCREEN_WIDTH
+	ld bc, 4 * SCREEN_WIDTH
 	add hl, bc
 	ld [hl], e
 	ret

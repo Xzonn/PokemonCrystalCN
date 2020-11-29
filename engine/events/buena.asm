@@ -4,12 +4,28 @@ BuenasPassword:
 	ld hl, .MenuHeader
 	call CopyMenuHeader
 	ld a, [wBuenasPassword]
-	ld c, a
-	farcall GetBuenasPassword
-	ld a, [wMenuBorderLeftCoord]
-	add c
-	add $2
+	; ld c, a
+	; farcall GetBuenasPassword
+	; ld a, [wMenuBorderLeftCoord]
+	; add c
+	; add $2
+	swap a
+	and $f
+	cp a, 10 ; 电台名 六字
+	jr z, .skip
+	cp a, 1 ; 道具名 四字
+	jr z, .skip4b
+	cp a, 9 ; 道具名 四字
+	jr z, .skip4b
+	ld a, [wMenuBorderRightCoord]
+	sub $4
 	ld [wMenuBorderRightCoord], a
+	jr .skip
+.skip4b
+	ld a, [wMenuBorderRightCoord]
+	sub $2
+	ld [wMenuBorderRightCoord], a
+.skip
 	call PushWindow
 	call DoNthMenu ; menu
 	farcall Buena_ExitMenu
@@ -29,7 +45,7 @@ BuenasPassword:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 10, 7
+	menu_coords 0, 0, 11, 7
 	dw .MenuData
 	db 1 ; default option
 
@@ -70,15 +86,16 @@ BuenaPrize:
 	ld [wMenuSelection], a
 	call Buena_PlacePrizeMenuBox
 	call Buena_DisplayBlueCardBalance
-	ld hl, .BuenaAskWhichPrizeText
-	call PrintText
-	jr .okay
+	; ld hl, .BuenaAskWhichPrizeText
+	; call PrintText
+	; jr .okay
 
 .loop
 	ld hl, .BuenaAskWhichPrizeText
-	call BuenaPrintText
+	; call BuenaPrintText
+	call PrintText
 
-.okay
+; .okay
 	call DelayFrame
 	call UpdateSprites
 	call PrintBlueCardBalance
@@ -90,7 +107,8 @@ BuenaPrize:
 	ld [wNamedObjectIndexBuffer], a
 	call GetItemName
 	ld hl, .BuenaIsThatRightText
-	call BuenaPrintText
+	; call BuenaPrintText
+	call PrintText
 	call YesNoBox
 	jr c, .loop
 
@@ -134,7 +152,8 @@ BuenaPrize:
 	ld hl, .BuenaHereYouGoText
 
 .print
-	call BuenaPrintText
+	; call BuenaPrintText
+	call PrintText
 	jr .loop
 
 .done
@@ -189,13 +208,17 @@ PrintBlueCardBalance:
 	call MenuBox
 	call UpdateSprites
 	call MenuBoxCoord2Tile
-	ld bc, SCREEN_WIDTH + 1
+	ld bc, 2 * SCREEN_WIDTH + 1
 	add hl, bc
+	push hl
 	ld de, .Points_string
 	call PlaceString
-	ld h, b
-	ld l, c
-	inc hl
+	pop hl
+	ld bc, SCREEN_WIDTH + 2
+	add hl, bc
+	; ld h, b
+	; ld l, c
+	; inc hl
 	ld a, " "
 	ld [hli], a
 	ld [hld], a
@@ -205,11 +228,11 @@ PrintBlueCardBalance:
 	ret
 
 .Points_string:
-	db "Points@"
+	db "点数@"
 
 BlueCardBalanceMenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 11, 11, 13
+	menu_coords 14, 0, 19, 4
 
 Buena_PlacePrizeMenuBox:
 	ld hl, .MenuHeader
@@ -218,7 +241,7 @@ Buena_PlacePrizeMenuBox:
 
 .MenuHeader
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 17, TEXTBOX_Y - 1
+	menu_coords 0, 0, 13, TEXTBOX_Y
 
 Buena_PrizeMenu:
 	ld hl, .MenuHeader
@@ -248,7 +271,7 @@ Buena_PrizeMenu:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 1, 1, 16, 9
+	menu_coords 1, 1, 12, 11
 	dw .MenuData
 	db 1 ; default option
 
@@ -256,7 +279,7 @@ Buena_PrizeMenu:
 
 .MenuData:
 	db SCROLLINGMENU_DISPLAY_ARROWS ; flags
-	db 4, 13 ; rows, columns
+	db 5, 10 ; rows, columns
 	db SCROLLINGMENU_ITEMS_NORMAL ; item format
 	dba .indices
 	dba .prizeitem

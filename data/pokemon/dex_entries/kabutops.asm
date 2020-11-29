@@ -1,10 +1,7 @@
-	db "SHELLFISH@" ; species name
-	dw 403, 890 ; height, weight
+	db "甲壳@" ; species name
+	dbw 13, 405 ; height, weight
 
-	db   "It was able to"
-	next "swim quickly thro-"
-	next "ugh the water by"
+	db   "会把锐利的镰刀折叠起来"
+	next "以便自己能在水中"
+	next "更迅速地游来游去。@"
 
-	page "compactly folding"
-	next "up its razor-sharp"
-	next "sickles.@"

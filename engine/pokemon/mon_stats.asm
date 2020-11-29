@@ -91,8 +91,8 @@ PrintTempMonStats:
 	pop hl
 	pop bc
 	add hl, bc
-	ld bc, SCREEN_WIDTH
-	add hl, bc
+	; ld bc, SCREEN_WIDTH
+	; add hl, bc
 	ld de, wTempMonAttack
 	lb bc, 2, 3
 	call .PrintStat
@@ -114,11 +114,11 @@ PrintTempMonStats:
 	ret
 
 .StatNames:
-	db   "ATTACK"
-	next "DEFENSE"
-	next "SPCL.ATK"
-	next "SPCL.DEF"
-	next "SPEED"
+	db   "攻击"
+	next "防御"
+	next "特攻"
+	next "特防"
+	next "速度"
 	next "@"
 
 GetGender:
@@ -251,8 +251,9 @@ ListMovePP:
 	and a
 	jr z, .skip
 	ld c, a
-	ld a, "-"
-	call .load_loop
+	; ld a, "-"
+	; call .load_loop
+	call .load_loop2
 
 .skip
 	pop hl
@@ -316,12 +317,31 @@ ListMovePP:
 	ret
 
 .load_loop
+	call ResetVramNo
 	ld [hli], a
+	call ResetVramNo
 	ld [hld], a
 	add hl, de
 	dec c
 	jr nz, .load_loop
 	ret
+
+.load_loop2
+	push hl
+	push de
+	push bc
+	ld de, .String_ListMovePP
+	call PlaceString
+	pop bc
+	pop de
+	pop hl
+	add hl, de
+	dec c
+	jr nz, .load_loop2
+	ret
+
+.String_ListMovePP:
+	db "--@"
 
 Function50cd0: ; unreferenced
 .loop
@@ -340,6 +360,8 @@ Unused_PlaceEnemyHPLevel:
 	ld hl, wPartyMonNicknames
 	ld a, [wCurPartyMon]
 	call GetNick
+	lb bc, 18, 0
+	farcall FixStrLength
 	pop hl
 	call PlaceString
 	call CopyMonToTempMon
@@ -353,9 +375,14 @@ Unused_PlaceEnemyHPLevel:
 	ld b, $0
 	call DrawEnemyHP
 	pop hl
-	ld bc, 5
+	ld bc, -12 ; 5
 	add hl, bc
 	push de
+	push hl
+	lb bc, 1, 9
+	call ClearBox
+	pop hl
+	inc hl
 	call PrintLevel
 	pop de
 
@@ -375,14 +402,15 @@ PlaceStatusString:
 	jr nz, PlaceNonFaintStatus
 	push de
 	ld de, FntString
-	call CopyStatusString
+	; call CopyStatusString
+	call PlaceString
 	pop de
 	ld a, $1
 	and a
 	ret
 
 FntString:
-	db "FNT@"
+	db $BA, $BB, "@" ; "FNT@"
 
 CopyStatusString:
 	ld a, [de]
@@ -415,7 +443,8 @@ PlaceNonFaintStatus:
 	jr z, .no_status
 
 .place
-	call CopyStatusString
+	; call CopyStatusString
+	call PlaceString
 	ld a, $1
 	and a
 
@@ -423,11 +452,67 @@ PlaceNonFaintStatus:
 	pop de
 	ret
 
-SlpString: db "SLP@"
-PsnString: db "PSN@"
-BrnString: db "BRN@"
-FrzString: db "FRZ@"
-ParString: db "PAR@"
+SlpString: db $BC, $BD, "@" ; "SLP@"
+PsnString: db $BE, $BF, "@" ; "PSN@"
+BrnString: db $CA, $CB, "@" ; "BRN@"
+FrzString: db $CC, $CD, "@" ; "FRZ@"
+ParString: db $CE, $CF, "@" ; "PAR@"
+
+PlaceLargeStatusString:
+	push de
+	inc de
+	inc de
+	ld a, [de]
+	ld b, a
+	inc de
+	ld a, [de]
+	or b
+	pop de
+	jr nz, PlaceLargeNonFaintStatus
+	push de
+	ld de, LargeFntString
+	call PlaceString
+	pop de
+	ld a, $1
+	and a
+	ret
+
+LargeFntString:
+	db "濒死@" ; "FNT@"
+
+PlaceLargeNonFaintStatus:
+	push de
+	ld a, [de]
+	ld de, LargePsnString
+	bit PSN, a
+	jr nz, .place
+	ld de, LargeBrnString
+	bit BRN, a
+	jr nz, .place
+	ld de, LargeFrzString
+	bit FRZ, a
+	jr nz, .place
+	ld de, LargeParString
+	bit PAR, a
+	jr nz, .place
+	ld de, LargeSlpString
+	and SLP
+	jr z, .no_status
+
+.place
+	call PlaceString
+	ld a, $1
+	and a
+
+.no_status
+	pop de
+	ret
+
+LargeSlpString: db "睡眠@" ; "SLP@"
+LargePsnString: db "中毒@" ; "PSN@"
+LargeBrnString: db "烧伤@" ; "BRN@"
+LargeFrzString: db "冰冻@" ; "FRZ@"
+LargeParString: db "麻痹@" ; "PAR@"
 
 ListMoves:
 ; List moves at hl, spaced every [wBuffer1] tiles.
@@ -468,9 +553,12 @@ ListMoves:
 
 .no_more_moves
 	ld a, b
+	push de
 .nonmove_loop
 	push af
-	ld [hl], "-"
+	; ld [hl], "-"
+	ld de, .string_nonmove
+	call PlaceString
 	ld a, [wBuffer1]
 	ld c, a
 	ld b, 0
@@ -479,6 +567,10 @@ ListMoves:
 	inc a
 	cp NUM_MOVES
 	jr nz, .nonmove_loop
+	pop de
 
 .done
 	ret
+
+.string_nonmove
+	db "-@"

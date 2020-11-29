@@ -1,10 +1,7 @@
-	db "JET@" ; species name
-	dw 200, 260 ; height, weight
+	db "喷射@" ; species name
+	dbw 6, 120 ; height, weight
 
-	db   "To escape from an"
-	next "attacker, it may"
-	next "shoot water out of"
+	db   "会从口中向前高速地"
+	next "喷出水流，利用反作用力"
+	next "来向后方逃跑。@"
 
-	page "its mouth, then"
-	next "use that force to"
-	next "swim backward.@"

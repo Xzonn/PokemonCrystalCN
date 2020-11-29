@@ -1,10 +1,7 @@
-	db "FAIRY@" ; species name
-	dw 200, 170 ; height, weight
+	db "妖精@" ; species name
+	dbw 6, 78 ; height, weight
 
-	db   "In truth, it is a"
-	next "cowardly #MON."
-	next "It growls eagerly"
+	db   "其实非常胆小。"
+	next "为了隐藏自己的胆怯，"
+	next "会拼命地发出低吼声。@"
 
-	page "in order to hide"
-	next "its fear from its"
-	next "opponent.@"

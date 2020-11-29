@@ -1,10 +1,7 @@
-	db "ROCK@" ; species name
-	dw 303, 2320 ; height, weight
+	db "岩石@" ; species name
+	dbw 10, 1050 ; height, weight
 
-	db   "It travels by rol-"
-	next "ling on mountain"
-	next "paths. If it gains"
+	db   "在山道上滚动前进。"
+	next "速度太快的话，就会因为"
+	next "撞上巨大的岩石而停下来。@"
 
-	page "too much speed, it"
-	next "stops by running"
-	next "into huge rocks.@"

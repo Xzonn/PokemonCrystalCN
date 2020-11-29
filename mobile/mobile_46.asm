@@ -501,7 +501,7 @@ BattleTowerRoomMenu_Cleanup:
 	ldh [hMobileReceive], a
 	ldh [hMobile], a
 	ldh [hVBlank], a
-	call NormalSpeed
+	; call NormalSpeed
 	xor a
 	ldh [rIF], a
 	ld a, [wcd32]
@@ -3871,27 +3871,27 @@ String_119d07:
 	db "   ▼@"
 
 Strings_L10ToL100:
-	db " L:10 @@"
-	db " L:20 @@"
-	db " L:30 @@"
-	db " L:40 @@"
-	db " L:50 @@"
-	db " L:60 @@"
-	db " L:70 @@"
-	db " L:80 @@"
-	db " L:90 @@"
-	db " L:100@@"
-	db "CANCEL@@"
+	db "等级10 @"
+	db "等级20 @"
+	db "等级30 @"
+	db "等级40 @"
+	db "等级50 @"
+	db "等级60 @"
+	db "等级70 @"
+	db "等级80 @"
+	db "等级90 @"
+	db "等级100@"
+	db "取消   @"
 
 Strings_Ll0ToL40:
-	db " L:10 @@"
-	db " L:20 @@"
-	db " L:30 @@"
-	db " L:40 @@"
-	db "CANCEL@@"
-
+	db "等级10 @"
+	db "等级20 @"
+	db "等级30 @"
+	db "等级40 @"
+	db "取消   @"
+	
 BattleTowerCancelString: ; unreferenced
-	db "CANCEL@"
+	db "取消   @"
 
 BattleTower_LevelCheck:
 	ldh a, [rSVBK]
@@ -4622,10 +4622,10 @@ BattleTowerRoomMenu2_UpdateYesNoMenu:
 	ret
 
 String_11a2cf:
-	db "YES@"
+	db "是@"
 
 String_11a2d3:
-	db "NO@"
+	db "否@"
 
 MenuHeader_11a2d6:
 	db MENU_BACKUP_TILES ; flags
@@ -4635,7 +4635,7 @@ MenuHeader_11a2d6:
 
 MenuHeader_11a2de:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 14, 7, SCREEN_WIDTH - 1, TEXTBOX_Y - 1
+	menu_coords 14, 6, SCREEN_WIDTH - 1, TEXTBOX_Y - 1
 	dw NULL
 	db 0 ; default option
 
@@ -5074,33 +5074,33 @@ Function11a63c:
 	ret
 
 String_11a661:
-	db   "これから　モバイルセンターに"
+	db   "これから<　>モバイルセンターに"
 	next "でんわ<WO>かけます@"
 
 String_11a679:
 	db   "モバイルアダプタ<NO>じゅんびは"
-	next "できて　いますか？@"
+	next "できて<　>いますか<？>@"
 
 String_11a692:
 	db   "でんわ<WO>かけています"
-	next "しばらく　おまちください@"
+	next "しばらく<　>おまちください@"
 
 String_11a6aa:
-	db   "でんわをかけると　つうわりょう"
+	db   "でんわをかけると<　>つうわりょう"
 	next "せつぞくりょう<GA>かかります@"
 
 String_11a6c8:
-	db   "せつぞく　しました@"
+	db   "せつぞく<　>しました@"
 
 String_11a6d2:
-	db   "つうしん　ちゅう@"
+	db   "つうしん<　>ちゅう@"
 
 String_11a6db:
-	db   "つうしん　ちゅう"
-	next "セレクト　エーでちゅうし@"
+	db   "つうしん<　>ちゅう"
+	next "セレクト<　>エーでちゅうし@"
 
 String_11a6f1:
-	db   "この　サービスには"
+	db   "この<　>サービスには"
 	next "つうわりょう<NO>ほかに@"
 
 String_11a706:
@@ -5108,48 +5108,48 @@ String_11a706:
 
 String_11a70b:
 	db   "えん"
-	next "かかります　よろしい　ですか？@"
+	next "かかります<　>よろしい<　>ですか<？>@"
 
 String_11a71e:
-	db   "つうしん　しゅうりょう@"
+	db   "つうしん<　>しゅうりょう@"
 
 String_11a72a:
-	db   "つないだ　じかん"
-	next "　　やく　　　ふん　　　びょう@"
+	db   "つないだ<　>じかん"
+	next "<　><　>やく<　><　><　>ふん<　><　><　>びょう@"
 
 String_11a743:
-	db   "もっていない　データが"
-	next "あります！@"
+	db   "もっていない<　>データが"
+	next "あります<！>@"
 
 String_11a755:
-	db   "データ<WO>よみこみますか？@"
+	db   "データ<WO>よみこみますか<？>@"
 
 String_11a762:
-	db   "おなじ　データ<WO>よみこんだ"
+	db   "おなじ<　>データ<WO>よみこんだ"
 	next "こと<GA>ありますが@"
 
 String_11a779:
 	db   "そのデータ<WA>なくなっているか"
-	next "こわれて　います@"
+	next "こわれて<　>います@"
 
 String_11a791:
-	db   "もっている　データと"
-	next "おなじデータしか　ありません！@"
+	db   "もっている<　>データと"
+	next "おなじデータしか<　>ありません<！>@"
 
 String_11a7ac:
 	db   "データ<NO>よみこみを"
-	next "ちゅうし　しますか？@"
+	next "ちゅうし<　>しますか<？>@"
 
 String_11a7c1:
-	db   "あたらしい　ニュースは"
-	next "ありません　でした@"
+	db   "あたらしい<　>ニュースは"
+	next "ありません<　>でした@"
 
 String_11a7d7:
 	db   "あたらしいニュース<GA>あります"
-	next "ニュース<WO>よみこみますか？@"
+	next "ニュース<WO>よみこみますか<？>@"
 
 String_11a7f4:
-	db   "　　　　　　　　　　　　　　　@"
+	db   "<　><　><　><　><　><　><　><　><　><　><　><　><　><　><　>@"
 
 MenuHeader_11a804:
 	db MENU_BACKUP_TILES ; flags
@@ -5272,7 +5272,7 @@ Function11a90f:
 	ld a, $1
 	ldh [rSVBK], a
 	call SpeechTextbox
-	ld a, $50
+	ld a, $50 ; "@"
 	ld hl, wc320
 	ld bc, $008c
 	call ByteFill
@@ -5283,17 +5283,27 @@ Function11a90f:
 	ld de, wc320
 .asm_11a92c
 	ld a, [hli]
-	cp $57
+	cp $57 ; "<DONE>"
 	jr z, .asm_11a94f
-	cp $0
+	cp $0  ; TX_START
+	jr z, .normal_text_copy ; .asm_11a92c
+	cp $50 ; "@"
 	jr z, .asm_11a92c
-	cp $50
-	jr z, .asm_11a92c
-	cp $1
+	cp $1  ; TX_RAM
 	jr z, .asm_11a941
 	ld [de], a
 	inc de
 	jr .asm_11a92c
+
+.normal_text_copy
+	ld a, [hli]
+	cp "@"
+	jr z, .asm_11a92c
+	cp "<DONE>"
+	jr z, .asm_11a94f
+	ld [de], a ; 没有带 <DONE> 的汉字编码，因此直接做简易替换
+	inc de
+	jr .normal_text_copy
 
 .asm_11a941
 	ld a, [hli]
@@ -5303,7 +5313,7 @@ Function11a90f:
 .asm_11a945
 	ld a, [bc]
 	inc bc
-	cp $50
+	cp $50 ; "@"
 	jr z, .asm_11a92c
 	ld [de], a
 	inc de
@@ -5352,24 +5362,43 @@ Function11a971:
 	ld a, [de]
 	inc de
 	ld [hli], a
+	and a
+	jr z, .singlechar
+	cp DFS_CODE_CONTRL_0
+	jr c, .doublechar
+	cp DFS_CODE_CONTRL_2
+	jr nc, .singlechar
+	bit 3, a
+	jr z, .singlechar
+.doublechar
+	ld a, [de]
+	inc de
+	ld [hli], a
+.singlechar
 	ld a, e
 	ld [wc31b], a
 	ld a, d
 	ld [wc31c], a
-	ld a, $50
+	ld a, $50 ; "@"
 	ld [hl], a
 	ld a, [wc31d]
 	ld l, a
 	ld a, [wc31e]
 	ld h, a
 	ld de, wcd8d
+	ld a, [wDFSCombineLevel]
+	inc a
+	ld [wDFSCombineLevel], a
 	call PlaceString
+	ld a, [wDFSCombineLevel]
+	dec a
+	ld [wDFSCombineLevel], a
 	ld a, c
 	ld [wc31d], a
 	ld a, b
 	ld [wc31e], a
 	ld a, [wcd8d]
-	cp $50
+	cp $50 ; "@"
 	jr nz, .asm_11a9bf
 	xor a
 	ld [wc31a], a
@@ -6027,12 +6056,12 @@ MenuHeader_11afe8:
 	db 0 ; default option
 
 String_11aff0:
-	db   "この　じょうけんで"
+	db   "この<　>じょうけんで"
 	next "よろしいですか?@"
 
 String_11b003:
 	db   "こうかんを"
-	next "ちゅうししますか？@"
+	next "ちゅうししますか<？>@"
 
 MenuHeader_11b013:
 	db MENU_BACKUP_TILES ; flags
@@ -6111,8 +6140,8 @@ Function11b03d:
 	call CopyBytes
 	ret
 
-.MaleString: db "オスの　"
-.FemaleString: db "メスの　"
+.MaleString: db "オスの<　>"
+.FemaleString: db "メスの<　>"
 
 Function11b082:
 	call Function11b242
@@ -6561,7 +6590,7 @@ String_11b303:
 	db "ほしい#@"
 
 String_11b308:
-	db "　　　　　@"
+	db "<　><　><　><　><　>@"
 
 String_11b30e:
 	db "みはっけん@"

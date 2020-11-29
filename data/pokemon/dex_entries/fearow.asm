@@ -1,10 +1,7 @@
-	db "BEAK@" ; species name
-	dw 311, 840 ; height, weight
+	db "鸟嘴@" ; species name
+	dbw 12, 380 ; height, weight
 
-	db   "It uses its long"
-	next "beak to attack. It"
-	next "has a surprisingly"
+	db   "用长长的喙进行攻击。"
+	next "攻击范围远超想象，"
+	next "所以一定要当心。@"
 
-	page "long reach, so it"
-	next "must be treated"
-	next "with caution.@"

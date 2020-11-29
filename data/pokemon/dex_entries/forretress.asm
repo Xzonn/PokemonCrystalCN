@@ -1,10 +1,7 @@
-	db "BAGWORM@" ; species name
-	dw 311, 2770 ; height, weight
+	db "蓑衣虫@" ; species name
+	dbw 12, 1258 ; height, weight
 
-	db   "Usually found"
-	next "hanging on to a"
-	next "fat tree trunk. It"
+	db   "一直附着在粗壮的树干上。"
+	next "感到周围有动静的时候，"
+	next "就会射出外壳的碎片。@"
 
-	page "shoots out bits of"
-	next "its shell when it"
-	next "sees action.@"

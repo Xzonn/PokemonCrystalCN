@@ -1,10 +1,7 @@
-	db "SLEEPING@" ; species name
-	dw 611, 10140 ; height, weight
+	db "瞌睡@" ; species name
+	dbw 21, 4600 ; height, weight
 
-	db   "This #MON's"
-	next "stomach is so"
-	next "strong, even"
+	db   "拥有结实的胃，"
+	next "不管食物发霉还是腐烂，"
+	next "都不会把肚子吃坏。@"
 
-	page "eating moldy or"
-	next "rotten food will"
-	next "not affect it.@"

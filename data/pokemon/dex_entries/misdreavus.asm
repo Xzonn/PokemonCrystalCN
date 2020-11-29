@@ -1,10 +1,7 @@
-	db "SCREECH@" ; species name
-	dw 204, 20 ; height, weight
+	db "夜啼@" ; species name
+	dbw 7, 10 ; height, weight
 
-	db   "It loves to watch"
-	next "people it's scar-"
-	next "ed. It frightens"
+	db   "特别喜欢人被吓到的样子，"
+	next "因此会突然出现"
+	next "并发出哭喊般的声音。@"
 
-	page "them by screaming"
-	next "loudly or appear-"
-	next "ing suddenly.@"

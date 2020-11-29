@@ -1,10 +1,7 @@
-	db "LITTLE BIRD@" ; species name
-	dw 8, 40 ; height, weight
+	db "小鸟@" ; species name
+	dbw 2, 20 ; height, weight
 
-	db   "It is extremely"
-	next "good at climbing"
-	next "tree trunks and"
+	db   "可以灵活地爬上树干，"
+	next "比较喜欢在枝头啄食"
+	next "刚长出来的树木嫩芽。@"
 
-	page "likes to eat the"
-	next "new sprouts on"
-	next "the trees.@"

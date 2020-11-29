@@ -1,10 +1,7 @@
-	db "FLYSCORPIO@" ; species name
-	dw 307, 1430 ; height, weight
+	db "飞蝎@" ; species name
+	dbw 11, 648 ; height, weight
 
-	db   "It builds its nest"
-	next "on a steep cliff."
-	next "When it is done"
+	db   "会在陡峭的岩壁上筑巢。"
+	next "每次滑翔之后"
+	next "都会飞跳起来返回巢穴。@"
 
-	page "gliding, it hops"
-	next "along the ground"
-	next "back to its nest.@"

@@ -1,10 +1,7 @@
-	db "BAT@" ; species name
-	dw 503, 1210 ; height, weight
+	db "蝙蝠@" ; species name
+	dbw 16, 550 ; height, weight
 
-	db   "When it plunges"
-	next "its fangs into its"
-	next "prey, it instantly"
+	db   "一旦将尖牙刺进猎物的"
+	next "身体里，就会在一瞬间"
+	next "吸走300毫升的血液。@"
 
-	page "draws and gulps"
-	next "down more than ten"
-	next "ounces of blood.@"

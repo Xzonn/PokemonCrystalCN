@@ -1,10 +1,7 @@
-	db "PATIENT@" ; species name
-	dw 403, 630 ; height, weight
+	db "忍耐@" ; species name
+	dbw 13, 285 ; height, weight
 
-	db   "In order to con-"
-	next "ceal its black"
-	next "tail, it lives in"
+	db   "为了把黑色的尾巴藏起来"
+	next "才会住在阴暗的洞窟中，"
+	next "在夜晚到来之前一动不动。@"
 
-	page "a dark cave and"
-	next "only moves about"
-	next "at night.@"

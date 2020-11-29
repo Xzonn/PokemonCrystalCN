@@ -1,10 +1,7 @@
-	db "OWL@" ; species name
-	dw 204, 470 ; height, weight
+	db "猫头鹰@" ; species name
+	dbw 7, 212 ; height, weight
 
-	db   "It begins to hoot"
-	next "at the same time"
-	next "every day. Some"
+	db   "每隔一定的时间就会"
+	next "啼叫起来，有的训练家"
+	next "会拿它来代替时钟。@"
 
-	page "trainers use them"
-	next "in place of"
-	next "clocks.@"

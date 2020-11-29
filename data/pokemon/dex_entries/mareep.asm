@@ -1,10 +1,7 @@
-	db "WOOL@" ; species name
-	dw 200, 170 ; height, weight
+	db "绵毛@" ; species name
+	dbw 6, 78 ; height, weight
 
-	db   "It stores lots of"
-	next "air in its soft"
-	next "fur, allowing it"
+	db   "蓬松的体毛里储存着"
+	next "大量的空气，"
+	next "因此拥有冬暖夏凉的体质。@"
 
-	page "to stay cool in"
-	next "summer and warm"
-	next "in winter.@"

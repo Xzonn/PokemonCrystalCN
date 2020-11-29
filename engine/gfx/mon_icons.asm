@@ -169,7 +169,7 @@ InitPartyMenuIcon:
 	add a
 	add a
 	add a
-	add $1c
+	add $1a
 	ld d, a
 ; x coord
 	ld e, $10
@@ -201,7 +201,7 @@ SetPartyMonIconAnimSpeed:
 
 .getspeed
 	farcall PlacePartymonHPBar
-	call GetHPPal
+	call GetShortHPPal
 	ld e, d
 	ld d, 0
 	ld hl, .speeds
@@ -235,7 +235,7 @@ MoveList_InitAnimatedMonIcon:
 	xor a
 	call GetIconGFX
 	ld d, 3 * 8 + 2 ; depixel 3, 4, 2, 4
-	ld e, 4 * 8 + 4
+	ld e, 3 * 8 ; 4 * 8 + 4
 	ld a, SPRITE_ANIM_INDEX_PARTY_MON
 	call _InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID

@@ -1,10 +1,7 @@
-	db "LEAF@" ; species name
-	dw 211, 140 ; height, weight
+	db "叶子@" ; species name
+	dbw 9, 64 ; height, weight
 
-	db   "It loves to bask"
-	next "in the sunlight."
-	next "It uses the leaf"
+	db   "特别喜欢沐浴阳光。"
+	next "会用头上的叶子"
+	next "探寻温暖的地方。@"
 
-	page "on its head to"
-	next "seek out warm"
-	next "places.@"

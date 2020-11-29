@@ -72,17 +72,17 @@ GoldenrodVendingMachine:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 2, SCREEN_WIDTH - 1, TEXTBOX_Y - 1
+	menu_coords 0, 2, 15, TEXTBOX_Y - 1
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
-	db "FRESH WATER  ¥200@"
-	db "SODA POP     ¥300@"
-	db "LEMONADE     ¥350@"
-	db "CANCEL@"
+	db "美味之水   200¥@"
+	db "劲爽汽水   300¥@"
+	db "果汁牛奶   350¥@"
+	db "取消@"
 
 GoldenrodDeptStore6FLassScript:
 	jumptextfaceplayer GoldenrodDeptStore6FLassText

@@ -52,7 +52,7 @@ MainMenu:
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 16, 7
+	menu_coords 0, 0, 14, 7
 	dw .MenuData
 	db 1 ; default option
 
@@ -65,14 +65,14 @@ MainMenu:
 
 .Strings:
 ; entries correspond to MAINMENUITEM_* constants
-	db "CONTINUE@"
-	db "NEW GAME@"
-	db "OPTION@"
-	db "MYSTERY GIFT@"
-	db "MOBILE@"
-	db "MOBILE STUDIUM@"
+	db "继续游戏@"
+	db "从头开始@"
+	db "重新设置@"
+	db "神秘礼物@"
+	db "手机@"
+	db "手机竞技场@"
 if DEF(_DEBUG)
-	db "DEBUG ROOM@"
+	db "调试空间@"
 endc
 
 .Jumptable:
@@ -280,18 +280,18 @@ MainMenu_PrintCurrentTimeAndDay:
 	ret
 
 .PlaceBox:
-	call CheckRTCStatus
-	and %10000000 ; Day count exceeded 16383
-	jr nz, .TimeFail
+	; call CheckRTCStatus
+	; and %10000000 ; Day count exceeded 16383
+	; jr nz, .TimeFail
 	hlcoord 0, 14
 	ld b, 2
 	ld c, 18
 	call Textbox
 	ret
 
-.TimeFail:
-	call SpeechTextbox
-	ret
+; .TimeFail:
+; 	call SpeechTextbox
+; 	ret
 
 .PlaceTime:
 	ld a, [wSaveFileExists]
@@ -303,31 +303,38 @@ MainMenu_PrintCurrentTimeAndDay:
 	call UpdateTime
 	call GetWeekday
 	ld b, a
-	decoord 1, 15
+	decoord 1, 16
 	call .PrintDayOfWeek
-	decoord 4, 16
+	decoord 7, 16
 	ldh a, [hHours]
 	ld c, a
 	farcall PrintHour
-	ld [hl], ":"
-	inc hl
+	; ld [hl], ":"
+	; inc hl
+	ld de, .hour
+	call PlaceString
+	ld l, c
+	ld h, b
 	ld de, hMinutes
 	lb bc, PRINTNUM_LEADINGZEROS | 1, 2
 	call PrintNum
+	ld de, .min
+	call PlaceString
 	ret
 
+.hour
+	db "时@"
 .min
-; unused
-	db "min.@"
+	db "分@"
 
 .PrintTimeNotSet:
-	hlcoord 1, 14
+	hlcoord 1, 16
 	ld de, .TimeNotSet
 	call PlaceString
 	ret
 
 .TimeNotSet:
-	db "TIME NOT SET@"
+	db "时钟的时间 不明@"
 
 .MainMenuTimeUnknownText:
 	text_far _MainMenuTimeUnknownText
@@ -341,23 +348,25 @@ MainMenu_PrintCurrentTimeAndDay:
 	ld d, h
 	ld e, l
 	pop hl
+	push de
+	ld de, .Day
 	call PlaceString
 	ld h, b
 	ld l, c
-	ld de, .Day
+	pop de
 	call PlaceString
 	ret
 
 .Days:
-	db "SUN@"
-	db "MON@"
-	db "TUES@"
-	db "WEDNES@"
-	db "THURS@"
-	db "FRI@"
-	db "SATUR@"
+	db "日@"
+	db "一@"
+	db "二@"
+	db "三@"
+	db "四@"
+	db "五@"
+	db "六@"
 .Day:
-	db "DAY@"
+	db "星期@"
 
 ClearTilemapEtc:
 	xor a

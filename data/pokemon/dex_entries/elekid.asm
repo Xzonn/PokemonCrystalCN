@@ -1,10 +1,7 @@
-	db "ELECTRIC@" ; species name
-	dw 200, 520 ; height, weight
+	db "电气@" ; species name
+	dbw 6, 235 ; height, weight
 
-	db   "It loves violent"
-	next "thunder. The space"
-	next "between its horns"
+	db   "最喜欢狂暴的雷电。"
+	next "在体内储存电气的时候，"
+	next "两角间会发出苍白色的光。@"
 
-	page "flickers bluish-"
-	next "white when it is"
-	next "charging energy.@"

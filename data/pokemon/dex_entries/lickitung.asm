@@ -1,10 +1,7 @@
-	db "LICKING@" ; species name
-	dw 311, 1440 ; height, weight
+	db "舔舔@" ; species name
+	dbw 12, 655 ; height, weight
 
-	db   "It has a tongue"
-	next "that is over 6'6''"
-	next "long. It uses this"
+	db   "会用超过2米的舌头"
+	next "舔遍自己的身体，"
+	next "靠这种方式来自我清洁。@"
 
-	page "long tongue to"
-	next "lick its body"
-	next "clean.@"

@@ -1,10 +1,7 @@
-	db "MAGNET@" ; species name
-	dw 303, 1320 ; height, weight
+	db "磁铁@" ; species name
+	dbw 10, 600 ; height, weight
 
-	db   "When many"
-	next "MAGNETON gather"
-	next "together, the"
+	db   "如果大量地出现三合一磁怪"
+	next "就会引起磁暴，"
+	next "会对通讯设备产生干扰。@"
 
-	page "resulting magnetic"
-	next "storm disrupts"
-	next "radio waves.@"

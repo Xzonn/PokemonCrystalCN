@@ -1,10 +1,7 @@
-	db "BIVALVE@" ; species name
-	dw 411, 2920 ; height, weight
+	db "双壳贝@" ; species name
+	dbw 15, 1325 ; height, weight
 
-	db   "Even a missile"
-	next "can't break the"
-	next "spikes it uses to"
+	db   "它的壳用燃烧弹都炸不穿，"
+	next "而用来扎对手的尖刺"
+	next "比它的壳还要硬得多。@"
 
-	page "stab opponents."
-	next "They're even hard-"
-	next "er than its shell.@"

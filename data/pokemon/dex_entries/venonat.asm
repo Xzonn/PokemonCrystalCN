@@ -1,10 +1,7 @@
-	db "INSECT@" ; species name
-	dw 303, 660 ; height, weight
+	db "昆虫@" ; species name
+	dbw 10, 300 ; height, weight
 
-	db   "The small bugs it"
-	next "eats appear only"
-	next "at night, so it"
+	db   "它捕食的小虫子"
+	next "只在夜间活动，夜幕之前"
+	next "它会在树洞等地方睡觉。@"
 
-	page "sleeps in a hole"
-	next "in a tree until"
-	next "night falls.@"

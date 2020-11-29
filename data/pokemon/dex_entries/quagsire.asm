@@ -1,10 +1,7 @@
-	db "WATER FISH@" ; species name
-	dw 407, 1650 ; height, weight
+	db "水鱼@" ; species name
+	dbw 14, 750 ; height, weight
 
-	db   "Its body is always"
-	next "slimy. It often"
-	next "bangs its head on"
+	db   "身体总是黏糊糊的。"
+	next "每次游泳都会撞到河床，"
+	next "但是它并不在意。@"
 
-	page "the river bottom"
-	next "as it swims but"
-	next "seems not to care.@"

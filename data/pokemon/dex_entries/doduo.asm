@@ -1,10 +1,7 @@
-	db "TWIN BIRD@" ; species name
-	dw 407, 860 ; height, weight
+	db "两头鸟@" ; species name
+	dbw 14, 392 ; height, weight
 
-	db   "It lives on a"
-	next "grassy plain where"
-	next "it can see a long"
+	db   "住在视野辽阔的草原里。"
+	next "发现敌人的话，就会立刻以"
+	next "100公里的时速跑走。@"
 
-	page "way. If it sees an"
-	next "enemy, it runs"
-	next "away at 60 mph.@"

@@ -1,10 +1,7 @@
-	db "LONELY@" ; species name
-	dw 104, 140 ; height, weight
+	db "孤独@" ; species name
+	dbw 4, 65 ; height, weight
 
-	db   "It lost its mother"
-	next "after its birth."
-	next "It wears its"
+	db   "出生之后立刻把"
+	next "过世母亲的头骨戴在头上，"
+	next "绝不让人看到真正的面目。@"
 
-	page "mother's skull,"
-	next "never revealing"
-	next "its true face.@"

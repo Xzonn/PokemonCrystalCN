@@ -226,6 +226,8 @@ Pokedex_InitMainScreen:
 	hlcoord 0, 17
 	ld de, String_START_SEARCH
 	call Pokedex_PlaceString
+	ld de, DFSCamouflageText2
+	call Pokedex_DFSCamouflage
 	ld a, 7
 	ld [wDexListingHeight], a
 	call Pokedex_PrintListing
@@ -253,6 +255,8 @@ Pokedex_InitMainScreen:
 	call Pokedex_GetSGBLayout
 	call Pokedex_UpdateCursorOAM
 	farcall DrawPokedexListWindow
+	ld de, DFSCamouflageText2
+	call Pokedex_DFSCamouflage
 	hlcoord 0, 17
 	ld de, String_START_SEARCH
 	call Pokedex_PlaceString
@@ -420,14 +424,14 @@ Pokedex_ReinitDexEntryScreen:
 	ret
 
 DexEntryScreen_ArrowCursorData:
-	db D_RIGHT | D_LEFT, 4
-	dwcoord 1, 17  ; PAGE
-	dwcoord 6, 17  ; AREA
-	dwcoord 11, 17 ; CRY
-	dwcoord 15, 17 ; PRNT
+	db D_RIGHT | D_LEFT, 3
+	; dwcoord 1, 17  ; PAGE
+	dwcoord 2, 17  ; AREA
+	dwcoord 8, 17 ; CRY
+	dwcoord 14, 17 ; PRNT
 
 DexEntryScreen_MenuActionJumptable:
-	dw Pokedex_Page
+	; dw Pokedex_Page
 	dw .Area
 	dw .Cry
 	dw .Print
@@ -723,8 +727,14 @@ Pokedex_InitSearchResultsScreen:
 	call ByteFill
 	call Pokedex_SetBGMapMode4
 	call Pokedex_ResetBGMapMode
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	farcall DrawPokedexSearchResultsWindow
 	call Pokedex_PlaceSearchResultsTypeStrings
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
+	ld de, DFSCamouflageText1
+	call Pokedex_DFSCamouflage
 	ld a, 4
 	ld [wDexListingHeight], a
 	call Pokedex_PrintListing
@@ -739,8 +749,14 @@ Pokedex_InitSearchResultsScreen:
 	ldh [hWY], a
 	call WaitBGMap
 	call Pokedex_ResetBGMapMode
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	farcall DrawPokedexSearchResultsWindow
 	call Pokedex_PlaceSearchResultsTypeStrings
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
+	ld de, DFSCamouflageText1
+	call Pokedex_DFSCamouflage
 	call Pokedex_UpdateSearchResultsCursorOAM
 	ld a, -1
 	ld [wCurPartySpecies], a
@@ -1076,15 +1092,19 @@ Pokedex_DrawMainScreenBG:
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
+	call ClearFullVramNo
 	hlcoord 0, 0
 	lb bc, 7, 7
 	call Pokedex_PlaceBorder
 	hlcoord 0, 9
 	lb bc, 6, 7
 	call Pokedex_PlaceBorder
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	hlcoord 1, 11
 	ld de, String_SEEN
-	call Pokedex_PlaceString
+	; call Pokedex_PlaceString
+	call PlaceString
 	ld hl, wPokedexSeen
 	ld b, wEndPokedexSeen - wPokedexSeen
 	call CountSetBits
@@ -1094,7 +1114,10 @@ Pokedex_DrawMainScreenBG:
 	call PrintNum
 	hlcoord 1, 14
 	ld de, String_OWN
-	call Pokedex_PlaceString
+	; call Pokedex_PlaceString
+	call PlaceString
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	ld hl, wPokedexCaught
 	ld b, wEndPokedexCaught - wPokedexCaught
 	call CountSetBits
@@ -1125,17 +1148,18 @@ Pokedex_DrawMainScreenBG:
 	ret
 
 String_SEEN:
-	db "SEEN", -1
+	db "发现@"
 String_OWN:
-	db "OWN", -1
+	db "捉到@"
 String_SELECT_OPTION:
-	db $3b, $48, $49, $4a, $44, $45, $46, $47 ; SELECT > OPTION
+	db $3b, $47 ,$48, $49, $44, $45, $46 ,$3c; SELECT > OPTION
 	; fallthrough
 String_START_SEARCH:
-	db $3c, $3b, $41, $42, $43, $4b, $4c, $4d, $4e, $3c, -1 ; START > SEARCH
+	db $32, $32, $32, $3b, $41, $42, $43, $4a, $4b, $4c, $3c, -1 ; START > SEARCH
 
 Pokedex_DrawDexEntryScreenBG:
 	call Pokedex_FillBackgroundColor2
+	call ClearFullVramNo
 	hlcoord 0, 0
 	lb bc, 15, 18
 	call Pokedex_PlaceBorder
@@ -1146,7 +1170,7 @@ Pokedex_DrawDexEntryScreenBG:
 	ld b, 15
 	call Pokedex_FillColumn
 	ld [hl], $39
-	hlcoord 1, 10
+	hlcoord 1, 9
 	ld bc, 19
 	ld a, $61
 	call ByteFill
@@ -1154,11 +1178,17 @@ Pokedex_DrawDexEntryScreenBG:
 	ld bc, 18
 	ld a, " "
 	call ByteFill
-	hlcoord 9, 7
+	hlcoord 9, 6
 	ld de, .Height
+	call PlaceString
+	hlcoord 14, 6
+	ld de, .Height2
 	call Pokedex_PlaceString
-	hlcoord 9, 9
+	hlcoord 9, 8
 	ld de, .Weight
+	call PlaceString
+	hlcoord 14, 8
+	ld de, .Weight2
 	call Pokedex_PlaceString
 	hlcoord 0, 17
 	ld de, .MenuItems
@@ -1168,15 +1198,23 @@ Pokedex_DrawDexEntryScreenBG:
 
 .Unused:
 	db $5c, $5d, -1 ; No.
-.Height:
-	db "HT  ?", $5e, "??", $5f, -1 ; HT  ?'??"
-.Weight:
-	db "WT   ???lb", -1 ; WT   ???lb
+.Height: ; 40852
+	db "身高@"
+.Height2:
+	db $6f, $6f, $6f, $5e, -1 ; ???m
+.Weight: ; 4085c
+	db "体重@"
+.Weight2:
+	db $6f, $6f, $6f, $5f, $60, -1 ; ???kg
 .MenuItems:
-	db $3b, " PAGE AREA CRY PRNT", -1
+	db $32, $3b, $7f, $56, $57, $58 ;分布
+	db $7f, $7f, $7f, $6b, $6c, $6d ;叫声
+	db $7f, $7f, $7f, $4d, $4e, $6e ;打印
+	db $7f, $3c, $32, -1
 
 Pokedex_DrawOptionScreenBG:
 	call Pokedex_FillBackgroundColor2
+	call ClearFullVramNo
 	hlcoord 0, 2
 	lb bc, 8, 18
 	call Pokedex_PlaceBorder
@@ -1198,29 +1236,30 @@ Pokedex_DrawOptionScreenBG:
 	ret
 
 .Title:
-	db $3b, " OPTION ", $3c, -1
+	db $3b, $7f, $44, $45, $46, $7f, $3c, -1 ;设置
 
 .Modes:
-	db   "NEW #DEX MODE"
-	next "OLD #DEX MODE"
-	next "A to Z MODE"
+	db   "新型图鉴模式"
+	next "传统图鉴模式"
+	next "拼音排序模式"
 	db   "@"
 
 .UnownMode:
-	db "UNOWN MODE@"
+	db "未知图腾图鉴@"
 
 Pokedex_DrawSearchScreenBG:
 	call Pokedex_FillBackgroundColor2
+	call ClearFullVramNo
 	hlcoord 0, 2
 	lb bc, 14, 18
 	call Pokedex_PlaceBorder
 	hlcoord 0, 1
 	ld de, .Title
 	call Pokedex_PlaceString
-	hlcoord 8, 4
+	hlcoord 10, 4
 	ld de, .TypeLeftRightArrows
 	call Pokedex_PlaceString
-	hlcoord 8, 6
+	hlcoord 10, 6
 	ld de, .TypeLeftRightArrows
 	call Pokedex_PlaceString
 	hlcoord 3, 4
@@ -1232,34 +1271,42 @@ Pokedex_DrawSearchScreenBG:
 	ret
 
 .Title:
-	db $3b, " SEARCH ", $3c, -1
+	db $3b, $7f, $4a, $4b, $4c, $7f, $3c, -1 ;搜索
 
 .TypeLeftRightArrows:
-	db $3d, "        ", $3e, -1
+	db $3d, "     ", $3e, -1
 
 .Types:
-	db   "TYPE1"
-	next "TYPE2"
+	db   "属性1"
+	next "属性2"
 	db   "@"
 
 .Menu:
-	db   "BEGIN SEARCH!!"
-	next "CANCEL"
+	db   "开始搜索!!"
+	next "取消"
 	db   "@"
 
 Pokedex_DrawSearchResultsScreenBG:
 	call Pokedex_FillBackgroundColor2
+	call ClearFullVramNo
 	hlcoord 0, 0
 	lb bc, 7, 7
 	call Pokedex_PlaceBorder
 	hlcoord 0, 11
 	lb bc, 5, 18
 	call Pokedex_PlaceBorder
-	hlcoord 1, 12
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
+	hlcoord 1, 13
 	ld de, .BottomWindowText
 	call PlaceString
+	hlcoord 5, 14
+	ld de, .BottomTypeText
+	call PlaceString
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	ld de, wDexSearchResultCount
-	hlcoord 1, 16
+	hlcoord 5, 16
 	lb bc, 1, 3
 	call PrintNum
 	hlcoord 8, 0
@@ -1278,15 +1325,16 @@ Pokedex_DrawSearchResultsScreenBG:
 	ret
 
 .BottomWindowText:
-	db   "SEARCH RESULTS"
-	next "  TYPE"
-	next "    FOUND!"
-	db   "@"
+	db "搜索@"
+.BottomTypeText:
+	db "属性@"
 
 Pokedex_PlaceSearchResultsTypeStrings:
 	ld a, [wDexSearchMonType1]
 	hlcoord 0, 14
 	call Pokedex_PlaceTypeString
+	ld h, b
+	ld l, c
 	ld a, [wDexSearchMonType1]
 	ld b, a
 	ld a, [wDexSearchMonType2]
@@ -1294,10 +1342,12 @@ Pokedex_PlaceSearchResultsTypeStrings:
 	jr z, .done
 	cp b
 	jr z, .done
-	hlcoord 2, 15
-	call Pokedex_PlaceTypeString
-	hlcoord 1, 15
+	; hlcoord 2, 15
+	; call Pokedex_PlaceTypeString
+	; hlcoord 1, 15
 	ld [hl], "/"
+	inc hl
+	call Pokedex_PlaceTypeString
 .done
 	ret
 
@@ -1415,10 +1465,12 @@ Pokedex_PlaceString:
 
 Pokedex_PlaceBorder:
 	push hl
+	call ResetVramNo
 	ld a, $33
 	ld [hli], a
 	ld d, $34
 	call .FillRow
+	call ResetVramNo
 	ld a, $35
 	ld [hl], a
 	pop hl
@@ -1426,10 +1478,12 @@ Pokedex_PlaceBorder:
 	add hl, de
 .loop
 	push hl
+	call ResetVramNo
 	ld a, $36
 	ld [hli], a
 	ld d, $7f
 	call .FillRow
+	call ResetVramNo
 	ld a, $37
 	ld [hl], a
 	pop hl
@@ -1437,10 +1491,12 @@ Pokedex_PlaceBorder:
 	add hl, de
 	dec b
 	jr nz, .loop
+	call ResetVramNo
 	ld a, $38
 	ld [hli], a
 	ld d, $39
 	call .FillRow
+	call ResetVramNo
 	ld a, $3a
 	ld [hl], a
 	ret
@@ -1451,6 +1507,7 @@ Pokedex_PlaceBorder:
 	ld a, e
 	and a
 	ret z
+	call ResetVramNo
 	ld a, d
 	ld [hli], a
 	dec e
@@ -1488,6 +1545,11 @@ Pokedex_PrintListing:
 	ld e, l
 	ld d, h
 	hlcoord 0, 2
+	ld a, [wCurDexMode]
+	cp DEXMODE_OLD
+	jr z, .okay2
+	inc hl
+.okay2
 	ld a, [wDexListingHeight]
 .loop
 	push af
@@ -1524,34 +1586,53 @@ Pokedex_PrintListing:
 Pokedex_PrintNumberIfOldMode:
 	ld a, [wCurDexMode]
 	cp DEXMODE_OLD
-	jr z, .printnum
-	ret
+	; jr z, .printnum
+	; ret
+	ret nz
 
-.printnum
-	push hl
-	ld de, -SCREEN_WIDTH
-	add hl, de
+; .printnum
+	; push hl
+	; ld de, -SCREEN_WIDTH
+	; add hl, de
 	ld de, wTempSpecies
 	lb bc, PRINTNUM_LEADINGZEROS | 1, 3
 	call PrintNum
-	pop hl
+	; pop hl
 	ret
 
 Pokedex_PlaceCaughtSymbolIfCaught:
 	call Pokedex_CheckCaught
 	jr nz, .place_caught_symbol
+	ld a, [wCurDexMode]
+	cp DEXMODE_OLD
+	ret z
 	inc hl
 	ret
 
 .place_caught_symbol
+	ld a, [wCurDexMode]
+	cp DEXMODE_OLD
+	jr z, .olddex
 	ld a, $4f
 	ld [hli], a
+	ret
+
+.olddex
+	push hl
+	ld de, -SCREEN_WIDTH - 1
+	add hl, de
+	ld [hl], $4f
+	pop hl
 	ret
 
 Pokedex_PlaceDefaultStringIfNotSeen:
 	call Pokedex_CheckSeen
 	ret nz
+	ld a, [wCurDexMode]
+	cp DEXMODE_OLD
+	jr z, .okay
 	inc hl
+.okay
 	ld de, .NameNotSeen
 	call PlaceString
 	scf
@@ -1729,20 +1810,20 @@ Pokedex_DisplayModeDescription:
 	dw .UnownMode
 
 .NewMode:
-	db   "<PK><MN> are listed by"
-	next "evolution type.@"
+	db   "将宝可梦按照"
+	next "进化关系的基准表示。@"
 
 .OldMode:
-	db   "<PK><MN> are listed by"
-	next "official type.@"
+	db   "将宝可梦按照"
+	next "正式的编号顺序表示。@"
 
 .ABCMode:
-	db   "<PK><MN> are listed"
-	next "alphabetically.@"
+	db   "将宝可梦按照"
+	next "拼音的顺序表示。@"
 
 .UnownMode:
-	db   "UNOWN are listed"
-	next "in catching order.@"
+	db   "将未知图腾按照"
+	next "捕捉的顺序记录。@"
 
 Pokedex_DisplayChangingModesMessage:
 	xor a
@@ -1764,8 +1845,7 @@ Pokedex_DisplayChangingModesMessage:
 	ret
 
 String_ChangingModesPleaseWait:
-	db   "Changing modes."
-	next "Please wait.@"
+	db   "正在切换模式!!@"
 
 Pokedex_UpdateSearchMonType:
 	ld a, [wDexArrowCursorPosIndex]
@@ -1841,15 +1921,15 @@ Pokedex_NextSearchMonType:
 Pokedex_PlaceSearchScreenTypeStrings:
 	xor a
 	ldh [hBGMapMode], a
-	hlcoord 9, 3
-	lb bc, 4, 8
+	hlcoord 11, 3
+	lb bc, 4, 5
 	ld a, " "
 	call Pokedex_FillBox
 	ld a, [wDexSearchMonType1]
-	hlcoord 9, 4
+	hlcoord 11, 4
 	call Pokedex_PlaceTypeString
 	ld a, [wDexSearchMonType2]
-	hlcoord 9, 6
+	hlcoord 11, 6
 	call Pokedex_PlaceTypeString
 	ld a, $1
 	ldh [hBGMapMode], a
@@ -1860,7 +1940,7 @@ Pokedex_PlaceTypeString:
 	ld e, a
 	ld d, 0
 	ld hl, PokedexTypeSearchStrings
-rept 9
+rept 7
 	add hl, de
 endr
 	ld e, l
@@ -1964,8 +2044,8 @@ Pokedex_DisplayTypeNotFoundMessage:
 	ret
 
 .TypeNotFound:
-	db   "The specified type"
-	next "was not found.@"
+	db   "未能找到所指定的"
+	next "属性。@"
 
 Pokedex_UpdateCursorOAM:
 	ld a, [wCurDexMode]
@@ -1977,69 +2057,87 @@ Pokedex_UpdateCursorOAM:
 
 Pokedex_PutOldModeCursorOAM:
 	ld hl, .CursorOAM
-	ld a, [wDexListingCursor]
-	or a
-	jr nz, .okay
-	ld hl, .CursorAtTopOAM
-.okay
+	; ld a, [wDexListingCursor]
+	; or a
+	; jr nz, .okay
+	; ld hl, .CursorAtTopOAM
+; .okay
 	call Pokedex_LoadCursorOAM
 	ret
 
 .CursorOAM:
-	dbsprite  9,  3, -1,  0, $30, 7
-	dbsprite  9,  2, -1,  0, $31, 7
-	dbsprite 10,  2, -1,  0, $32, 7
-	dbsprite 11,  2, -1,  0, $32, 7
-	dbsprite 12,  2, -1,  0, $32, 7
-	dbsprite 13,  2, -1,  0, $33, 7
-	dbsprite 16,  2, -2,  0, $33, 7 | X_FLIP
-	dbsprite 17,  2, -2,  0, $32, 7 | X_FLIP
-	dbsprite 18,  2, -2,  0, $32, 7 | X_FLIP
-	dbsprite 19,  2, -2,  0, $32, 7 | X_FLIP
-	dbsprite 20,  2, -2,  0, $31, 7 | X_FLIP
-	dbsprite 20,  3, -2,  0, $30, 7 | X_FLIP
-	dbsprite  9,  4, -1,  0, $30, 7 | Y_FLIP
-	dbsprite  9,  5, -1,  0, $31, 7 | Y_FLIP
-	dbsprite 10,  5, -1,  0, $32, 7 | Y_FLIP
-	dbsprite 11,  5, -1,  0, $32, 7 | Y_FLIP
-	dbsprite 12,  5, -1,  0, $32, 7 | Y_FLIP
-	dbsprite 13,  5, -1,  0, $33, 7 | Y_FLIP
-	dbsprite 16,  5, -2,  0, $33, 7 | X_FLIP | Y_FLIP
-	dbsprite 17,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 18,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 19,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 20,  5, -2,  0, $31, 7 | X_FLIP | Y_FLIP
-	dbsprite 20,  4, -2,  0, $30, 7 | X_FLIP | Y_FLIP
+	dbsprite 12,  3,  2,  2, $30, 0
+	dbsprite 13,  3,  2,  2, $31, 0
+	dbsprite 14,  3,  2,  2, $31, 0
+	dbsprite 15,  3,  2,  2, $31, 0
+	dbsprite 16,  3,  2,  2, $31, 0
+	dbsprite 17,  3,  2,  2, $31, 0
+	dbsprite 18,  3,  2,  2, $31, 0
+	dbsprite 19,  3, -1,  2, $32, 0
+	dbsprite 12,  4,  2,  2, $33, 0
+	dbsprite 13,  4,  2,  2, $34, 0
+	dbsprite 14,  4,  2,  2, $34, 0
+	dbsprite 15,  4,  2,  2, $34, 0
+	dbsprite 16,  4,  2,  2, $34, 0
+	dbsprite 17,  4,  2,  2, $34, 0
+	dbsprite 18,  4,  2,  2, $34, 0
+	dbsprite 19,  4, -1,  2, $35, 0
 	db -1
 
-.CursorAtTopOAM:
-; OAM data for when the cursor is at the top of the list. The tiles at the top
-; are cut off so they don't show up outside the list area.
-	dbsprite  9,  3, -1,  0, $30, 7
-	dbsprite  9,  2, -1,  0, $34, 7
-	dbsprite 10,  2, -1,  0, $35, 7
-	dbsprite 11,  2, -1,  0, $35, 7
-	dbsprite 12,  2, -1,  0, $35, 7
-	dbsprite 13,  2, -1,  0, $36, 7
-	dbsprite 16,  2, -2,  0, $36, 7 | X_FLIP
-	dbsprite 17,  2, -2,  0, $35, 7 | X_FLIP
-	dbsprite 18,  2, -2,  0, $35, 7 | X_FLIP
-	dbsprite 19,  2, -2,  0, $35, 7 | X_FLIP
-	dbsprite 20,  2, -2,  0, $34, 7 | X_FLIP
-	dbsprite 20,  3, -2,  0, $30, 7 | X_FLIP
-	dbsprite  9,  4, -1,  0, $30, 7 | Y_FLIP
-	dbsprite  9,  5, -1,  0, $31, 7 | Y_FLIP
-	dbsprite 10,  5, -1,  0, $32, 7 | Y_FLIP
-	dbsprite 11,  5, -1,  0, $32, 7 | Y_FLIP
-	dbsprite 12,  5, -1,  0, $32, 7 | Y_FLIP
-	dbsprite 13,  5, -1,  0, $33, 7 | Y_FLIP
-	dbsprite 16,  5, -2,  0, $33, 7 | X_FLIP | Y_FLIP
-	dbsprite 17,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 18,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 19,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 20,  5, -2,  0, $31, 7 | X_FLIP | Y_FLIP
-	dbsprite 20,  4, -2,  0, $30, 7 | X_FLIP | Y_FLIP
-	db -1
+; 	dbsprite  9,  3, -1,  0, $30, 7
+; 	dbsprite  9,  2, -1,  0, $31, 7
+; 	dbsprite 10,  2, -1,  0, $32, 7
+; 	dbsprite 11,  2, -1,  0, $32, 7
+; 	dbsprite 12,  2, -1,  0, $32, 7
+; 	dbsprite 13,  2, -1,  0, $33, 7
+; 	dbsprite 16,  2, -2,  0, $33, 7 | X_FLIP
+; 	dbsprite 17,  2, -2,  0, $32, 7 | X_FLIP
+; 	dbsprite 18,  2, -2,  0, $32, 7 | X_FLIP
+; 	dbsprite 19,  2, -2,  0, $32, 7 | X_FLIP
+; 	dbsprite 20,  2, -2,  0, $31, 7 | X_FLIP
+; 	dbsprite 20,  3, -2,  0, $30, 7 | X_FLIP
+; 	dbsprite  9,  4, -1,  0, $30, 7 | Y_FLIP
+; 	dbsprite  9,  5, -1,  0, $31, 7 | Y_FLIP
+; 	dbsprite 10,  5, -1,  0, $32, 7 | Y_FLIP
+; 	dbsprite 11,  5, -1,  0, $32, 7 | Y_FLIP
+; 	dbsprite 12,  5, -1,  0, $32, 7 | Y_FLIP
+; 	dbsprite 13,  5, -1,  0, $33, 7 | Y_FLIP
+; 	dbsprite 16,  5, -2,  0, $33, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 17,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 18,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 19,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 20,  5, -2,  0, $31, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 20,  4, -2,  0, $30, 7 | X_FLIP | Y_FLIP
+; 	db -1
+
+; .CursorAtTopOAM:
+; ; OAM data for when the cursor is at the top of the list. The tiles at the top
+; ; are cut off so they don't show up outside the list area.
+; 	dbsprite  9,  3, -1,  0, $30, 7
+; 	dbsprite  9,  2, -1,  0, $34, 7
+; 	dbsprite 10,  2, -1,  0, $35, 7
+; 	dbsprite 11,  2, -1,  0, $35, 7
+; 	dbsprite 12,  2, -1,  0, $35, 7
+; 	dbsprite 13,  2, -1,  0, $36, 7
+; 	dbsprite 16,  2, -2,  0, $36, 7 | X_FLIP
+; 	dbsprite 17,  2, -2,  0, $35, 7 | X_FLIP
+; 	dbsprite 18,  2, -2,  0, $35, 7 | X_FLIP
+; 	dbsprite 19,  2, -2,  0, $35, 7 | X_FLIP
+; 	dbsprite 20,  2, -2,  0, $34, 7 | X_FLIP
+; 	dbsprite 20,  3, -2,  0, $30, 7 | X_FLIP
+; 	dbsprite  9,  4, -1,  0, $30, 7 | Y_FLIP
+; 	dbsprite  9,  5, -1,  0, $31, 7 | Y_FLIP
+; 	dbsprite 10,  5, -1,  0, $32, 7 | Y_FLIP
+; 	dbsprite 11,  5, -1,  0, $32, 7 | Y_FLIP
+; 	dbsprite 12,  5, -1,  0, $32, 7 | Y_FLIP
+; 	dbsprite 13,  5, -1,  0, $33, 7 | Y_FLIP
+; 	dbsprite 16,  5, -2,  0, $33, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 17,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 18,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 19,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 20,  5, -2,  0, $31, 7 | X_FLIP | Y_FLIP
+; 	dbsprite 20,  4, -2,  0, $30, 7 | X_FLIP | Y_FLIP
+; 	db -1
 
 Pokedex_PutNewModeABCModeCursorOAM:
 	ld hl, .CursorOAM
@@ -2047,26 +2145,24 @@ Pokedex_PutNewModeABCModeCursorOAM:
 	ret
 
 .CursorOAM:
-	dbsprite  9,  3, -1,  3, $30, 7
-	dbsprite  9,  2, -1,  3, $31, 7
-	dbsprite 10,  2, -1,  3, $32, 7
-	dbsprite 11,  2, -1,  3, $32, 7
-	dbsprite 12,  2, -1,  3, $33, 7
-	dbsprite 16,  2,  0,  3, $33, 7 | X_FLIP
-	dbsprite 17,  2,  0,  3, $32, 7 | X_FLIP
-	dbsprite 18,  2,  0,  3, $32, 7 | X_FLIP
-	dbsprite 19,  2,  0,  3, $31, 7 | X_FLIP
-	dbsprite 19,  3,  0,  3, $30, 7 | X_FLIP
-	dbsprite  9,  4, -1,  3, $30, 7 | Y_FLIP
-	dbsprite  9,  5, -1,  3, $31, 7 | Y_FLIP
-	dbsprite 10,  5, -1,  3, $32, 7 | Y_FLIP
-	dbsprite 11,  5, -1,  3, $32, 7 | Y_FLIP
-	dbsprite 12,  5, -1,  3, $33, 7 | Y_FLIP
-	dbsprite 16,  5,  0,  3, $33, 7 | X_FLIP | Y_FLIP
-	dbsprite 17,  5,  0,  3, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 18,  5,  0,  3, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 19,  5,  0,  3, $31, 7 | X_FLIP | Y_FLIP
-	dbsprite 19,  4,  0,  3, $30, 7 | X_FLIP | Y_FLIP
+	dbsprite 10,  3, -1,  2, $30, 0
+	dbsprite 11,  3, -1,  2, $31, 0
+	dbsprite 12,  3, -1,  2, $31, 0
+	dbsprite 13,  3, -1,  2, $31, 0
+	dbsprite 14,  3, -1,  2, $31, 0
+	dbsprite 15,  3, -1,  2, $31, 0
+	dbsprite 16,  3, -1,  2, $31, 0
+	dbsprite 17,  3, -1,  2, $31, 0
+	dbsprite 18,  3, -1,  2, $32, 0
+	dbsprite 10,  4, -1,  2, $33, 0
+	dbsprite 11,  4, -1,  2, $34, 0
+	dbsprite 12,  4, -1,  2, $34, 0
+	dbsprite 13,  4, -1,  2, $34, 0
+	dbsprite 14,  4, -1,  2, $34, 0
+	dbsprite 15,  4, -1,  2, $34, 0
+	dbsprite 16,  4, -1,  2, $34, 0
+	dbsprite 17,  4, -1,  2, $34, 0
+	dbsprite 18,  4, -1,  2, $35, 0
 	db -1
 
 Pokedex_UpdateSearchResultsCursorOAM:
@@ -2078,30 +2174,24 @@ Pokedex_UpdateSearchResultsCursorOAM:
 	ret
 
 .CursorOAM:
-	dbsprite  9,  3, -1,  3, $30, 7
-	dbsprite  9,  2, -1,  3, $31, 7
-	dbsprite 10,  2, -1,  3, $32, 7
-	dbsprite 11,  2, -1,  3, $32, 7
-	dbsprite 12,  2, -1,  3, $32, 7
-	dbsprite 13,  2, -1,  3, $33, 7
-	dbsprite 16,  2, -2,  3, $33, 7 | X_FLIP
-	dbsprite 17,  2, -2,  3, $32, 7 | X_FLIP
-	dbsprite 18,  2, -2,  3, $32, 7 | X_FLIP
-	dbsprite 19,  2, -2,  3, $32, 7 | X_FLIP
-	dbsprite 20,  2, -2,  3, $31, 7 | X_FLIP
-	dbsprite 20,  3, -2,  3, $30, 7 | X_FLIP
-	dbsprite  9,  4, -1,  3, $30, 7 | Y_FLIP
-	dbsprite  9,  5, -1,  3, $31, 7 | Y_FLIP
-	dbsprite 10,  5, -1,  3, $32, 7 | Y_FLIP
-	dbsprite 11,  5, -1,  3, $32, 7 | Y_FLIP
-	dbsprite 12,  5, -1,  3, $32, 7 | Y_FLIP
-	dbsprite 13,  5, -1,  3, $33, 7 | Y_FLIP
-	dbsprite 16,  5, -2,  3, $33, 7 | X_FLIP | Y_FLIP
-	dbsprite 17,  5, -2,  3, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 18,  5, -2,  3, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 19,  5, -2,  3, $32, 7 | X_FLIP | Y_FLIP
-	dbsprite 20,  5, -2,  3, $31, 7 | X_FLIP | Y_FLIP
-	dbsprite 20,  4, -2,  3, $30, 7 | X_FLIP | Y_FLIP
+	dbsprite 10,  3,  2,  2, $30, 0
+	dbsprite 11,  3,  2,  2, $31, 0
+	dbsprite 12,  3,  2,  2, $31, 0
+	dbsprite 13,  3,  2,  2, $31, 0
+	dbsprite 14,  3,  2,  2, $31, 0
+	dbsprite 15,  3,  2,  2, $31, 0
+	dbsprite 16,  3,  2,  2, $31, 0
+	dbsprite 17,  3,  2,  2, $31, 0
+	dbsprite 18,  3,  2,  2, $32, 0
+	dbsprite 10,  4,  2,  2, $33, 0
+	dbsprite 11,  4,  2,  2, $34, 0
+	dbsprite 12,  4,  2,  2, $34, 0
+	dbsprite 13,  4,  2,  2, $34, 0
+	dbsprite 14,  4,  2,  2, $34, 0
+	dbsprite 15,  4,  2,  2, $34, 0
+	dbsprite 16,  4,  2,  2, $34, 0
+	dbsprite 17,  4,  2,  2, $34, 0
+	dbsprite 18,  4,  2,  2, $35, 0
 	db -1
 
 Pokedex_LoadCursorOAM:
@@ -2448,6 +2538,8 @@ Pokedex_LoadGFX:
 
 Pokedex_LoadInvertedFont:
 	call LoadStandardFont
+	ld a, DFS_FONT_STYLE_DEX
+	ld [wDFSFontSytle], a
 	ld hl, vTiles1
 	ld bc, $80 tiles
 
@@ -2527,11 +2619,12 @@ _NewPokedexEntry:
 	ld [wCurPartySpecies], a
 	call Pokedex_DrawDexEntryScreenBG
 	call Pokedex_DrawFootprint
-	hlcoord 0, 17
-	ld [hl], $3b
-	inc hl
+	hlcoord 1, 17
+	; ld [hl], $3b
+	; inc hl
 	ld bc, 19
-	ld a, " "
+	; ld a, " "
+	ld a, $32
 	call ByteFill
 	farcall DisplayDexEntry
 	call EnableLCD
@@ -2544,6 +2637,26 @@ _NewPokedexEntry:
 	ld a, [wCurPartySpecies]
 	call PlayMonCry
 	ret
+
+Pokedex_DFSCamouflage:
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
+	hlcoord 12, 0
+	lb bc, SCREEN_HEIGHT, SCREEN_WIDTH - 12
+	call ClearBox
+	hlcoord 12, 1
+	call PlaceString
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
+	ret
+DFSCamouflageText1:
+	db   "搜索"
+	next "属性"
+	db   "@"
+DFSCamouflageText2:
+	db   "发现"
+	next "捉到"
+	db   "@"
 
 Pokedex_SetBGMapMode3:
 	ld a, $3

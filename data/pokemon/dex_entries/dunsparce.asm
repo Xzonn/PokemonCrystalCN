@@ -1,10 +1,7 @@
-	db "LAND SNAKE@" ; species name
-	dw 411, 310 ; height, weight
+	db "地蛇@" ; species name
+	dbw 15, 140 ; height, weight
 
-	db   "It hides deep"
-	next "inside caves where"
-	next "no light ever"
+	db   "会待在暗无天日的"
+	next "洞窟极深处，"
+	next "一动不动地待着。@"
 
-	page "reaches it and"
-	next "remains virtually"
-	next "motionless there.@"

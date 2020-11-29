@@ -1,10 +1,7 @@
-	db "SCOUT@" ; species name
-	dw 207, 130 ; height, weight
+	db "放哨@" ; species name
+	dbw 8, 60 ; height, weight
 
-	db   "When acting as a"
-	next "lookout, it warns"
-	next "others of danger"
+	db   "放哨时会用尾巴拍打地面"
+	next "或者用尖叫等方式"
+	next "来通知伙伴注意危险。@"
 
-	page "by screeching and"
-	next "hitting the ground"
-	next "with its tail.@"

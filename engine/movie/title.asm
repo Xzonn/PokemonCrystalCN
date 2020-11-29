@@ -2,6 +2,7 @@ _TitleScreen:
 	call ClearBGPalettes
 	call ClearSprites
 	call ClearTilemap
+	call ClearFullVramNo
 
 ; Turn BG Map update off
 	xor a
@@ -39,49 +40,50 @@ _TitleScreen:
 ; line 0 (copyright)
 	hlbgcoord 0, 0, vBGMap1
 	ld bc, BG_MAP_WIDTH
-	ld a, 7 ; palette
+	ld a, 5 ; palette
 	call ByteFill
 
 ; BG Map 0:
 
 ; Apply logo gradient:
 
-; lines 3-4
+; line 3
 	hlbgcoord 0, 3
-	ld bc, 2 * BG_MAP_WIDTH
-	ld a, 2
-	call ByteFill
-; line 5
-	hlbgcoord 0, 5
 	ld bc, BG_MAP_WIDTH
+	ld a, 1
+	call ByteFill
+; lines 4-6
+	hlbgcoord 0, 4
+	ld bc, 3 * BG_MAP_WIDTH
 	ld a, 3
 	call ByteFill
-; line 6
-	hlbgcoord 0, 6
-	ld bc, BG_MAP_WIDTH
+; lines 7-8
+	hlbgcoord 0, 7
+	ld bc, 2 * BG_MAP_WIDTH
 	ld a, 4
 	call ByteFill
-; line 7
-	hlbgcoord 0, 7
-	ld bc, BG_MAP_WIDTH
-	ld a, 5
-	call ByteFill
-; lines 8-9
-	hlbgcoord 0, 8
-	ld bc, 2 * BG_MAP_WIDTH
-	ld a, 6
+; line 9-10
+	hlbgcoord 0, 9
+	ld bc, 2  * BG_MAP_WIDTH
+	ld a, 2
 	call ByteFill
 
 ; 'CRYSTAL VERSION'
-	hlbgcoord 5, 9
-	ld bc, 11 ; length of version text
-	ld a, 1
-	call ByteFill
+	; hlbgcoord 5, 9
+	; ld bc, 11 ; length of version text
+	; ld a, 1
+	; call ByteFill
 
 ; Suicune gfx
 	hlbgcoord 0, 12
 	ld bc, 6 * BG_MAP_WIDTH ; the rest of the screen
 	ld a, 0 | VRAM_BANK_1
+	call ByteFill
+
+; Fix Vlank Update
+	hlcoord 0, 12, wAttrmap
+	ld bc, 6 * SCREEN_WIDTH ; the rest of the screen
+	ld a, 8
 	call ByteFill
 
 ; Back to VRAM bank 0
@@ -105,16 +107,16 @@ _TitleScreen:
 	call ByteFill
 
 ; Draw Pokemon logo
-	hlcoord 0, 3
-	lb bc, 7, 20
+	hlcoord 2, 3
+	lb bc, 8, 16
 	ld d, $80
-	ld e, 20
+	ld e, 16
 	call DrawTitleGraphic
 
 ; Draw copyright text
 	hlbgcoord 3, 0, vBGMap1
 	lb bc, 1, 13
-	ld d, $c
+	ld d, 0
 	ld e, 16
 	call DrawTitleGraphic
 
@@ -156,16 +158,24 @@ _TitleScreen:
 ; (This part is actually totally pointless, you can't
 ;  see anything until these values are overwritten!)
 
-	ld b, 80 / 2 ; alternate for 80 lines
-	ld hl, wLYOverrides
-.loop
+	; ld b, 80 / 2 ; alternate for 80 lines
+	; ld hl, wLYOverrides
+; .loop
 ; $00 is the middle position
-	ld [hl], +112 ; coming from the left
-	inc hl
-	ld [hl], -112 ; coming from the right
-	inc hl
-	dec b
-	jr nz, .loop
+	; ld [hl], +112 ; coming from the left
+	; inc hl
+	; ld [hl], -112 ; coming from the right
+	; inc hl
+	; dec b
+	; jr nz, .loop
+	ld hl, wLYOverrides
+	ld a, +112
+	ld bc, $0050
+	call ByteFill
+	ld hl, wLYOverrides - $18
+	ld a, -122
+	ld bc, $0028
+	call ByteFill
 
 ; Make sure the rest of the buffer is empty
 	ld hl, wLYOverrides + 80

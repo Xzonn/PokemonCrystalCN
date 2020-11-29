@@ -1,10 +1,7 @@
-	db "BALLOON@" ; species name
-	dw 303, 260 ; height, weight
+	db "气球@" ; species name
+	dbw 10, 120 ; height, weight
 
-	db   "The rich, fluffy"
-	next "fur that covers"
-	next "its body feels so"
+	db   "摸到柔软的体毛时，"
+	next "有种很舒服的手感，"
+	next "会令人爱不释手。@"
 
-	page "good that anyone"
-	next "who feels it can't"
-	next "stop touching it.@"

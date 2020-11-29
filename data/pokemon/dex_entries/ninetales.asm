@@ -1,10 +1,7 @@
-	db "FOX@" ; species name
-	dw 307, 440 ; height, weight
+	db "狐狸@" ; species name
+	dbw 11, 199 ; height, weight
 
-	db   "It is said to live"
-	next "a thousand years,"
-	next "and each of its"
+	db   "它的每一根尾巴里都"
+	next "蕴含着神通之力。"
+	next "据说可以活1000年。@"
 
-	page "tails is loaded"
-	next "with supernatural"
-	next "powers.@"

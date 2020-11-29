@@ -1,10 +1,7 @@
-	db "SUPERPOWER@" ; species name
-	dw 411, 1550 ; height, weight
+	db "怪力@" ; species name
+	dbw 15, 705 ; height, weight
 
-	db   "This tough #MON"
-	next "always stays in"
-	next "the zone. Its"
+	db   "不知疲倦、结实的宝可梦。"
+	next "对战中用到的那些肌肉"
+	next "会变得越来越壮实。@"
 
-	page "muscles become"
-	next "thicker after"
-	next "every battle.@"

@@ -1,10 +1,7 @@
-	db "GAS@" ; species name
-	dw 403, 2 ; height, weight
+	db "气体状@" ; species name
+	dbw 13, 1 ; height, weight
 
-	db   "It wraps its op-"
-	next "ponent in its gas-"
-	next "like body, slowly"
+	db   "用瓦斯状的身体死死缠住"
+	next "猎物，一点一点地往"
+	next "皮肤里注入毒素使其衰弱。@"
 
-	page "weakening its prey"
-	next "by poisoning it"
-	next "through the skin.@"

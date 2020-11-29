@@ -1,10 +1,7 @@
-	db "STARSHAPE@" ; species name
-	dw 100, 70 ; height, weight
+	db "星形@" ; species name
+	dbw 3, 30 ; height, weight
 
-	db   "If the impact site"
-	next "of a meteorite is"
-	next "found, this"
+	db   "找到流星坠落的地点，"
+	next "应该就能那里"
+	next "找到皮宝宝。@"
 
-	page "#MON is certain"
-	next "to be within the"
-	next "immediate area.@"

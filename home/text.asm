@@ -8,6 +8,7 @@ FillBoxWithByte::
 	push bc
 	push hl
 .col
+	call ResetVramNo
 	ld [hli], a
 	dec c
 	jr nz, .col
@@ -39,6 +40,39 @@ ClearScreen::
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
 	jr ClearTilemap
+
+ClearFullVramNo::
+	hlcoord 0, 0, wAttrmap
+	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
+
+ClearVramNo::
+	inc b  ; we bail the moment b hits 0, so include the last run
+	inc c  ; same thing; include last byte
+	jr .HandleLoop
+.Clear:
+	res OAM_TILE_BANK, [hl]
+	inc hl
+.HandleLoop:
+	dec c
+	jr nz, .Clear
+	dec b
+	jr nz, .Clear
+	ret
+
+ResetVramNo::
+	push hl
+	ld hl, wDFSVramLimit
+	bit 2, [hl]
+	pop hl
+	ret nz
+	push bc
+	push hl
+	ld bc, wAttrmap - wTilemap
+	add hl, bc
+	res OAM_TILE_BANK, [hl]
+	pop hl
+	pop bc
+	ret
 
 Textbox::
 ; Draw a text box at hl with room for b lines of c characters each.
@@ -129,7 +163,7 @@ SpeechTextbox::
 	jp Textbox
 
 GameFreakText:: ; unreferenced
-	text "ゲームフりーク！" ; "GAMEFREAK!"
+	text "ゲームフりーク<！>" ; "GAMEFREAK!"
 	done
 
 RadioTerminator::
@@ -143,8 +177,8 @@ PrintText::
 	call SetUpTextbox
 BuenaPrintText::
 	push hl
-	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
-	lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
+	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY - 1
+	lb bc, TEXTBOX_INNERH, TEXTBOX_INNERW
 	call ClearBox
 	pop hl
 
@@ -161,7 +195,48 @@ SetUpTextbox::
 	pop hl
 	ret
 
+SetDFSV0Only::
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
+	ret
+
+SetDFSV1Only::
+	ld a, DFS_VRAM_LIMIT_VRAM1
+	ld [wDFSVramLimit], a
+	ret
+
+UnsetDFSV0Only::
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
+	ret
+
+IncreaseDFSCombineLevel::
+	push af
+	ld a, [wDFSCombineLevel]
+	inc a
+	ld [wDFSCombineLevel], a
+	dec a
+	jr nz, .not_bottom
+	; xor a
+	ld [wDFSCombineCode], a
+.not_bottom
+	pop af
+	ret
+
+DecreaseDFSCombineLevel::
+	push af
+	ld a, [wDFSCombineLevel]
+	dec a
+	ld [wDFSCombineLevel], a
+	jr nz, .not_bottom
+	; xor a
+	ld [wDFSCombineCode], a
+.not_bottom
+	pop af
+	ret
+
 PlaceString::
+	call IncreaseDFSCombineLevel
 	push hl
 
 PlaceNextChar::
@@ -170,6 +245,7 @@ PlaceNextChar::
 	jr nz, CheckDict
 	ld b, h
 	ld c, l
+	call DecreaseDFSCombineLevel
 	pop hl
 	ret
 
@@ -201,12 +277,11 @@ else
 	endc
 endc
 ENDM
-
 	dict "<MOBILE>",  MobileScriptChar
 	dict "<LINE>",    LineChar
 	dict "<NEXT>",    NextLineChar
 	dict "<CR>",      CarriageReturnChar
-	dict "<NULL>",    NullChar
+	dict "<NULL>",    "?" ; NullChar
 	dict "<SCROLL>",  _ContTextNoPause
 	dict "<_CONT>",   _ContText
 	dict "<PARA>",    Paragraph
@@ -232,55 +307,33 @@ ENDM
 	dict "<PKMN>",    PlacePKMN
 	dict "<POKE>",    PlacePOKE
 	dict "%",         NextChar
-	dict "¯",         " "
+	; dict "¯",         " "
 	dict "<DEXEND>",  PlaceDexEnd
 	dict "<TARGET>",  PlaceMoveTargetsName
 	dict "<USER>",    PlaceMoveUsersName
 	dict "<ENEMY>",   PlaceEnemysName
 	dict "<PLAY_G>",  PlaceGenderedPlayerName
-	dict "ﾟ",         .place ; should be .diacritic
-	dict "ﾞ",         .place ; should be .diacritic
-	jr .not_diacritic
-
-.diacritic
-	ld b, a
-	call Diacritic
-	jp NextChar
-
-.not_diacritic
-	cp FIRST_REGULAR_TEXT_CHAR
-	jr nc, .place
-
-	cp "パ"
-	jr nc, .handakuten
-
-.dakuten
-	cp FIRST_HIRAGANA_DAKUTEN_CHAR
-	jr nc, .hiragana_dakuten
-	add "カ" - "ガ"
-	jr .katakana_dakuten
-.hiragana_dakuten
-	add "か" - "が"
-.katakana_dakuten
-	ld b, "ﾞ" ; dakuten
-	call Diacritic
-	jr .place
-
-.handakuten
-	cp "ぱ"
-	jr nc, .hiragana_handakuten
-	add "ハ" - "パ"
-	jr .katakana_handakuten
-.hiragana_handakuten
-	add "は" - "ぱ"
-.katakana_handakuten
-	ld b, "ﾟ" ; handakuten
-	call Diacritic
-
-.place
+.not_dict
+	push hl
+	push de
+	ld hl,wDFSCode
+rept 3
 	ld [hli], a
-	call PrintLetterDelay
+	inc de
+	ld a, [de]
+endr
+	ld [hl], a
+	pop de
+	pop hl
+	call dfsUnion
 	jp NextChar
+
+PlaceDFSChar::
+	xor a
+	ld [wDFSCombineCode], a
+dfsUnion::
+	homecall _dfsUnion
+	ret
 
 MobileScriptChar::
 	ld c, l
@@ -352,14 +405,30 @@ PlaceEnemysName::
 
 	ld de, wOTClassName
 	call PlaceString
-	ld h, b
-	ld l, c
-	ld de, String_Space
-	call PlaceString
 	push bc
 	callfar Battle_GetTrainerName
-	pop hl
+	ld de, wOTClassName
+	callfar GetStrLength
+	push bc
 	ld de, wStringBuffer1
+	callfar GetStrLength
+	ld a, b
+	pop bc
+	add b
+	cp 9 + 7 ; 宝可梦训练家ABCDEFG
+	pop hl
+	jr nc, .skip_space
+	; ld h, b
+	; ld l, c
+	ld de, String_Space
+	call PlaceString
+	ld h, b
+	ld l, c
+	; push bc
+	; callfar Battle_GetTrainerName
+	; pop hl
+	ld de, wStringBuffer1
+.skip_space
 	jr PlaceCommandCharacter
 
 .rival
@@ -391,13 +460,13 @@ PlaceCommandCharacter::
 	jp NextChar
 
 TMCharText::      db "TM@"
-TrainerCharText:: db "TRAINER@"
+TrainerCharText:: db "训练家@"
 PCCharText::      db "PC@"
 RocketCharText::  db "ROCKET@"
 PlacePOKeText::   db "POKé@"
 KougekiText::     db "こうげき@"
 SixDotsCharText:: db "……@"
-EnemyText::       db "Enemy @"
+EnemyText::       db "敌人的@"
 PlacePKMNText::   db "<PK><MN>@"
 PlacePOKEText::   db "<PO><KE>@"
 String_Space::    db " @"
@@ -482,8 +551,8 @@ Paragraph::
 .linkbattle
 	call Text_WaitBGMap
 	call PromptButton
-	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
-	lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
+	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY - 1
+	lb bc, TEXTBOX_INNERH, TEXTBOX_INNERW
 	call ClearBox
 	call UnloadBlinkingCursor
 	ld c, 20
@@ -557,6 +626,7 @@ PromptText::
 	call UnloadBlinkingCursor
 
 DoneText::
+	call DecreaseDFSCombineLevel
 	pop hl
 	ld de, .stop
 	dec de
@@ -572,35 +642,7 @@ NullChar::
 	jp NextChar
 
 TextScroll::
-	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
-	decoord TEXTBOX_INNERX, TEXTBOX_INNERY - 1
-	ld a, TEXTBOX_INNERH - 1
-
-.col
-	push af
-	ld c, TEXTBOX_INNERW
-
-.row
-	ld a, [hli]
-	ld [de], a
-	inc de
-	dec c
-	jr nz, .row
-
-	inc de
-	inc de
-	inc hl
-	inc hl
-	pop af
-	dec a
-	jr nz, .col
-
-	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY + 2
-	ld a, " "
-	ld bc, TEXTBOX_INNERW
-	call ByteFill
-	ld c, 5
-	call DelayFrames
+	homecall _TextScroll
 	ret
 
 Text_WaitBGMap::
@@ -656,7 +698,9 @@ PlaceHLTextAtBC::
 	set NO_TEXT_DELAY_F, a
 	ld [wTextboxFlags], a
 
+	call IncreaseDFSCombineLevel
 	call DoTextUntilTerminator
+	call DecreaseDFSCombineLevel
 
 	pop af
 	ld [wTextboxFlags], a
@@ -1023,10 +1067,12 @@ TextCommand_DAY::
 	ld d, h
 	ld e, l
 	pop hl
+	push de
+	ld de, .Day
 	call PlaceString
 	ld h, b
 	ld l, c
-	ld de, .Day
+	pop de
 	call PlaceString
 	pop hl
 	ret
@@ -1040,11 +1086,11 @@ TextCommand_DAY::
 	dw .Fri
 	dw .Satur
 
-.Sun:    db "SUN@"
-.Mon:    db "MON@"
-.Tues:   db "TUES@"
-.Wednes: db "WEDNES@"
-.Thurs:  db "THURS@"
-.Fri:    db "FRI@"
-.Satur:  db "SATUR@"
-.Day:    db "DAY@"
+.Sun:    db "日@"
+.Mon:    db "一@"
+.Tues:   db "二@"
+.Wednes: db "三@"
+.Thurs:  db "四@"
+.Fri:    db "五@"
+.Satur:  db "六@"
+.Day:    db "星期@"

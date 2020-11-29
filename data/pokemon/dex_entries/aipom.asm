@@ -1,10 +1,7 @@
-	db "LONG TAIL@" ; species name
-	dw 207, 250 ; height, weight
+	db "长尾@" ; species name
+	dbw 8, 115 ; height, weight
 
-	db   "It uses its tail"
-	next "to hang on to tree"
-	next "branches. It uses"
+	db   "用尾巴悬吊在树枝上。"
+	next "通过反作用力来"
+	next "跳到另一棵树上。@"
 
-	page "its momentum to"
-	next "swing from one"
-	next "branch to another.@"

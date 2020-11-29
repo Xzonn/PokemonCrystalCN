@@ -1,10 +1,7 @@
-	db "ANGLER@" ; species name
-	dw 108, 260 ; height, weight
+	db "琵琶鱼@" ; species name
+	dbw 5, 120 ; height, weight
 
-	db   "Its antennae, whi-"
-	next "ch evolved from a"
-	next "fin, have both po-"
+	db   "两只触手由鳍演变而来，"
+	next "其中一只带着正电，"
+	next "另一只带着负电。@"
 
-	page "sitive and neg-"
-	next "ative charges flo-"
-	next "wing through them.@"

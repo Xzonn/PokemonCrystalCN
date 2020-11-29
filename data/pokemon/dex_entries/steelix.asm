@@ -1,10 +1,7 @@
-	db "IRON SNAKE@" ; species name
-	dw 3002, 8820 ; height, weight
+	db "铁蛇@" ; species name
+	dbw 92, 4000 ; height, weight
 
-	db   "The many small"
-	next "metal particles"
-	next "that cover this"
+	db   "全身上下都覆盖了"
+	next "细碎的小块钢铁，"
+	next "可以映出亮晶晶的反光。@"
 
-	page "#MON's body"
-	next "reflect bright"
-	next "light well.@"

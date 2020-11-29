@@ -1,10 +1,7 @@
-	db "FAIRY@" ; species name
-	dw 200, 170 ; height, weight
+	db "妖精@" ; species name
+	dbw 6, 75 ; height, weight
 
-	db   "Though rarely"
-	next "seen, it becomes"
-	next "easier to spot,"
+	db   "很少见的宝可梦。"
+	next "奇怪的是，在满月之夜"
+	next "很容易就能发现它们。@"
 
-	page "for some reason,"
-	next "on the night of a "
-	next "full moon.@"

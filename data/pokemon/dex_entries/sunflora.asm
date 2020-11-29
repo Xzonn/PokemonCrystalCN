@@ -1,10 +1,7 @@
-	db "SUN@" ; species name
-	dw 207, 190 ; height, weight
+	db "太阳@" ; species name
+	dbw 8, 85 ; height, weight
 
-	db   "As the hot season"
-	next "approaches, the"
-	next "petals on this"
+	db   "酷暑将近之时，"
+	next "它头上的花会变得更鲜艳，"
+	next "也会更频繁地摆动。@"
 
-	page "#MON's face"
-	next "become more vivid"
-	next "and lively.@"

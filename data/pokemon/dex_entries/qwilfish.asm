@@ -1,10 +1,7 @@
-	db "BALLOON@" ; species name
-	dw 108, 90 ; height, weight
+	db "气球@" ; species name
+	dbw 5, 39 ; height, weight
 
-	db   "When faced with a"
-	next "larger opponent,"
-	next "it swallows as"
+	db   "为了把自己的身体撑到和"
+	next "对方差不多的大小，会拼命"
+	next "地喝水直到肚子即将爆裂。@"
 
-	page "much water as it"
-	next "can to match the"
-	next "opponent's size.@"

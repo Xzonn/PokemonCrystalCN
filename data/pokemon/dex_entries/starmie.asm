@@ -1,10 +1,7 @@
-	db "MYSTERIOUS@" ; species name
-	dw 307, 1760 ; height, weight
+	db "谜@" ; species name
+	dbw 11, 800 ; height, weight
 
-	db   "It is said that it"
-	next "uses the seven-"
-	next "colored core of"
+	db   "有传闻说，它身体中有"
+	next "闪烁着七彩光芒的核心，"
+	next "会对着宇宙发射电波。@"
 
-	page "its body to send"
-	next "electric waves"
-	next "into outer space.@"

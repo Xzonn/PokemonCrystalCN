@@ -1,10 +1,7 @@
-	db "THUNDER@" ; species name
-	dw 603, 3920 ; height, weight
+	db "天雷@" ; species name
+	dbw 19, 1780 ; height, weight
 
-	db   "This rough #MON"
-	next "stores energy"
-	next "inside its body,"
+	db   "在大地上驰骋的同时，会将"
+	next "激荡在体内的力量化为雷电"
+	next "释出。强悍的宝可梦。@"
 
-	page "then sweeps across"
-	next "the land, shooting"
-	next "off electricity.@"

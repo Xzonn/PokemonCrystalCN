@@ -195,7 +195,7 @@ LinkBattle_TrainerHuds:
 	ld hl, wPlaceBallsX
 	ld a, 10 * 8
 	ld [hli], a
-	ld [hl], 13 * 8
+	ld [hl], 14 * 8
 	ld hl, wVirtualOAMSprite00 + PARTY_LENGTH * SPRITEOAMSTRUCT_LENGTH
 	jp LoadTrainerHudOAM
 
@@ -238,13 +238,17 @@ _ShowLinkBattleParticipants:
 	ld b, 9
 	ld c, 14
 	call Textbox
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	hlcoord 4, 5
 	ld de, wPlayerName
 	call PlaceString
-	hlcoord 4, 10
+	hlcoord 4, 11
 	ld de, wOTPlayerName
 	call PlaceString
-	hlcoord 9, 8
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
+	hlcoord 9, 9
 	ld a, "<BOLD_V>"
 	ld [hli], a
 	ld [hl], "<BOLD_S>"

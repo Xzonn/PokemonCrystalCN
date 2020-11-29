@@ -1,10 +1,7 @@
-	db "JELLYFISH@" ; species name
-	dw 503, 1210 ; height, weight
+	db "水母@" ; species name
+	dbw 16, 550 ; height, weight
 
-	db   "When its 80 feel-"
-	next "ers absorb water,"
-	next "it stretches to"
+	db   "80根触手吸水后"
+	next "会不断生长，然后结成"
+	next "网一样的形状缠住猎物。@"
 
-	page "become like a net"
-	next "to entangle its"
-	next "prey.@"

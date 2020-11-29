@@ -1,10 +1,7 @@
-	db "FIVE STAR@" ; species name
-	dw 407, 780 ; height, weight
+	db "五星@" ; species name
+	dbw 14, 356 ; height, weight
 
-	db   "In the daytime"
-	next "when it gets warm,"
-	next "it curls up inside"
+	db   "白天气温上升的话，"
+	next "就会把自己裹在巨大的"
+	next "叶子里，美美地睡一觉。@"
 
-	page "a big leaf and"
-	next "drifts off into"
-	next "a deep slumber.@"

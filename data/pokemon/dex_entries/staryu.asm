@@ -1,10 +1,7 @@
-	db "STARSHAPE@" ; species name
-	dw 207, 760 ; height, weight
+	db "星形@" ; species name
+	dbw 8, 345 ; height, weight
 
-	db   "When the stars"
-	next "twinkle at night,"
-	next "it floats up from"
+	db   "星星在夜空中闪烁的时候，"
+	next "它就会从海底浮上来"
+	next "并闪烁着自己的中心处。@"
 
-	page "the sea floor, and"
-	next "its body's center"
-	next "core flickers.@"

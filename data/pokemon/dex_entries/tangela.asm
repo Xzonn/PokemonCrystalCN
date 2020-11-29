@@ -1,10 +1,7 @@
-	db "VINE@" ; species name
-	dw 303, 770 ; height, weight
+	db "藤蔓状@" ; species name
+	dbw 10, 350 ; height, weight
 
-	db   "During battle, it"
-	next "constantly moves"
-	next "the vines that"
+	db   "将全身覆盖得无懈可击的蔓"
+	next "藤在战斗时会不停地扭动，"
+	next "看到就会烦躁起来。@"
 
-	page "cover its body in"
-	next "order to annoy its"
-	next "opponent.@"

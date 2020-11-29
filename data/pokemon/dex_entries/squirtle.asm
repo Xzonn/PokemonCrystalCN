@@ -1,10 +1,7 @@
-	db "TINYTURTLE@" ; species name
-	dw 108, 200 ; height, weight
+	db "小龟@" ; species name
+	dbw 5, 90 ; height, weight
 
-	db   "When it feels"
-	next "threatened, it"
-	next "draws its legs"
+	db   "一旦遇到危险就会把手脚"
+	next "缩到壳里以保护自己，"
+	next "同时还会用嘴喷水。@"
 
-	page "inside its shell"
-	next "and sprays water"
-	next "from its mouth.@"

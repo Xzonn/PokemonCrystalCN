@@ -19,6 +19,7 @@ tradeanim: MACRO
 ENDM
 
 TradeAnimation:
+	farcall dfsClearCache
 	xor a
 	ld [wcf66], a
 	ld hl, wPlayerTrademonSenderName
@@ -70,6 +71,7 @@ TradeAnimation:
 	tradeanim TradeAnim_End
 
 TradeAnimationPlayer2:
+	farcall dfsClearCache
 	xor a
 	ld [wcf66], a
 	ld hl, wOTTrademonSenderName
@@ -597,21 +599,21 @@ TradeAnim_PlaceTrademonStatsOnTubeAnim:
 	ld bc, SCREEN_WIDTH
 	ld a, "─"
 	call ByteFill
-	hlcoord 0, 1
+	hlcoord 0, 2
 	ld de, wLinkPlayer1Name
 	call PlaceString
-	ld hl, wLinkPlayer2Name
-	ld de, 0
-.find_name_end_loop
-	ld a, [hli]
-	cp "@"
-	jr z, .done
-	dec de
-	jr .find_name_end_loop
+; 	ld hl, wLinkPlayer2Name
+; 	ld de, 0
+; .find_name_end_loop
+; 	ld a, [hli]
+; 	cp "@"
+; 	jr z, .done
+; 	dec de
+; 	jr .find_name_end_loop
 
-.done
-	hlcoord 0, 4
-	add hl, de
+; .done
+	hlcoord 13, 2
+	; add hl, de
 	ld de, wLinkPlayer2Name
 	call PlaceString
 	hlcoord 7, 2
@@ -939,7 +941,7 @@ TrademonStats_MonTemplate:
 .OTMonData:
 	db   "─── №."
 	next ""
-	next "OT/"
+	next "初训家/"
 	next "<ID>№.@"
 
 TrademonStats_Egg:
@@ -958,8 +960,8 @@ TrademonStats_Egg:
 	ret
 
 .EggData:
-	db   "EGG"
-	next "OT/?????"
+	db   "蛋"
+	next "初训家/?????"
 	next "<ID>№.?????@"
 
 TrademonStats_WaitBGMap:
@@ -987,7 +989,7 @@ TrademonStats_PrintOTName:
 	xor a
 .caught_gender_okay
 	push af
-	hlcoord 7, 4
+	hlcoord 10, 4
 	call PlaceString
 	inc bc
 	pop af
@@ -996,6 +998,7 @@ TrademonStats_PrintOTName:
 	ld e, a
 	add hl, de
 	ld a, [hl]
+	bccoord 15, 6
 	ld [bc], a
 	ret
 

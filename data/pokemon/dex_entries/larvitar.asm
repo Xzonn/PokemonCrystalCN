@@ -1,10 +1,7 @@
-	db "ROCK SKIN@" ; species name
-	dw 200, 1590 ; height, weight
+	db "岩石肤@" ; species name
+	dbw 6, 720 ; height, weight
 
-	db   "Born deep under-"
-	next "ground, this"
-	next "#MON becomes a"
+	db   "出生在地底深处。"
+	next "为了长出结实的身体，"
+	next "吃完大量泥土后会结蛹。@"
 
-	page "pupa after eating"
-	next "enough dirt to"
-	next "make a mountain.@"

@@ -1,10 +1,7 @@
-	db "POISON GAS@" ; species name
-	dw 311, 210 ; height, weight
+	db "毒气@" ; species name
+	dbw 12, 95 ; height, weight
 
-	db   "When it inhales"
-	next "poisonous gases"
-	next "from garbage, its"
+	db   "每次从垃圾中吸取毒瓦斯"
+	next "身体就会膨胀，"
+	next "身上的味道也会变得更臭。@"
 
-	page "body expands, and"
-	next "its insides smell"
-	next "much worse.@"

@@ -1,10 +1,7 @@
-	db "SEED@" ; species name
-	dw 204, 150 ; height, weight
+	db "种子@" ; species name
+	dbw 7, 69 ; height, weight
 
-	db   "While it is young,"
-	next "it uses the"
-	next "nutrients that are"
+	db   "在出生后的一段时间内，"
+	next "靠吸收储存在背上种子里的"
+	next "营养使自己成长。@"
 
-	page "stored in the"
-	next "seeds on its back"
-	next "in order to grow.@"

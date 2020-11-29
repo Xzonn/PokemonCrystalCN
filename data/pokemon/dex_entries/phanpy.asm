@@ -1,10 +1,7 @@
-	db "LONG NOSE@" ; species name
-	dw 108, 740 ; height, weight
+	db "长鼻@" ; species name
+	dbw 5, 335 ; height, weight
 
-	db   "During the desert-"
-	next "ed morning hours,"
-	next "it comes ashore"
+	db   "清晨会来到无人的水边"
+	next "灵活地挥舞长鼻子"
+	next "来给自己淋浴。@"
 
-	page "where it deftly"
-	next "uses its trunk to"
-	next "take a shower.@"

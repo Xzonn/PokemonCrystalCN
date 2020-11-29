@@ -597,7 +597,7 @@ MenuHeader_Buy:
 
 .MenuData
 	db SCROLLINGMENU_DISPLAY_ARROWS | SCROLLINGMENU_ENABLE_FUNCTION3 ; flags
-	db 4, 8 ; rows, columns
+	db 4, 9 ; rows, columns
 	db SCROLLINGMENU_ITEMS_NORMAL ; item format
 	dbw 0, wCurMart
 	dba PlaceMenuItemName
@@ -616,10 +616,16 @@ MenuHeader_Buy:
 	ld d, h
 	ld e, l
 	pop hl
-	ld bc, SCREEN_WIDTH
-	add hl, bc
+	ld a, [hl] ; backup tile name (only TMXX, so skip attr backup)
+	push hl
+	push af
+	; ld bc, SCREEN_WIDTH
+	; add hl, bc
 	ld c, PRINTNUM_LEADINGZEROS | PRINTNUM_MONEY | 3
 	call PrintBCDNumber
+	pop af
+	pop hl
+	ld [hl], a
 	ret
 
 HerbShopLadyIntroText:
@@ -768,8 +774,8 @@ SellMenu:
 	farcall SelectQuantityToSell
 	call ExitMenu
 	jr c, .declined
-	hlcoord 1, 14
-	lb bc, 3, 18
+	hlcoord 1, 13
+	lb bc, 4, 18
 	call ClearBox
 	ld hl, MartSellPriceText
 	call PrintTextboxText
@@ -782,8 +788,8 @@ SellMenu:
 	ld hl, wNumItems
 	call TossItem
 	predef PartyMonItemName
-	hlcoord 1, 14
-	lb bc, 3, 18
+	hlcoord 1, 13
+	lb bc, 4, 18
 	call ClearBox
 	ld hl, MartBoughtText
 	call PrintTextboxText
@@ -805,7 +811,7 @@ MartSellPriceText:
 	text_end
 
 UnusedDummyString: ; unreferenced
-	db "！ダミー！@" ; "!Dummy!"
+	db "<！>ダミー<！>@" ; "!Dummy!"
 
 MartWelcomeText:
 	text_far _MartWelcomeText
@@ -813,16 +819,16 @@ MartWelcomeText:
 
 MenuHeader_BuySell:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 7, 8
+	menu_coords 0, 0, 11, 7
 	dw .MenuData
 	db 1 ; default option
 
 .MenuData
 	db STATICMENU_CURSOR ; strings
 	db 3 ; items
-	db "BUY@"
-	db "SELL@"
-	db "QUIT@"
+	db "购买@"
+	db "出售@"
+	db "什么也不需要@"
 
 MartThanksText:
 	text_far _MartThanksText

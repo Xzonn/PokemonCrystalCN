@@ -3,9 +3,13 @@ DoMysteryGift:
 	call ClearSprites
 	call WaitBGMap
 	call InitMysteryGiftLayout
+	ld a, DFS_VRAM_LIMIT_VRAM0
+	ld [wDFSVramLimit], a
 	hlcoord 3, 8
 	ld de, .String_PressAToLink_BToCancel
 	call PlaceString
+	xor a ; DFS_VRAM_LIMIT_NOLIMIT
+	ld [wDFSVramLimit], a
 	call WaitBGMap
 	farcall PrepMysteryGiftDataToSend
 	call MysteryGift_ClearTrainerData
@@ -121,10 +125,10 @@ DoMysteryGift:
 	ret
 
 .String_PressAToLink_BToCancel:
-	db   "Press A to"
-	next "link IR-Device"
-	next "Press B to"
-	next "cancel it."
+	db   "按A键"
+	next "就会进行连接！"
+	next "按B键"
+	next "就会停止连接。"
 	db   "@"
 
 .MysteryGiftCanceledText:
@@ -227,6 +231,7 @@ DoMysteryGift:
 
 Function104a95:
 	di
+	call NormalSpeed
 	farcall ClearChannels
 	call Function104d5e
 
@@ -428,6 +433,7 @@ Function104bd0:
 	jp Function104b22
 
 .quit
+	call DoubleSpeed
 	ldh a, [hMGStatusFlags]
 	push af
 	call Function104da0
@@ -1488,9 +1494,9 @@ PrintTextAndExit_JP:
 
 String_PressAToLink_BToCancel_JP:
 	db   "エーボタン<WO>おすと"
-	next "つうしん<PKMN>おこなわれるよ！"
+	next "つうしん<PKMN>おこなわれるよ<！>"
 	next "ビーボタン<WO>おすと"
-	next "つうしん<WO>ちゅうし　します"
+	next "つうしん<WO>ちゅうし<　>します"
 	db   "@"
 
 MysteryGiftReceivedCardText:

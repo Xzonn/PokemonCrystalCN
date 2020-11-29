@@ -2,15 +2,15 @@ String_89116:
 	db "-----@"
 
 String_8911c:
-	db   "でんわばんごうが　ただしく" ; Phone number is not
-	next "はいって　いません！@"   ; entered correctly!
+	db   "でんわばんごうが<　>ただしく" ; Phone number is not
+	next "はいって<　>いません<！>@"   ; entered correctly!
 
 String_89135:
-	db   "データが　かわって　いますが"  ; The data has changed.
-	next "かきかえないで　やめますか？@" ; Quit anyway?
+	db   "データが<　>かわって<　>いますが"  ; The data has changed.
+	next "かきかえないで<　>やめますか<？>@" ; Quit anyway?
 
 String_89153:
-	db   "メッセージは　ありません@"    ; No message
+	db   "メッセージは<　>ありません@"    ; No message
 
 OpenSRAMBank4:
 	push af
@@ -1466,7 +1466,7 @@ Function8999c:
 	ret
 
 String_899ac:
-	db "の　めいし@"
+	db "の<　>めいし@"
 
 Function899b2:
 	ld bc, wPlayerName
@@ -2744,7 +2744,7 @@ Function8a1b0:
 	ret
 
 Strings_8a1cc:
-	db   "めいし<NO>せいりと　へんしゅうを"
+	db   "めいし<NO>せいりと<　>へんしゅうを"
 	next "おこないます"
 	db   "@"
 
@@ -3027,7 +3027,7 @@ MenuData_0x8a417:
 	db STATICMENU_CURSOR | STATICMENU_WRAP ; flags
 	db 4 ; items
 	db "めいしりスト@"
-	db "じぶんの　めいし@"
+	db "じぶんの<　>めいし@"
 	db "めいしこうかん@"
 	db "やめる@"
 
@@ -3041,7 +3041,7 @@ MenuData_0x8a43d:
 	db STATICMENU_CURSOR | STATICMENU_WRAP ; flags
 	db 3 ; items
 	db "めいしりスト@"
-	db "じぶんの　めいし@"
+	db "じぶんの<　>めいし@"
 	db "やめる@"
 
 Function8a453:
@@ -3072,8 +3072,8 @@ Strings_8a483:
 	db   "でんわばんごう<WO>いれると"
 	next "めいしこうかん<GA>できます@"
 
-	db   "ともだちと　じぶん<NO>めいしを"
-	next "せきがいせんで　こうかん　します@"
+	db   "ともだちと<　>じぶん<NO>めいしを"
+	next "せきがいせんで<　>こうかん<　>します@"
 
 Function8a4d3:
 	ld a, [wMenuSelection]
@@ -3574,7 +3574,7 @@ Function8a818:
 	ret
 
 .string_8a868
-	db "めいし<WO>かきかえ　まし<TA!>@"
+	db "めいし<WO>かきかえ<　>まし<TA!>@"
 
 .asm_8a875
 	ld de, String_8a88b
@@ -3591,7 +3591,7 @@ Function8a818:
 
 String_8a88b:
 	db   "おともだち<NO>なまえが"
-	next "かかれて　いません！@"
+	next "かかれて<　>いません<！>@"
 
 Function8a8a1:
 	call OpenSRAMBank4
@@ -3646,7 +3646,7 @@ Function8a8c3:
 	ret
 
 String_8a919:
-	db "このデータ<WO>けしますか？@"
+	db "このデータ<WO>けしますか<？>@"
 
 String_8a926:
 	db "データ<WO>けしまし<TA!>@"
@@ -3885,7 +3885,7 @@ Function8aab6:
 	ret
 
 String_8aaf0:
-	db "あたらしい　めいし<PKMN>できまし<LF>@"
+	db "あたらしい<　>めいし<PKMN>できまし<LF>@"
 
 Function8ab00:
 	ld de, String_8911c
@@ -4039,7 +4039,7 @@ Function8aba9:
 
 String_8ac3b:
 	db   "こ<NO>ともだち<NI>でんわを"
-	next "かけますか？@"
+	next "かけますか<？>@"
 
 Function8ac4e:
 	xor a
@@ -4211,11 +4211,11 @@ Function8ad0b:
 
 String_8ad89:
 	db   "こ<NO>めいし<WO>けして"
-	next "いれかえますか？@"
+	next "いれかえますか<？>@"
 
 String_8ad9c:
 	db   "おともだち<NO>なまえを"
-	next "のこして　おきますか？@"
+	next "のこして<　>おきますか<？>@"
 
 Function8adb3:
 	call Function891de

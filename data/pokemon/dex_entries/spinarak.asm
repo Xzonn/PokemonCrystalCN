@@ -1,10 +1,7 @@
-	db "STRINGSPIT@" ; species name
-	dw 108, 190 ; height, weight
+	db "吐丝@" ; species name
+	dbw 5, 85 ; height, weight
 
-	db   "If prey becomes"
-	next "ensnared in its"
-	next "nest of spun"
+	db   "会把用丝编成的网当作"
+	next "巢穴，即使有猎物落网，"
+	next "也要一直等到天黑才行动。@"
 
-	page "string, it waits"
-	next "motionlessly until"
-	next "it becomes dark.@"

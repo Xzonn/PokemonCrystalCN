@@ -1,10 +1,7 @@
-	db "ATROCIOUS@" ; species name
-	dw 2104, 5180 ; height, weight
+	db "凶恶@" ; species name
+	dbw 65, 2350 ; height, weight
 
-	db   "It appears when-"
-	next "ever there is"
-	next "world conflict,"
+	db   "如果人们纷争不休，"
+	next "它就会突然冒出来"
+	next "把周围烧成一片焦土。@"
 
-	page "burning down any"
-	next "place it travels"
-	next "through.@"

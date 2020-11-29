@@ -1,10 +1,7 @@
-	db "FLOWER@" ; species name
-	dw 311, 410 ; height, weight
+	db "花@" ; species name
+	dbw 12, 186 ; height, weight
 
-	db   "By shaking its big"
-	next "petals, it scat-"
-	next "ters toxic pollen"
+	db   "晃动头顶巨大的花，"
+	next "就会散出大量的花粉，"
+	next "把周围的空气都变成黄色。@"
 
-	page "into the air,"
-	next "turning the air"
-	next "yellow.@"

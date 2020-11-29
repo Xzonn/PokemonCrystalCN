@@ -20,24 +20,26 @@ PrintDayOfWeek:
 	ld d, h
 	ld e, l
 	pop hl
+	push de
+	ld de, .Day
 	call PlaceString
 	ld h, b
 	ld l, c
-	ld de, .Day
+	pop de
 	call PlaceString
 	ret
 
 .Days:
-	db "SUN@"
-	db "MON@"
-	db "TUES@"
-	db "WEDNES@"
-	db "THURS@"
-	db "FRI@"
-	db "SATUR@"
+	db "日@"
+	db "一@"
+	db "二@"
+	db "三@"
+	db "四@"
+	db "五@"
+	db "六@"
 
 .Day:
-	db "DAY@"
+	db "星期@"
 
 NewGame_ClearTilemapEtc:
 	xor a
@@ -262,20 +264,20 @@ SetDefaultBoxNames:
 	ret
 
 .Box:
-	db "BOX@"
+	db "盒子@"
 
 InitializeMagikarpHouse:
 	ld hl, wBestMagikarpLengthFeet
-	ld a, $3
+	ld a, $4 ; $3
 	ld [hli], a
-	ld a, $6
+	ld a, $1d ; $6
 	ld [hli], a
 	ld de, .Ralph
 	call CopyName2
 	ret
 
 .Ralph:
-	db "RALPH@"
+	db "泰明@"
 
 InitializeNPCNames:
 	ld hl, .Rival
@@ -299,9 +301,9 @@ InitializeNPCNames:
 	ret
 
 .Rival:  db "???@"
-.Red:    db "RED@"
-.Green:  db "GREEN@"
-.Mom:    db "MOM@"
+.Red:    db "赤红@"
+.Green:  db "青绿@"
+.Mom:    db "妈妈@"
 
 InitializeWorld:
 	call ShrinkPlayer
@@ -483,17 +485,17 @@ DisplaySaveInfoOnContinue:
 	call CheckRTCStatus
 	and %10000000
 	jr z, .clock_ok
-	lb de, 4, 8
+	lb de, 5, 8
 	call DisplayContinueDataWithRTCError
 	ret
 
 .clock_ok
-	lb de, 4, 8
+	lb de, 5, 8
 	call DisplayNormalContinueData
 	ret
 
 DisplaySaveInfoOnSave:
-	lb de, 4, 0
+	lb de, 5, 0
 	jr DisplayNormalContinueData
 
 DisplayNormalContinueData:
@@ -529,47 +531,57 @@ Continue_LoadMenuHeader:
 
 .MenuHeader_Dex:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 15, 9
+	menu_coords 0, 0, 14, 9
 	dw .MenuData_Dex
 	db 1 ; default option
 
 .MenuData_Dex:
 	db 0 ; flags
 	db 4 ; items
-	db "PLAYER@"
-	db "BADGES@"
-	db "#DEX@"
-	db "TIME@"
+	db "主角@"
+	db "拥有徽章@"
+	db "宝可梦图鉴@"
+	db "游戏时间@"
 
 .MenuHeader_NoDex:
 	db MENU_BACKUP_TILES ; flags
-	menu_coords 0, 0, 15, 9
+	menu_coords 0, 0, 14, 9
 	dw .MenuData_NoDex
 	db 1 ; default option
 
 .MenuData_NoDex:
 	db 0 ; flags
 	db 4 ; items
-	db "PLAYER <PLAYER>@"
-	db "BADGES@"
+	db "主角@"
+	db "拥有徽章@"
 	db " @"
-	db "TIME@"
+	db "游戏时间@"
 
 Continue_DisplayBadgesDexPlayerName:
 	call MenuBoxCoord2Tile
 	push hl
-	decoord 13, 4, 0
+	decoord 10, 4, 0
 	add hl, de
 	call Continue_DisplayBadgeCount
 	pop hl
 	push hl
-	decoord 12, 6, 0
+	decoord 9, 6, 0
 	add hl, de
 	call Continue_DisplayPokedexNumCaught
 	pop hl
 	push hl
-	decoord 8, 2, 0
+	decoord 14, 2, 0
 	add hl, de
+	push hl
+	ld de, wPlayerName
+	call GetStrLength
+	pop hl
+	ld a, l
+	sub a, b
+	ld l, a
+	jr nc, .nor
+	dec h
+.nor
 	ld de, .Player
 	call PlaceString
 	pop hl
@@ -579,20 +591,20 @@ Continue_DisplayBadgesDexPlayerName:
 	db "<PLAYER>@"
 
 Continue_PrintGameTime:
-	decoord 9, 8, 0
+	decoord 8, 8, 0
 	add hl, de
 	call Continue_DisplayGameTime
 	ret
 
 Continue_UnknownGameTime:
-	decoord 9, 8, 0
+	decoord 11, 8, 0
 	add hl, de
 	ld de, .three_question_marks
 	call PlaceString
 	ret
 
 .three_question_marks
-	db " ???@"
+	db "不明@"
 
 Continue_DisplayBadgeCount:
 	push hl
@@ -602,7 +614,11 @@ Continue_DisplayBadgeCount:
 	pop hl
 	ld de, wNumSetBits
 	lb bc, 1, 2
-	jp PrintNum
+	call PrintNum
+	ld de, .numstr
+	jp PlaceString
+.numstr
+	db "枚@"
 
 Continue_DisplayPokedexNumCaught:
 	ld a, [wStatusFlags]
@@ -619,7 +635,11 @@ endc
 	pop hl
 	ld de, wNumSetBits
 	lb bc, 1, 3
-	jp PrintNum
+	call PrintNum
+	ld de, .numstr
+	jp PlaceString
+.numstr
+	db "只@"
 
 Continue_DisplayGameTime:
 	ld de, wGameTimeHours
@@ -749,7 +769,8 @@ NamePlayer:
 	dec a
 	jr z, .NewName
 	call StorePlayerName
-	farcall ApplyMonOrTrainerPals
+	; farcall ApplyMonOrTrainerPals
+	; 不让汉字显示出错
 	farcall MovePlayerPicLeft
 	ret
 
@@ -783,9 +804,9 @@ NamePlayer:
 	ret
 
 .Chris:
-	db "CHRIS@@@@@@"
+	db "克里斯@@@@@"
 .Kris:
-	db "KRIS@@@@@@@"
+	db "克丽丝@@@@@"
 
 GSShowPlayerNamingChoices: ; unreferenced
 	call LoadMenuHeader
@@ -1098,17 +1119,20 @@ TitleScreenEntrance:
 
 ; Reversed signage for every other line's position.
 ; This is responsible for the interlaced effect.
+	ld hl, wLYOverrides + $18
+	ld bc, $0028
 	ld a, e
 	xor $ff
 	inc a
+	call ByteFill
 
-	ld b, 8 * 10 / 2 ; logo height / 2
-	ld hl, wLYOverrides + 1
-.loop
-	ld [hli], a
-	inc hl
-	dec b
-	jr nz, .loop
+; 	ld b, 8 * 10 / 2 ; logo height / 2
+; 	ld hl, wLYOverrides + 1
+; .loop
+; 	ld [hli], a
+; 	inc hl
+; 	dec b
+; 	jr nz, .loop
 
 	farcall AnimateTitleCrystal
 	ret

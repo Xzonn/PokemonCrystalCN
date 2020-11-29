@@ -1,10 +1,7 @@
-	db "MOUSE@" ; species name
-	dw 207, 660 ; height, weight
+	db "鼠@" ; species name
+	dbw 8, 300 ; height, weight
 
-	db   "If its electric"
-	next "pouches run empty,"
-	next "it raises its tail"
+	db   "如果电流袋里没有电了，"
+	next "就会笔直地竖起尾巴"
+	next "吸收空气中的电气。@"
 
-	page "to gather electri-"
-	next "city from the"
-	next "atmosphere.@"

@@ -1,10 +1,7 @@
-	db "BALLOON@" ; species name
-	dw 100, 20 ; height, weight
+	db "气球@" ; species name
+	dbw 3, 10 ; height, weight
 
-	db   "Instead of walking"
-	next "with its short"
-	next "legs, it moves"
+	db   "比起用短小的双脚走路，"
+	next "更擅长用柔软的身体"
+	next "弹跳着四处移动。@"
 
-	page "around by bouncing"
-	next "on its soft,"
-	next "tender body.@"

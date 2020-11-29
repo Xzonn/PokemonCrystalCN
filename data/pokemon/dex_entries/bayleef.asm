@@ -1,10 +1,7 @@
-	db "LEAF@" ; species name
-	dw 311, 350 ; height, weight
+	db "叶子@" ; species name
+	dbw 12, 158 ; height, weight
 
-	db   "The scent that"
-	next "wafts from the"
-	next "leaves on its neck"
+	db   "脖子上的叶子会散发香气，"
+	next "闻到这种气味的人"
+	next "会变得精力充沛。@"
 
-	page "causes anyone who"
-	next "smells it to"
-	next "become energetic.@"

@@ -1,10 +1,7 @@
-	db "SHELLFISH@" ; species name
-	dw 503, 1890 ; height, weight
+	db "甲壳@" ; species name
+	dbw 16, 855 ; height, weight
 
-	db   "It firmly plants"
-	next "its feet on the"
-	next "ground before"
+	db   "从后背的喷口中"
+	next "喷出强力水柱的时候，"
+	next "双脚会重重地踏在地面上。@"
 
-	page "shooting water"
-	next "from the jets on"
-	next "its back.@"

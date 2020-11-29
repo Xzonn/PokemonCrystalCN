@@ -1,10 +1,7 @@
-	db "FLAME@" ; species name
-	dw 607, 1320 ; height, weight
+	db "火焰@" ; species name
+	dbw 20, 600 ; height, weight
 
-	db   "Legendary bird"
-	next "#MON. It is"
-	next "said to migrate"
+	db   "据说它从南方飞回来时，"
+	next "春天也会一同到来。"
+	next "传说中的鸟宝可梦。@"
 
-	page "from the south"
-	next "along with the"
-	next "spring.@"

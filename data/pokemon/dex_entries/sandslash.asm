@@ -1,10 +1,7 @@
-	db "MOUSE@" ; species name
-	dw 303, 650 ; height, weight
+	db "鼠@" ; species name
+	dbw 10, 295 ; height, weight
 
-	db   "Adept at climbing"
-	next "trees, it rolls"
-	next "into a spiny ball,"
+	db   "善于爬树。会蜷曲身体"
+	next "变成带刺的球状，"
+	next "然后从上方发动袭击。@"
 
-	page "then attacks its"
-	next "enemies from"
-	next "above.@"

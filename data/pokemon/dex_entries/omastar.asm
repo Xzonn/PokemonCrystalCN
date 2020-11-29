@@ -1,10 +1,7 @@
-	db "SPIRAL@" ; species name
-	dw 303, 770 ; height, weight
+	db "漩涡@" ; species name
+	dbw 10, 350 ; height, weight
 
-	db   "Its heavy shell"
-	next "allowed it to"
-	next "reach only nearby"
+	db   "据说是因为背上的壳太重，"
+	next "只能捕食身边的猎物，"
+	next "所以才会灭绝的。@"
 
-	page "food. This could"
-	next "be the reason it"
-	next "is extinct.@"

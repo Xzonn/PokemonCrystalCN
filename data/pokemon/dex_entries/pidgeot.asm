@@ -1,10 +1,7 @@
-	db "BIRD@" ; species name
-	dw 411, 870 ; height, weight
+	db "鸟@" ; species name
+	dbw 15, 395 ; height, weight
 
-	db   "Its outstanding"
-	next "vision allows it"
-	next "to spot splashing"
+	db   "拥有顶尖的视力，"
+	next "就算在千米高空中也能"
+	next "找到从水中跃起的鲤鱼王。@"
 
-	page "MAGIKARP, even"
-	next "while flying at"
-	next "3300 feet.@"

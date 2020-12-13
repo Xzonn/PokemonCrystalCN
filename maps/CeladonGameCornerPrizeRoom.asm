@@ -203,7 +203,7 @@ CeladonGameCornerPrizeRoomPokemonVendor:
 	db STATICMENU_CURSOR ; flags
 	db 4 ; items
 	db "皮卡丘   2222@"
-	db "立方兽   5555@"
+	db "多边兽   5555@"
 	db "幼基拉斯  8888@"
 	db "取消@"
 

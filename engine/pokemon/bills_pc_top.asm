@@ -80,7 +80,7 @@ _BillsPC:
 	dw .strings
 
 .strings
-	db "取出宝可梦@"
+	db "带走宝可梦@"
 	db "寄放宝可梦@"
 	db "切换盒子@"
 	db "整理盒子  /请取下邮件@"

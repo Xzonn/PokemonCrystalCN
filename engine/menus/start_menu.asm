@@ -198,7 +198,7 @@ StartMenu::
 .SaveString:     db "记录@"
 .OptionString:   db "设置@"
 .ExitString:     db "关闭@"
-.PokegearString: db "齿轮@"
+.PokegearString: db "装置@"
 .QuitString:     db "中止@"
 
 .PokedexDesc:

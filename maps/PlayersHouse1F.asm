@@ -104,7 +104,7 @@ MeetMomTalkedScript:
 	sjump MeetMomScript
 
 PokegearName:
-	db "宝可齿轮@"
+	db "宝可装置@"
 
 PlayersHouse1FReceiveItemStd:
 	jumpstd ReceiveItemScript

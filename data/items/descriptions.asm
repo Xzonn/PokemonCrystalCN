@@ -849,7 +849,7 @@ TeruSama21Desc:
 	db   "?@"
 
 LightBallDesc:
-	db   "点光闪烁的神奇之球。@"
+	db   "电光闪烁的神奇之球。@"
 
 FriendBallDesc:
 	db   "捉到的宝可梦"

@@ -16,8 +16,10 @@ LCD::
 	jr z, .done
 
 ; At this point it's assumed we're in BANK(wLYOverrides)!
-	push bc
 	ldh a, [rLY]
+	cp a, SCREEN_HEIGHT_PX ; fix buffer overflow in double speed mode
+	jr nc, .done
+	push bc
 	ld c, a
 	ld b, HIGH(wLYOverrides)
 	ld a, [bc]

@@ -58,12 +58,16 @@ BattleAnimRunScript:
 	farcall CheckBattleScene
 	jr c, .disabled
 
+; This vc_hook reduces the move animation flashing in the Virtual Console for
+; Fissure, Self-Destruct, Thunder, Flash, Explosion, Horn Drill, and Hyper Beam.
+	vc_hook Reduce_move_anim_flashing
 	call BattleAnimClearHud
 	call RunBattleAnimScript
 
 	call BattleAnimAssignPals
 	call BattleAnimRequestPals
 
+	vc_hook Stop_reducing_move_anim_flashing
 	xor a
 	ldh [hSCX], a
 	ldh [hSCY], a
@@ -670,6 +674,7 @@ BattleAnimCmd_5GFX:
 .loop
 	ld a, [wBattleAnimTemp0]
 	cp (vTiles1 - vTiles0) / LEN_2BPP_TILE - BATTLEANIM_BASE_TILE
+	vc_hook Reduce_move_anim_flashing_PRESENT
 	ret nc
 	call GetBattleAnimByte
 	ld [hli], a

@@ -13,14 +13,24 @@ DoMysteryGift:
 	call WaitBGMap
 	farcall PrepMysteryGiftDataToSend
 	call MysteryGift_ClearTrainerData
+	vc_patch Infrared_stage_party_data
+if DEF(_CRYSTAL11_VC)
+	farcall StagePartyDataForMysteryGift
+	call MysteryGift_ClearTrainerData
+	nop
+else
 	ld a, $2
 	ld [wca01], a
 	ld a, $14
 	ld [wca02], a
+endc
+	vc_patch_end Infrared_stage_party_data
+
 	ldh a, [rIE]
 	push af
 
 	call Function104a95
+	vc_hook Infrared_ExchangeMysteryGiftData_end
 
 	ld d, a
 	xor a
@@ -230,6 +240,26 @@ DoMysteryGift:
 	jp CloseSRAM
 
 Function104a95:
+	vc_hook Infrared_ExchangeMysteryGiftData_start
+	vc_patch Infrared_ExchangeMysteryGiftData_function
+if DEF(_CRYSTAL11_VC)
+	ld d, $ef
+.loop
+	dec d
+	ld a, d
+	or a
+	jr nz, .loop
+	vc_hook Infrared_ExchangeMysteryGiftData_loop_done
+	nop
+	cp $10
+.loop2 ; same location as unpatched .loop2
+	ret z
+	nop
+	nop
+	cp $6c
+	jr nz, Function104a95
+	ret
+else
 	di
 	call NormalSpeed
 	farcall ClearChannels
@@ -239,6 +269,9 @@ Function104a95:
 	call Function104d96
 	call Function104ddd
 	ldh a, [hMGStatusFlags]
+endc
+	vc_patch_end Infrared_ExchangeMysteryGiftData_function
+
 	cp $10
 	jp z, Function104bd0
 	cp $6c

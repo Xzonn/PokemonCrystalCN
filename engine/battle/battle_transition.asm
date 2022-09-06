@@ -21,6 +21,7 @@ DoBattleTransition:
 	ld hl, hVBlank
 	ld a, [hl]
 	push af
+	vc_hook Reduce_battle_transition_flashing
 	ld [hl], $1
 
 .loop
@@ -58,6 +59,7 @@ DoBattleTransition:
 	ld a, $1 ; unnecessary bankswitch?
 	ldh [rSVBK], a
 	pop af
+	vc_hook Stop_reducing_battle_transition_flashing
 	ldh [hVBlank], a
 	call DelayFrame
 	ret
@@ -310,6 +312,7 @@ StartTrainerBattle_Flash:
 	dc 0, 0, 0, 1
 
 StartTrainerBattle_SetUpForWavyOutro:
+	vc_hook Stop_reducing_battle_transition_flashing_WavyOutro
 	farcall RespawnPlayerAndOpponent
 	ld a, BANK(wLYOverrides)
 	ldh [rSVBK], a
@@ -367,6 +370,7 @@ StartTrainerBattle_SineWave:
 	ret
 
 StartTrainerBattle_SetUpForSpinOutro:
+	vc_hook Stop_reducing_battle_transition_flashing_SpinOutro
 	farcall RespawnPlayerAndOpponent
 	ld a, BANK(wLYOverrides)
 	ldh [rSVBK], a
@@ -509,6 +513,7 @@ ENDM
 .wedge5: db 4, 0, 3, 0, 3, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, -1
 
 StartTrainerBattle_SetUpForRandomScatterOutro:
+	vc_hook Stop_reducing_battle_transition_flashing_ScatterOutro
 	farcall RespawnPlayerAndOpponent
 	ld a, BANK(wLYOverrides)
 	ldh [rSVBK], a
@@ -763,6 +768,7 @@ StartTrainerBattle_DrawSineWave:
 	calc_sine_wave
 
 StartTrainerBattle_ZoomToBlack:
+	vc_hook Stop_reducing_battle_transition_flashing_ZoomToBlack
 	farcall RespawnPlayerAndOpponent
 	ld de, .boxes
 
